@@ -1,9 +1,4 @@
 <script type="text/javascript">
-      var initialized = false;
-
-      $(window).on("load", function() {
-        initialized = true;
-      });
       /*Copyright (c) 2013-2016, Rob Schmuecker
       All rights reserved.
 
@@ -35,7 +30,26 @@
       // Get JSON data
       treeJSON = d3.json("<?php echo $dir_cladograma ?>", function(error, treeData) {
 
-        var flag = false;
+        //var usada pra saber se o Node selecionado eh ou nao 'parent' do Node arrastado
+        var diferentNode = false;
+        //var usada pra saber se o mouse esta dentro ou fora do circulo fantasma (circulo vermelho)
+        //esta var guarda duas posicoes pois a ultima alterada sempre sera zero
+        var mouseIn = [null, null];
+        //var usada pra saber o último índice alterado de mouseIn
+        var lastModifiedIndexMouseIn = null;
+
+        //muda o valor de LMIMI (lastModifiedIndexMouseIn)
+        function changeValueOfLMIMI(){
+          if(mouseIn[0] === null){
+            lastModifiedIndexMouseIn = 0;
+          } else if(mouseIn[1] === null){
+            lastModifiedIndexMouseIn = 1;
+          } else if(lastModifiedIndexMouseIn == 0){
+            lastModifiedIndexMouseIn = 1;
+          } else if(lastModifiedIndexMouseIn == 1){
+            lastModifiedIndexMouseIn = 0;
+          }
+        }
 
         // Calculate total nodes, max label length
         var totalNodes = 0;
@@ -309,12 +323,17 @@
         // Function to update the temporary connector indicating dragging affiliation
         var updateTempConnector = function() {
             var data = [];
+            //a condicao (A1) entra quando tiver um Node selecionado e um Node arrastado
             if (draggingNode !== null && selectedNode !== null) {
-              if(initialized && draggingNode.parent.name !== selectedNode.name){
-                flag = true;
-              } else{
-                flag = false;
-              }
+                //a condicao (A2) entra quando o Node selecionado não for 'parent' do Node arrastado
+                if(draggingNode.parent.name !== selectedNode.name){
+                  changeValueOfLMIMI();
+
+                  mouseIn[lastModifiedIndexMouseIn] = true;
+                  diferentNode = true;
+                } else{ //a condicao A2 entra aqui caso o Node selecionado for 'parente' do Node arrastado
+                  diferentNode = false;
+                }
                 // have to flip the source coordinates since we did this for the existing connectors on the original tree
                 data = [{
                     source: {
@@ -326,6 +345,9 @@
                         y: draggingNode.x0
                     }
                 }];
+            } else if(draggingNode !== null && selectedNode === null){ //a condicao A1 entra quando tiver um Node arrastado
+              changeValueOfLMIMI();                                    //e nenhum Node selecionado
+              mouseIn[lastModifiedIndexMouseIn] = false;
             }
             var link = svgGroup.selectAll(".templink").data(data);
 
@@ -457,6 +479,7 @@
                 .on("mouseout", function(node) {
                     outCircle(node);
                 });
+                //console.log(nodeEnter);
 
             // Update the text to reflect whether node has children or not.
             node.select('text')
@@ -548,9 +571,16 @@
                 d.y0 = d.y;
             });
 
-            if(flag){
-              flag = false;
-              saveNewRoot(JSON.parse(getDiagram(root)));
+            //a condicao (A3) entra caso o Node selecionado for diferente do Node arrastado
+            if(diferentNode){
+              changeValueOfLMIMI();
+
+              diferentNode = false;
+
+              //a condicao (A4) entra caso o mouse esteja dentro do circulo fantasma (circulo vermelho)
+              if(mouseIn[lastModifiedIndexMouseIn] == true){
+                saveNewRoot(JSON.parse(getDiagram(root)));
+              }
             }
         }
 

@@ -1,25 +1,21 @@
 var savedRoot = null;
 
 function saveNewRoot(notSavedRoot){
-  delete notSavedRoot.x;
-  delete notSavedRoot.x0;
-  delete notSavedRoot.y;
-  delete notSavedRoot.y0;
-  delete notSavedRoot.depth;
-  delete notSavedRoot.id;
-  delUnwatedKeysDiagram(notSavedRoot);
-  savedRoot = getDiagram(notSavedRoot);
+  savedRoot = notSavedRoot;
 
-  $.post("php/readCurrentDiagram.php", function(data){
-    if(data !== savedRoot){
-      animate();
-    } else{
-      depress();
-    }
-  });
+  animate();
 }
 
 function saveDiagram(){
+  delete savedRoot.x;
+  delete savedRoot.x0;
+  delete savedRoot.y;
+  delete savedRoot.y0;
+  delete savedRoot.depth;
+  delete savedRoot.id;
+  delUnwatedKeysDiagram(savedRoot);
+  savedRoot = getDiagram(savedRoot);
+  
   $.post("php/writeNewDiagram.php", {modifiedDiagram: savedRoot});
 
   depress();
