@@ -1,26 +1,35 @@
 var savedRoot = null;
 
 function saveNewRoot(notSavedRoot){
-  savedRoot = notSavedRoot;
+  //a var savedRoot se torna uma copia do objeto notSavedRoot, na qual agora pode ser manipulado sem causar travamentos
+  //pois nao se trata mais de uma referencia ao mesmo local da memoria
+  savedRoot = JSON.parse(turnDiagramInText(notSavedRoot));
 
   animate();
 }
 
+//funcao que 'salva' o novo diagrama
 function saveDiagram(){
+  //aqui sao deletas as chaves da primeira camada do diagrama
   delete savedRoot.x;
   delete savedRoot.x0;
   delete savedRoot.y;
   delete savedRoot.y0;
   delete savedRoot.depth;
   delete savedRoot.id;
+  //e aqui as posteriores
   delUnwatedKeysDiagram(savedRoot);
-  savedRoot = getDiagram(savedRoot);
-  
+
+  //var savedRoot recebe o valor da var manipulableDiagram retornada pela funcao turnDiagramInText()
+  savedRoot = turnDiagramInText(savedRoot);
+
+  //a linha abaixo envia (assincronamente) os dados que devem ser escritos no arquivo .json
   $.post("php/writeNewDiagram.php", {modifiedDiagram: savedRoot});
 
   depress();
 }
 
+//funcao deleta as chaves nao desejadas do diagrama
 function delUnwatedKeysDiagram(diagram){
   if(diagram["children"] != null){
     diagram = diagram["children"];
@@ -39,9 +48,10 @@ function delUnwatedKeysDiagram(diagram){
   }
 }
 
-function getDiagram(diagram){
+//funcao constroi e retorna o novo diagrama
+function turnDiagramInText(diagram){
   var cache = [];
-  var newDiagram = JSON.stringify(diagram, function(key, value){
+  var manipulableDiagram = JSON.stringify(diagram, function(key, value){
     if(typeof value === 'object' && value !== null){
       if(cache.indexOf(value) !== -1){
         //Duplicate reference found
@@ -61,13 +71,15 @@ function getDiagram(diagram){
 
   cache = null; //Enable garbage collection
 
-  return newDiagram;
+  return manipulableDiagram;
 }
 
+//funcao que adiciona a classe anime-start
 function animate(){
   $('.anime').addClass('anime-start');
 }
 
+//funcao que remove a classe anime-start
 function depress(){
   $('.anime-start').removeClass('anime-start');
 }

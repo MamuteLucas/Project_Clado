@@ -577,9 +577,9 @@
 
               diferentNode = false;
 
-              //a condicao (A4) entra caso o mouse esteja dentro do circulo fantasma (circulo vermelho)
-              if(mouseIn[lastModifiedIndexMouseIn] == true){
-                saveNewRoot(JSON.parse(getDiagram(root)));
+              //a condicao (A4) entra caso o mouse seja solto dentro do circulo fantasma (circulo vermelho)
+              if(mouseIn[lastModifiedIndexMouseIn]){
+                saveNewRoot(root);
               }
             }
         }
