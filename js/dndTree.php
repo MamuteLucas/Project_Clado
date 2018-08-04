@@ -26,9 +26,11 @@
       NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
       EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.*/
 
+      var initialDiagram = null;
+      var flag = true;
 
       // Get JSON data
-      treeJSON = d3.json("<?php echo $dir_cladograma ?>", function(error, treeData) {
+      treeJSON = d3.json("<?php echo "cladogramas/".$dir_cladograma ?>", function(error, treeData) {
 
         //var usada para permitir que o Node seja arrastado somente quando o botao esquerdo do mouse for usado nele
         var permitionDrag = true;
@@ -341,15 +343,8 @@
             var data = [];
             //a condicao (A1) entra quando tiver um Node selecionado e um Node arrastado
             if (draggingNode !== null && selectedNode !== null) {
-                //a condicao (A2) entra quando o Node selecionado não for 'parent' do Node arrastado
-                if(draggingNode.parent.name !== selectedNode.name){
-                  changeValueOfLMIMI();
-
-                  mouseIn[lastModifiedIndexMouseIn] = true;
-                  diferentNode = true;
-                } else{ //a condicao A2 entra aqui caso o Node selecionado for 'parente' do Node arrastado
-                  diferentNode = false;
-                }
+                changeValueOfLMIMI();
+                mouseIn[lastModifiedIndexMouseIn] = true;
                 // have to flip the source coordinates since we did this for the existing connectors on the original tree
                 data = [{
                     source: {
@@ -588,15 +583,11 @@
                 d.y0 = d.y;
             });
 
-            //a condicao (A3) entra caso o Node selecionado for diferente do Node arrastado
-            if(diferentNode){
+            //a condicao (A2) entra caso o mouse seja solto dentro do circulo fantasma (circulo vermelho)
+            if(mouseIn[0] != null && mouseIn[1] != null){
               changeValueOfLMIMI();
-
-              diferentNode = false;
-
-              //a condicao (A4) entra caso o mouse seja solto dentro do circulo fantasma (circulo vermelho)
               if(mouseIn[lastModifiedIndexMouseIn]){
-                saveNewRoot(root);
+                saveNewRoot(root, initialDiagram);
               }
             }
         }
@@ -612,5 +603,11 @@
         // Layout the tree initially and center on the root node.
         update(root);
         centerNode(root);
+
+        if(flag){
+          flag = false;
+          initialDiagram = JSON.parse(turnDiagramInText(root));
+          initialDiagram = prepareDiagram(initialDiagram);
+        }
       });
       </script>

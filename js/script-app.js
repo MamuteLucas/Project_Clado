@@ -1,31 +1,46 @@
 var savedRoot = null;
 
-function saveNewRoot(notSavedRoot){
+function saveNewRoot(notSavedRoot, initialDiagram){
   //a var savedRoot se torna uma copia do objeto notSavedRoot, na qual agora pode ser manipulado sem causar travamentos
   //pois nao se trata mais de uma referencia ao mesmo local da memoria
   savedRoot = JSON.parse(turnDiagramInText(notSavedRoot));
 
-  animate();
+  savedRoot = prepareDiagram(savedRoot);
+
+  //o diagrama inicial eh comparado com o diagrama salvo para decidir de ira mostrar ou tirar o botao Salvar
+  if(savedRoot != initialDiagram){
+    animate();
+  } else{
+    depress();
+  }
+}
+
+//funcao prepara o diagrama para ser salvo
+function prepareDiagram(diagram){
+  //aqui sao deletas as chaves da primeira camada do diagrama
+  delete diagram.x;
+  delete diagram.x0;
+  delete diagram.y;
+  delete diagram.y0;
+  delete diagram.depth;
+  delete diagram.id;
+  //e aqui as posteriores
+  delUnwatedKeysDiagram(diagram);
+
+  //var savedRoot recebe o valor da var manipulableDiagram retornada pela funcao turnDiagramInText()
+  diagram = turnDiagramInText(diagram);
+
+  return diagram;
 }
 
 //funcao que 'salva' o novo diagrama
 function saveDiagram(){
-  //aqui sao deletas as chaves da primeira camada do diagrama
-  delete savedRoot.x;
-  delete savedRoot.x0;
-  delete savedRoot.y;
-  delete savedRoot.y0;
-  delete savedRoot.depth;
-  delete savedRoot.id;
-  //e aqui as posteriores
-  delUnwatedKeysDiagram(savedRoot);
-
-  //var savedRoot recebe o valor da var manipulableDiagram retornada pela funcao turnDiagramInText()
-  savedRoot = turnDiagramInText(savedRoot);
-
-  //a linha abaixo envia (assincronamente) os dados que devem ser escritos no arquivo .json
+  //a linha abaixo envia (assincronamente) os dados que devem ser escritos no arquivo .json para o script PHP
   $.post("php/writeNewDiagram.php", {modifiedDiagram: savedRoot});
 
+  //var initialDiagram recebe o valor do novo diagrama
+  initialDiagram = savedRoot;
+  
   depress();
 }
 
@@ -48,7 +63,7 @@ function delUnwatedKeysDiagram(diagram){
   }
 }
 
-//funcao constroi e retorna o novo diagrama
+//funcao tranforma o objeto diagrama em texto
 function turnDiagramInText(diagram){
   var cache = [];
   var manipulableDiagram = JSON.stringify(diagram, function(key, value){
@@ -86,7 +101,7 @@ function depress(){
 
 $(function(){
     $.contextMenu({
-        selector: '.context-menu-one', 
+        selector: '.node',
         items: {
             // <input type="text">
             name: {

@@ -5,7 +5,7 @@
 
 	$info_clado = mysqli_query($con, $sql) or die('Falha procurar cladograma');
 	$info_clado = mysqli_fetch_array($info_clado);
-	$dir_cladograma = "cladogramas/".$info_clado['Clado_userAdmin']."_".$info_clado['Clado_nome'].".json";
+	$dir_cladograma = $info_clado['Clado_userAdmin']."_".$info_clado['Clado_nome'].".json";
 ?>
 
 <!DOCTYPE html>
@@ -26,7 +26,7 @@
 
 </head>
 
-<body onselectstart="return false" oncontextmenu="return false" ondragstart="return false" onMouseOver="window.status='..message perso .. '; return true;">
+<body oncontextmenu="return false">
     <div id="tree-container"></div>
 
 		<button type="button" class="btn btn-primary anime" onclick="saveDiagram()">Salvar</button>
