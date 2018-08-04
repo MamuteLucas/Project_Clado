@@ -30,6 +30,8 @@
       // Get JSON data
       treeJSON = d3.json("<?php echo $dir_cladograma ?>", function(error, treeData) {
 
+        //var usada para permitir que o Node seja arrastado somente quando o botao esquerdo do mouse for usado nele
+        var permitionDrag = true;
         //var usada pra saber se o Node selecionado eh ou nao 'parent' do Node arrastado
         var diferentNode = false;
         //var usada pra saber se o mouse esta dentro ou fora do circulo fantasma (circulo vermelho)
@@ -201,6 +203,16 @@
             .call(zoomListener);
 
 
+        $(function(){
+          $(".node").on("mousedown", function(e){
+            if(e.which == 3 || e.which == 2){
+              permitionDrag = false;
+            } else{
+              permitionDrag = true;
+            }
+          });
+        });
+
         // Define the drag listeners for drag/drop behaviour of nodes.
         dragListener = d3.behavior.drag()
             .on("dragstart", function(d) {
@@ -210,9 +222,12 @@
                 dragStarted = true;
                 nodes = tree.nodes(d);
                 d3.event.sourceEvent.stopPropagation();
-                // it's important that we suppress the mouseover event on the node being dragged. Otherwise it will absorb the mouseover event and the underlying node will not detect it d3.select(this).attr('pointer-events', 'none');
+                // it's important that we suppress the mouseover event on the node being dragged.
+                //Otherwise it will absorb the mouseover event and the underlying node will not detect it
+                //d3.select(this).attr('pointer-events', 'none');
             })
             .on("drag", function(d) {
+              if(permitionDrag){
                 if (d == root) {
                     return;
                 }
@@ -249,6 +264,7 @@
                 var node = d3.select(this);
                 node.attr("transform", "translate(" + d.y0 + "," + d.x0 + ")");
                 updateTempConnector();
+              }
             }).on("dragend", function(d) {
                 if (d == root) {
                     return;
@@ -361,13 +377,14 @@
             link.exit().remove();
         };
 
-        // Function to center node when clicked/dropped so node doesn't get lost when collapsing/moving with large amount of children.
+        // Function to center node when clicked/dropped so node doesn't get lost when collapsing/moving
+        //with large amount of children.
 
         function centerNode(source) {
             scale = zoomListener.scale();
             x = -source.y0;
             y = -source.x0;
-            x = x * scale + viewerWidth / 2;
+            x = (x * scale + viewerWidth / 2) / 4;
             y = y * scale + viewerHeight / 2;
             d3.select('g').transition()
                 .duration(duration)

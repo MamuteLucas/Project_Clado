@@ -13,17 +13,20 @@
 <head>
 	<meta charset="utf-8">
 
+	<link rel="stylesheet" type="text/css" href="css/jquery.contextMenu.min.css">
 	<link rel="stylesheet" type="text/css" href="css/dndTree.css">
 	<link rel="stylesheet" type="text/css" href="css/style-app.css">
 
 	<script src="js/jquery-3.3.1.min.js"></script>
+	<script src="js/jquery.contextMenu.min.js"></script>
+	<script src="js/jquery.ui.position.js"></script>
 	<script src="js/d3.v3.min.js"></script>
 	<script src="js/script-app.js"></script>
 	<?php include('js/dndTree.php') ?>
 
 </head>
 
-<body>
+<body onselectstart="return false" oncontextmenu="return false" ondragstart="return false" onMouseOver="window.status='..message perso .. '; return true;">
     <div id="tree-container"></div>
 
 		<button type="button" class="btn btn-primary anime" onclick="saveDiagram()">Salvar</button>
