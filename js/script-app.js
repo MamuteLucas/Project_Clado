@@ -40,7 +40,7 @@ function saveDiagram(){
 
   //var initialDiagram recebe o valor do novo diagrama
   initialDiagram = savedRoot;
-  
+
   depress();
 }
 
@@ -89,6 +89,40 @@ function turnDiagramInText(diagram){
   return manipulableDiagram;
 }
 
+function searchNode(quest, diagram){
+  diagram = JSON.parse(turnDiagramInText(diagram));
+
+  //console.log(diagram);
+}
+
+function getNodes(diagram, nodes){
+  for(var i = 0; i < diagram.children.length; i++){
+    var kid = diagram.children[i];
+
+    nodes[kid.name] = kid;
+
+    if(kid.children){
+      getNodes(kid, nodes);
+    }
+  }
+
+  return nodes;
+}
+
+function getIndexNodes(diagram, indexNodes){
+  for(var i = 0; i < diagram.children.length; i++){
+    var kid = diagram.children[i];
+
+    indexNodes.push(kid.name);
+
+    if(kid.children){
+      getIndexNodes(kid, indexNodes);
+    }
+  }
+
+  return indexNodes;
+}
+
 //funcao que adiciona a classe anime-start
 function animate(){
   $('.anime').addClass('anime-start');
@@ -105,9 +139,8 @@ $(function(){
         items: {
             // <input type="text">
             name: {
-                name: "Text",
+                name: "Digite",
                 type: 'text',
-                value: "Hello World",
                 events: {
                     keyup: function(e) {
                         // add some fancy key handling here?
@@ -115,66 +148,6 @@ $(function(){
                     }
                 }
             },
-            sep1: "---------",
-            // <input type="checkbox">
-            yesno: {
-                name: "Boolean",
-                type: 'checkbox',
-                selected: true
-            },
-            sep2: "---------",
-            // <input type="radio">
-            radio1: {
-                name: "Radio1",
-                type: 'radio',
-                radio: 'radio',
-                value: '1'
-            },
-            radio2: {
-                name: "Radio2",
-                type: 'radio',
-                radio: 'radio',
-                value: '2',
-                selected: true
-            },
-            radio3: {
-                name: "Radio3",
-                type: 'radio',
-                radio: 'radio',
-                value: '3'
-            },
-            radio4: {
-                name: "Radio3",
-                type: 'radio',
-                radio: 'radio',
-                value: '4',
-                disabled: true
-            },
-            sep3: "---------",
-            // <select>
-            select: {
-                name: "Select",
-                type: 'select',
-                options: {1: 'one', 2: 'two', 3: 'three'},
-                selected: 2
-            },
-            // <textarea>
-            area1: {
-                name: "Textarea with height",
-                type: 'textarea',
-                value: "Hello World",
-                height: 40
-            },
-            area2: {
-                name: "Textarea",
-                type: 'textarea',
-                value: "Hello World"
-            },
-            sep4: "---------",
-            key: {
-                name: "Something Clickable",
-                callback: $.noop
-            }
         },
         events: {
             show: function(opt) {

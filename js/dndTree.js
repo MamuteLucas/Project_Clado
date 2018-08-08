@@ -1,36 +1,38 @@
-<script type="text/javascript">
-      /*Copyright (c) 2013-2016, Rob Schmuecker
-      All rights reserved.
+/*Copyright (c) 2013-2016, Rob Schmuecker
+All rights reserved.
 
-      Redistribution and use in source and binary forms, with or without
-      modification, are permitted provided that the following conditions are met:
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
 
-      * Redistributions of source code must retain the above copyright notice, this
-      list of conditions and the following disclaimer.
+* Redistributions of source code must retain the above copyright notice, this
+list of conditions and the following disclaimer.
 
-      * Redistributions in binary form must reproduce the above copyright notice,
-      this list of conditions and the following disclaimer in the documentation
-      and/or other materials provided with the distribution.
+* Redistributions in binary form must reproduce the above copyright notice,
+this list of conditions and the following disclaimer in the documentation
+and/or other materials provided with the distribution.
 
-      * The name Rob Schmuecker may not be used to endorse or promote products
-      derived from this software without specific prior written permission.
+* The name Rob Schmuecker may not be used to endorse or promote products
+derived from this software without specific prior written permission.
 
-      THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-      AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-      IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-      DISCLAIMED. IN NO EVENT SHALL MICHAEL BOSTOCK BE LIABLE FOR ANY DIRECT,
-      INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
-      BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-      DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
-      OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-      NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
-      EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.*/
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL MICHAEL BOSTOCK BE LIABLE FOR ANY DIRECT,
+INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
+OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.*/
 
-      var initialDiagram = null;
-      var flag = true;
+var initialDiagram = null;
+var initialNodes = null;
+var indexInitialNodes = null;
+var firstLoad = true;
 
-      // Get JSON data
-      treeJSON = d3.json("<?php echo "cladogramas/".$dir_cladograma ?>", function(error, treeData) {
+function startDiagram(cladograma, search) {
+    // Get JSON data
+    treeJSON = d3.json(cladograma, function(error, treeData) {
 
         //var usada para permitir que o Node seja arrastado somente quando o botao esquerdo do mouse for usado nele
         var permitionDrag = true;
@@ -39,20 +41,20 @@
         //var usada pra saber se o mouse esta dentro ou fora do circulo fantasma (circulo vermelho)
         //esta var guarda duas posicoes pois a ultima alterada sempre sera zero
         var mouseIn = [null, null];
-        //var usada pra saber o último índice alterado de mouseIn
+        //var usada pra saber o ultimo indice alterado de mouseIn
         var lastModifiedIndexMouseIn = null;
 
         //muda o valor de LMIMI (lastModifiedIndexMouseIn)
-        function changeValueOfLMIMI(){
-          if(mouseIn[0] === null){
-            lastModifiedIndexMouseIn = 0;
-          } else if(mouseIn[1] === null){
-            lastModifiedIndexMouseIn = 1;
-          } else if(lastModifiedIndexMouseIn == 0){
-            lastModifiedIndexMouseIn = 1;
-          } else if(lastModifiedIndexMouseIn == 1){
-            lastModifiedIndexMouseIn = 0;
-          }
+        function changeValueOfLMIMI() {
+            if (mouseIn[0] === null) {
+                lastModifiedIndexMouseIn = 0;
+            } else if (mouseIn[1] === null) {
+                lastModifiedIndexMouseIn = 1;
+            } else if (lastModifiedIndexMouseIn == 0) {
+                lastModifiedIndexMouseIn = 1;
+            } else if (lastModifiedIndexMouseIn == 1) {
+                lastModifiedIndexMouseIn = 0;
+            }
         }
 
         // Calculate total nodes, max label length
@@ -111,11 +113,11 @@
         // sort the tree according to the node names
 
         function sortTree() {
-            tree.sort(function(a, b) {
-                return b.name.toLowerCase() < a.name.toLowerCase() ? 1 : -1;
-            });
-        }
-        // Sort the tree initially incase the JSON isn't in a sorted order.
+                tree.sort(function(a, b) {
+                    return b.name.toLowerCase() < a.name.toLowerCase() ? 1 : -1;
+                });
+            }
+            // Sort the tree initially incase the JSON isn't in a sorted order.
         sortTree();
 
         // TODO: Pan function, can be better implemented.
@@ -205,14 +207,14 @@
             .call(zoomListener);
 
 
-        $(function(){
-          $(".node").on("mousedown", function(e){
-            if(e.which == 3 || e.which == 2){
-              permitionDrag = false;
-            } else{
-              permitionDrag = true;
-            }
-          });
+        $(function() {
+            $(".node").on("mousedown", function(e) {
+                if (e.which == 3 || e.which == 2) {
+                    permitionDrag = false;
+                } else {
+                    permitionDrag = true;
+                }
+            });
         });
 
         // Define the drag listeners for drag/drop behaviour of nodes.
@@ -229,44 +231,44 @@
                 //d3.select(this).attr('pointer-events', 'none');
             })
             .on("drag", function(d) {
-              if(permitionDrag){
-                if (d == root) {
-                    return;
-                }
-                if (dragStarted) {
-                    domNode = this;
-                    initiateDrag(d, domNode);
-                }
-
-                // get coords of mouseEvent relative to svg container to allow for panning
-                relCoords = d3.mouse($('svg').get(0));
-                if (relCoords[0] < panBoundary) {
-                    panTimer = true;
-                    pan(this, 'left');
-                } else if (relCoords[0] > ($('svg').width() - panBoundary)) {
-
-                    panTimer = true;
-                    pan(this, 'right');
-                } else if (relCoords[1] < panBoundary) {
-                    panTimer = true;
-                    pan(this, 'up');
-                } else if (relCoords[1] > ($('svg').height() - panBoundary)) {
-                    panTimer = true;
-                    pan(this, 'down');
-                } else {
-                    try {
-                        clearTimeout(panTimer);
-                    } catch (e) {
-
+                if (permitionDrag) {
+                    if (d == root) {
+                        return;
                     }
-                }
+                    if (dragStarted) {
+                        domNode = this;
+                        initiateDrag(d, domNode);
+                    }
 
-                d.x0 += d3.event.dy;
-                d.y0 += d3.event.dx;
-                var node = d3.select(this);
-                node.attr("transform", "translate(" + d.y0 + "," + d.x0 + ")");
-                updateTempConnector();
-              }
+                    // get coords of mouseEvent relative to svg container to allow for panning
+                    relCoords = d3.mouse($('svg').get(0));
+                    if (relCoords[0] < panBoundary) {
+                        panTimer = true;
+                        pan(this, 'left');
+                    } else if (relCoords[0] > ($('svg').width() - panBoundary)) {
+
+                        panTimer = true;
+                        pan(this, 'right');
+                    } else if (relCoords[1] < panBoundary) {
+                        panTimer = true;
+                        pan(this, 'up');
+                    } else if (relCoords[1] > ($('svg').height() - panBoundary)) {
+                        panTimer = true;
+                        pan(this, 'down');
+                    } else {
+                        try {
+                            clearTimeout(panTimer);
+                        } catch (e) {
+
+                        }
+                    }
+
+                    d.x0 += d3.event.dy;
+                    d.y0 += d3.event.dx;
+                    var node = d3.select(this);
+                    node.attr("transform", "translate(" + d.y0 + "," + d.x0 + ")");
+                    updateTempConnector();
+                }
             }).on("dragend", function(d) {
                 if (d == root) {
                     return;
@@ -356,9 +358,9 @@
                         y: draggingNode.x0
                     }
                 }];
-            } else if(draggingNode !== null && selectedNode === null){ //a condicao A1 entra quando tiver um Node arrastado
-              changeValueOfLMIMI();                                    //e nenhum Node selecionado
-              mouseIn[lastModifiedIndexMouseIn] = false;
+            } else if (draggingNode !== null && selectedNode === null) { //a condicao A1 entra quando tiver um Node arrastado
+                changeValueOfLMIMI(); //e nenhum Node selecionado
+                mouseIn[lastModifiedIndexMouseIn] = false;
             }
             var link = svgGroup.selectAll(".templink").data(data);
 
@@ -379,7 +381,7 @@
             scale = zoomListener.scale();
             x = -source.y0;
             y = -source.x0;
-            x = (x * scale + viewerWidth / 2) / 4;
+            x = x * scale + viewerWidth / 2;
             y = y * scale + viewerHeight / 2;
             d3.select('g').transition()
                 .duration(duration)
@@ -442,7 +444,7 @@
                 // d.y = (d.depth * 500); //500px per level.
             });
 
-            // Update the nodes…
+            // Update the nodes
             node = svgGroup.selectAll("g.node")
                 .data(nodes, function(d) {
                     return d.id || (d.id = ++i);
@@ -483,7 +485,7 @@
                 .attr('class', 'ghostCircle')
                 .attr("r", 30)
                 .attr("opacity", 0.2) // change this to zero to hide the target area
-            .style("fill", "red")
+                .style("fill", "red")
                 .attr('pointer-events', 'mouseover')
                 .on("mouseover", function(node) {
                     overCircle(node);
@@ -491,7 +493,7 @@
                 .on("mouseout", function(node) {
                     outCircle(node);
                 });
-                //console.log(nodeEnter);
+            //console.log(nodeEnter);
 
             // Update the text to reflect whether node has children or not.
             node.select('text')
@@ -537,7 +539,7 @@
             nodeExit.select("text")
                 .style("fill-opacity", 0);
 
-            // Update the links…
+            // Update the links
             var link = svgGroup.selectAll("path.link")
                 .data(links, function(d) {
                     return d.target.id;
@@ -584,11 +586,11 @@
             });
 
             //a condicao (A2) entra caso o mouse seja solto dentro do circulo fantasma (circulo vermelho)
-            if(mouseIn[0] != null && mouseIn[1] != null){
-              changeValueOfLMIMI();
-              if(mouseIn[lastModifiedIndexMouseIn]){
-                saveNewRoot(root, initialDiagram);
-              }
+            if (mouseIn[0] != null && mouseIn[1] != null) {
+                changeValueOfLMIMI();
+                if (mouseIn[lastModifiedIndexMouseIn]) {
+                    saveNewRoot(root, initialDiagram);
+                }
             }
         }
 
@@ -604,10 +606,72 @@
         update(root);
         centerNode(root);
 
-        if(flag){
-          flag = false;
-          initialDiagram = JSON.parse(turnDiagramInText(root));
-          initialDiagram = prepareDiagram(initialDiagram);
+        if (firstLoad) {
+            firstLoad = false;
+            initialDiagram = JSON.parse(turnDiagramInText(root));
+            initialDiagram = prepareDiagram(initialDiagram);
+
+            indexInitialNodes = initialNodes;
+
+            initialNodes = getNodes(root, new Array());
+            indexInitialNodes = getIndexNodes(root, new Array());
         }
-      });
-      </script>
+
+        $(function(){
+          $("input[name='filo']").on('keyup', function(e){
+            var digitated = $(this).val();
+            var countResults = 0;
+
+            if(65 <= e.keyCode && e.keyCode <= 90 || e.keyCode == 8){
+              $('.results-search').remove();
+              $('#search-autoComplete').css({opacity: 1, top: "1.9rem", right: "3.5rem"});
+              $(this).css("border-radius", "0.3rem 0.3rem 0rem 0rem");
+
+              for(var i = 0; i < indexInitialNodes.length; i++){
+                if(indexInitialNodes[i].match(digitated)){
+                  $('#search-autoComplete').append("<li class='results-search' name='"+indexInitialNodes[i]+"'>"+indexInitialNodes[i]+"</li>");
+                  countResults++;
+                }
+              }
+
+              if(countResults == 0){
+                $('#search-autoComplete').append("<li class='results-search'>No results</li>");
+              }
+            }
+
+            if(digitated == ''){
+              $("input[name='filo']").css("border-radius", "0.3rem");
+
+              $('#search-autoComplete').css({opacity: 0, top: "-20rem", right: "-20rem"});
+              $('.results-search').remove();
+            }
+
+          }).on('focusin', function(){
+            var digitated = $(this).val();
+
+            if(digitated != ''){
+              $('#search-autoComplete').css({opacity: 1, top: "1.9rem", right: "3.5rem"});
+              $(this).css("border-radius", "0.3rem 0.3rem 0rem 0rem");
+            } else{
+              $(this).css("border-radius", "0.3rem");
+
+              $('#search-autoComplete').css({opacity: 0, top: "-20rem", right: "-20rem"});
+              $('.results-search').remove();
+            }
+
+          }).on('focusout', function(){
+            $('.results-search').on('click', function(){
+              $('input[name="filo"]').css("border-radius", "0.3rem");
+              $('#search-autoComplete').css({opacity: 0, top: "-20rem", right: "-20rem"});
+
+              centerNode(initialNodes[$(this)[0].innerText]);
+            });
+          });
+
+          $('#tree-container').on('click', function(){
+              $('input[name="filo"]').css("border-radius", "0.3rem");
+              $('#search-autoComplete').css({opacity: 0, top: "-20rem", right: "-20rem"});
+          });
+        });
+    });
+}

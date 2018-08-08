@@ -22,12 +22,21 @@
 	<script src="js/jquery.ui.position.js"></script>
 	<script src="js/d3.v3.min.js"></script>
 	<script src="js/script-app.js"></script>
-	<?php include('js/dndTree.php') ?>
+	<script src="js/dndTree.js"></script>
+
+	<script>
+		startDiagram("<?= "cladogramas/".$dir_cladograma ?>");
+	</script>
 
 </head>
 
 <body oncontextmenu="return false">
     <div id="tree-container"></div>
+
+		<input type="text" class="abs btn search search-text" name="filo" autocomplete="off" placeholder="Pesquise por um filo...">
+		<input type="button" class="abs btn search search-submit" value="">
+
+		<ul id='search-autoComplete' class="abs"></ul>
 
 		<button type="button" class="btn btn-primary anime" onclick="saveDiagram()">Salvar</button>
 </body>
