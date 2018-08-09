@@ -13,16 +13,19 @@
 <head>
 	<meta charset="utf-8">
 
-	<link rel="stylesheet" type="text/css" href="css/jquery.contextMenu.min.css">
+	<script src="js/jquery-3.3.1.min.js"></script>
+	<script src="js/d3.v3.min.js"></script>
+	<script src="js/dndTree.js"></script>
 	<link rel="stylesheet" type="text/css" href="css/dndTree.css">
+
+	<script src="js/script-app.js"></script>
 	<link rel="stylesheet" type="text/css" href="css/style-app.css">
 
-	<script src="js/jquery-3.3.1.min.js"></script>
-	<script src="js/jquery.contextMenu.min.js"></script>
-	<script src="js/jquery.ui.position.js"></script>
-	<script src="js/d3.v3.min.js"></script>
-	<script src="js/script-app.js"></script>
-	<script src="js/dndTree.js"></script>
+	<script src="js/events-search.js"></script>
+	<link rel="stylesheet" type="text/css" href="css/div_search.css">
+
+	<script src="js/events-tabOptions.js"></script>
+	<link rel="stylesheet" type="text/css" href="css/div_tabOptions.css">
 
 	<script>
 		startDiagram("<?= "cladogramas/".$dir_cladograma ?>");
@@ -33,11 +36,25 @@
 <body oncontextmenu="return false">
     <div id="tree-container"></div>
 
-		<input type="text" class="abs btn search search-text" name="filo" autocomplete="off" placeholder="Pesquise por um filo...">
-		<input type="button" class="abs btn search search-submit" value="">
+		<div id="div_tabOptions">
+			<ul id="ul_options">
+				<li id="li_labelInput">
+					<label for="input_options">Inserir novo filo</label>
+					<input type="text" id="input_options">
+				</li>
 
-		<ul id='search-autoComplete' class="abs"></ul>
+				<li id="li_span">
+					<span>Informações sobre o filo</span>
+				</li>
+			</ul>
+		</div>
 
-		<button type="button" class="btn btn-primary anime" onclick="saveDiagram()">Salvar</button>
+		<div id="div_search">
+			<input type="text" class="btn" id="input_text" placeholder="Pesquise por um filo..." autocomplete="off">
+			<ul id="ul_autoComplete"></ul>
+			<input type="button" class="btn btn-primary" id="input_button" value="">
+		</div>
+<!--
+		<input type="button" class="btn btn-primary anime" onclick="saveDiagram()" value="Salvar"> -->
 </body>
 </html>

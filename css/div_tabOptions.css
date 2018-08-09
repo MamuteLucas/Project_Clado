@@ -1,0 +1,35 @@
+#div_tabOptions{
+  position: absolute;
+  display: none;
+  min-width: 12rem;
+  max-width: 13rem;
+  background-color: #c3c3c3;
+  border-radius: 0.2rem;
+}
+
+#ul_options{
+  padding: 0.2rem 0 0.2rem 0;
+  list-style-type: none;
+  margin: 0;
+}
+
+#li_labelInput{
+  padding: 0 0.3rem 0.25rem 0.3rem;
+  text-align: inherit;
+}
+
+#li_labelInput:hover{
+  background-color: steelblue;
+}
+
+#input_options{
+  width: 12rem;
+}
+
+#li_span{
+  padding: 0.25rem 0.3rem 0 0.3rem;
+}
+
+#li_span:hover{
+  background-color: steelblue;
+}

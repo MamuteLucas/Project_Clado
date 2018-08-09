@@ -30,7 +30,7 @@ var initialNodes = null;
 var indexInitialNodes = null;
 var firstLoad = true;
 
-function startDiagram(cladograma, search) {
+function startDiagram(cladograma) {
     // Get JSON data
     treeJSON = d3.json(cladograma, function(error, treeData) {
 
@@ -205,17 +205,6 @@ function startDiagram(cladograma, search) {
             .attr("height", viewerHeight)
             .attr("class", "overlay")
             .call(zoomListener);
-
-
-        $(function() {
-            $(".node").on("mousedown", function(e) {
-                if (e.which == 3 || e.which == 2) {
-                    permitionDrag = false;
-                } else {
-                    permitionDrag = true;
-                }
-            });
-        });
 
         // Define the drag listeners for drag/drop behaviour of nodes.
         dragListener = d3.behavior.drag()
@@ -606,72 +595,59 @@ function startDiagram(cladograma, search) {
         update(root);
         centerNode(root);
 
+        //na primeira vez que carrega
         if (firstLoad) {
             firstLoad = false;
+
+            //setado o valor da var initialDiagram como o diagrama inicial
+            //isso poderia ser feito lendo o arquivo 1_cladograma.json
             initialDiagram = JSON.parse(turnDiagramInText(root));
             initialDiagram = prepareDiagram(initialDiagram);
 
-            indexInitialNodes = initialNodes;
-
+            //var initialNodes eh setado como um array alfanumerico que cada posicao recebe um Node
             initialNodes = getNodes(root, new Array());
+
+            //var indexInitialNodes eh setado como um array numerico que cada posicao contem um index de initialNodes
             indexInitialNodes = getIndexNodes(root, new Array());
         }
 
         $(function(){
-          $("input[name='filo']").on('keyup', function(e){
-            var digitated = $(this).val();
-            var countResults = 0;
+          $(".node")
+          .on("mousedown", function(buttonPressed){ //ocorre quando um botao do mouse eh pressionado em um Node
+              //a var permitionDrag eh boolean, se true ela permitira arrastar um node, caso false nao permitira
+              permitionDrag = dotNode_onmousedown(buttonPressed);
 
-            if(65 <= e.keyCode && e.keyCode <= 90 || e.keyCode == 8){
-              $('.results-search').remove();
-              $('#search-autoComplete').css({opacity: 1, top: "1.9rem", right: "3.5rem"});
-              $(this).css("border-radius", "0.3rem 0.3rem 0rem 0rem");
+          }).on("mouseup", function(buttonPressed){ //ocorre quando um botao do mouse eh solto em um Node
+              dotNode_onmouseup(buttonPressed);
 
-              for(var i = 0; i < indexInitialNodes.length; i++){
-                if(indexInitialNodes[i].match(digitated)){
-                  $('#search-autoComplete').append("<li class='results-search' name='"+indexInitialNodes[i]+"'>"+indexInitialNodes[i]+"</li>");
-                  countResults++;
-                }
-              }
+          });
 
-              if(countResults == 0){
-                $('#search-autoComplete').append("<li class='results-search'>No results</li>");
-              }
-            }
-
-            if(digitated == ''){
-              $("input[name='filo']").css("border-radius", "0.3rem");
-
-              $('#search-autoComplete').css({opacity: 0, top: "-20rem", right: "-20rem"});
-              $('.results-search').remove();
-            }
-
-          }).on('focusin', function(){
-            var digitated = $(this).val();
-
-            if(digitated != ''){
-              $('#search-autoComplete').css({opacity: 1, top: "1.9rem", right: "3.5rem"});
-              $(this).css("border-radius", "0.3rem 0.3rem 0rem 0rem");
-            } else{
-              $(this).css("border-radius", "0.3rem");
-
-              $('#search-autoComplete').css({opacity: 0, top: "-20rem", right: "-20rem"});
-              $('.results-search').remove();
-            }
-
-          }).on('focusout', function(){
-            $('.results-search').on('click', function(){
-              $('input[name="filo"]').css("border-radius", "0.3rem");
-              $('#search-autoComplete').css({opacity: 0, top: "-20rem", right: "-20rem"});
-
-              centerNode(initialNodes[$(this)[0].innerText]);
+          $("#tree-container")
+            .not(".node, #div_tabOptions, #ul_autoComplete")
+            .on("mousedown", function(){                    //ocorre quando um botao do mouse eh pressionado em qualquer lugar da
+              $("#div_tabOptions").css("display", "none");  //div#tree-container (toda a area da tela) com excecao dos Nodes, da
+              inputText_onfocusout($("#input_text").val()); //div#div_tabOptions (aba de opcoes) e do ul#ul_autoComplete
+                                                            //(autocomplete do campo de pesquisa)
             });
+
+          $("#input_text").on("keyup", function(keyPressed){            //ocorre caso alguma letra (+backspace) seja pressionada
+            //$(this).val() eh o que esta escrito no campo de pesquisa  //no campo de pesquisa
+            inputText_onkeyup(keyPressed.keyCode, $(this).val());
+
+          }).on("focusin", function(){ //ocorre quando o campo de pesquisa entra em foco
+            //$(this).val() eh o que esta escrito no campo de pesquisa
+            inputText_onfocusin($(this).val());
+
           });
 
-          $('#tree-container').on('click', function(){
-              $('input[name="filo"]').css("border-radius", "0.3rem");
-              $('#search-autoComplete').css({opacity: 0, top: "-20rem", right: "-20rem"});
+          $("#ul_autoComplete").on("click", function(liClicked){  //ocorre quando um botao do mouse eh pressionado dentro da
+            //chamada a funcao passando como parametro o texto    //ul#ul_autoComplete (autocomplete do campo de pesquisa)
+            //do li em que o mouse foi clicado sobre
+            ulAutoComplete_onclick(liClicked.target.innerText);
+
           });
+
         });
+
     });
 }

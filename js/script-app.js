@@ -97,12 +97,12 @@ function searchNode(quest, diagram){
 
 function getNodes(diagram, nodes){
   for(var i = 0; i < diagram.children.length; i++){
-    var kid = diagram.children[i];
+    var child = diagram.children[i];
 
-    nodes[kid.name] = kid;
+    nodes[child.name] = child;
 
-    if(kid.children){
-      getNodes(kid, nodes);
+    if(child.children){
+      getNodes(child, nodes);
     }
   }
 
@@ -111,12 +111,12 @@ function getNodes(diagram, nodes){
 
 function getIndexNodes(diagram, indexNodes){
   for(var i = 0; i < diagram.children.length; i++){
-    var kid = diagram.children[i];
+    var child = diagram.children[i];
 
-    indexNodes.push(kid.name);
+    indexNodes.push(child.name);
 
-    if(kid.children){
-      getIndexNodes(kid, indexNodes);
+    if(child.children){
+      getIndexNodes(child, indexNodes);
     }
   }
 
@@ -132,40 +132,3 @@ function animate(){
 function depress(){
   $('.anime-start').removeClass('anime-start');
 }
-
-$(function(){
-    $.contextMenu({
-        selector: '.node',
-        items: {
-            // <input type="text">
-            name: {
-                name: "Digite",
-                type: 'text',
-                events: {
-                    keyup: function(e) {
-                        // add some fancy key handling here?
-                        window.console && console.log('key: '+ e.keyCode);
-                    }
-                }
-            },
-        },
-        events: {
-            show: function(opt) {
-                // this is the trigger element
-                var $this = this;
-                // import states from data store
-                $.contextMenu.setInputValues(opt, $this.data());
-                // this basically fills the input commands from an object
-                // like {name: "foo", yesno: true, radio: "3", &hellip;}
-            },
-            hide: function(opt) {
-                // this is the trigger element
-                var $this = this;
-                // export states to data store
-                $.contextMenu.getInputValues(opt, $this.data());
-                // this basically dumps the input commands' values to an object
-                // like {name: "foo", yesno: true, radio: "3", &hellip;}
-            }
-        }
-    });
-});

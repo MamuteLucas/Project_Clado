@@ -1,0 +1,58 @@
+.btn {
+  display: inline-block;
+  font-weight: 400;
+  text-align: center;
+  padding: 0.3rem 1rem;
+  font-size: 0.9rem;
+  line-height: 1.5rem;
+  border-radius: 0.3rem;
+}
+
+#input_text{
+  position: absolute;
+  top: 0.5rem;
+  right: 3.5rem;
+  color: #000;
+  width: 12rem;
+  background-color: #abababab;
+  border: 2px solid #ababab;
+  outline: 0;
+}
+
+#input_button{
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  width: 2.7rem;
+  border: 2px solid #c6c6c6;
+  background-image: url('../images/Search-button.png');
+  background-size: 2.6rem;
+  background-position: center;
+  background-repeat: no-repeat;
+  outline: 0;
+}
+
+#input_button:active, #input_text:focus{
+  border: 2px solid steelblue;
+}
+
+#ul_autoComplete{
+  position: absolute;
+  top: 2.9rem;
+  right: 3.5rem;
+  width: 14.1rem;
+  background-color: #fff;
+  border: 1px solid #000;
+  display: none;
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.results_search{
+  padding: 0.3rem;
+}
+
+.results_search:hover{
+  background-color: steelblue;
+}

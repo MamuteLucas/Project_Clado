@@ -1,61 +1,7 @@
 body{
   margin: 0px;
   overflow: hidden;
-}
-
-.btn {
-  display: inline-block;
-  font-weight: 400;
-  text-align: center;
-  padding: 0.3rem 1rem;
-  font-size: 0.9rem;
-  line-height: 1.5rem;
-  border-radius: 0.3rem;
-}
-
-.btn-primary{
-  color: #fff;
-  background-color: #007bff;
-  border: 0px solid #007bff;
-}
-
-.btn-primary:hover{
-  background-color: #0069d9;
-  border-color: #0062cc;
-}
-
-.abs {
-  position: absolute;
-}
-
-.search{
-  top: 0.5rem;
-  outline: 0;
-}
-
-.search-text{
-  right: 3.5rem;
-  color: #000;
-  background-color: #abababab;
-  border: 2px solid #ababab;
-}
-
-.search-text:focus{
-  border: 2px solid steelblue;
-}
-
-.search-submit{
-  right: 0.5rem;
-  width: 2.7rem;
-  border: 2px solid #c6c6c6;
-  background-image: url('../images/Search-button.png');
-  background-size: 2.6rem;
-  background-position: center;
-  background-repeat: no-repeat;
-}
-
-.search-submit:active{
-  border: 2px solid steelblue;
+  font-family: arial;
 }
 
 .anime{
@@ -68,23 +14,4 @@ body{
 .anime-start{
   bottom: 1rem;
 	opacity: 1;
-}
-
-#search-autoComplete{
-  top: 1.9rem;
-  right: 3.5rem;
-  width: 12.8rem;
-  background-color: #fff;
-  border: 1px solid #000;
-  opacity: 0;
-  list-style-type: none;
-  padding: 0;
-}
-
-.results-search{
-  padding: 0.3rem;
-}
-
-.results-search:hover{
-  background-color: steelblue;
 }
