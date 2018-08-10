@@ -38,12 +38,20 @@
 
 		<div id="div_tabOptions">
 			<ul id="ul_options">
-				<li id="li_labelInput">
-					<label for="input_options">Inserir novo filo</label>
-					<input type="text" id="input_options">
+				<li class="li_search" id="li_addFilo">
+					<label for="input_addFilo"><p id="p_addFilo">Inserir novo filo</p></label>
+					<input type="text" id="input_addFilo">
 				</li>
 
-				<li id="li_span">
+				<li class="li_search" id="li_removeFilo">
+					<span>Remover filo</span>
+				</li>
+
+				<li class="li_search" id="li_editFilo">
+					<span>Editar filo</span>
+				</li>
+
+				<li class="li_search" id="li_infoFilo">
 					<span>Informações sobre o filo</span>
 				</li>
 			</ul>
@@ -54,7 +62,7 @@
 			<ul id="ul_autoComplete"></ul>
 			<input type="button" class="btn btn-primary" id="input_button" value="">
 		</div>
-<!--
-		<input type="button" class="btn btn-primary anime" onclick="saveDiagram()" value="Salvar"> -->
+
+		<input type="button" class="btn btn-primary anime" onclick="saveDiagram()" value="Salvar">
 </body>
 </html>

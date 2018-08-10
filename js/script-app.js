@@ -91,8 +91,7 @@ function turnDiagramInText(diagram){
 
 function searchNode(quest, diagram){
   diagram = JSON.parse(turnDiagramInText(diagram));
-
-  //console.log(diagram);
+  
 }
 
 function getNodes(diagram, nodes){
@@ -125,10 +124,16 @@ function getIndexNodes(diagram, indexNodes){
 
 //funcao que adiciona a classe anime-start
 function animate(){
-  $('.anime').addClass('anime-start');
+  $(".anime").addClass("anime-visibility");
+  setTimeout(function(){
+    $(".anime").addClass("anime-start");
+  }, 1);
 }
 
 //funcao que remove a classe anime-start
 function depress(){
-  $('.anime-start').removeClass('anime-start');
+  $(".anime").removeClass("anime-start");
+  setTimeout(function(){
+    $(".anime").removeClass("anime-visibility");
+  }, 400);
 }

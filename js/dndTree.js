@@ -482,7 +482,7 @@ function startDiagram(cladograma) {
                 .on("mouseout", function(node) {
                     outCircle(node);
                 });
-            //console.log(nodeEnter);
+            console.log(nodeEnter);
 
             // Update the text to reflect whether node has children or not.
             node.select('text')
@@ -641,9 +641,11 @@ function startDiagram(cladograma) {
           });
 
           $("#ul_autoComplete").on("click", function(liClicked){  //ocorre quando um botao do mouse eh pressionado dentro da
-            //chamada a funcao passando como parametro o texto    //ul#ul_autoComplete (autocomplete do campo de pesquisa)
-            //do li em que o mouse foi clicado sobre
-            ulAutoComplete_onclick(liClicked.target.innerText);
+            liClicked = liClicked.target.innerText;               //ul#ul_autoComplete (autocomplete do campo de pesquisa)
+            //chamada a funcao passando como parametro o texto do li em que o mouse foi clicado sobre
+            ulAutoComplete_onclick(liClicked);
+            //node selecionado eh colocado no centro da tela
+            centerNode(initialNodes[liClicked]);
 
           });
 
