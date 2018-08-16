@@ -1,68 +1,57 @@
-<?php
-	include("connect.php");
-
-	$sql = "SELECT * FROM `cladograma` WHERE Clado_userAdmin = 1";
-
-	$info_clado = mysqli_query($con, $sql) or die('Falha procurar cladograma');
-	$info_clado = mysqli_fetch_array($info_clado);
-	$dir_cladograma = $info_clado['Clado_userAdmin']."_".$info_clado['Clado_nome'].".json";
-?>
-
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
 	<meta charset="utf-8">
+	<title>Página Principal</title>
 
 	<script src="js/jquery-3.3.1.min.js"></script>
-	<script src="js/d3.v3.min.js"></script>
-	<script src="js/dndTree.js"></script>
-	<link rel="stylesheet" type="text/css" href="css/dndTree.css">
+	<link rel="stylesheet" type="text/css" href="css/index.css">
 
-	<script src="js/script-app.js"></script>
-	<link rel="stylesheet" type="text/css" href="css/style-app.css">
-
-	<script src="js/events-search.js"></script>
-	<link rel="stylesheet" type="text/css" href="css/div_search.css">
-
-	<script src="js/events-tabOptions.js"></script>
-	<link rel="stylesheet" type="text/css" href="css/div_tabOptions.css">
-
-	<script>
-		startDiagram("<?= "cladogramas/".$dir_cladograma ?>");
-	</script>
-
+	<?php
+		if(!empty($_GET["pag"])){
+			if($_GET["pag"] == "entrar"){
+				echo '<script src="js/events-login.js"></script>';
+		 } else if($_GET["pag"] == "cadastrar"){
+			 echo '<script src="js/events-register.js"></script>';
+		 }
+	 }
+	?>
 </head>
 
-<body oncontextmenu="return false">
-    <div id="tree-container"></div>
+<body>
+	<div id="navbar">
+		<ul>
+			<?php
+				if(!empty($_GET["pag"])){
+					if($_GET["pag"] == "inicio"){
+						echo '<li><a class="active" href="?pag=inicio">Início</a></li>';
+		 		  	echo '<li class="li_right"><a href="?pag=cadastrar">Criar conta</a></li>';
+						echo '<li class="li_right"><a href="?pag=entrar">Entrar</a></li>';
+				 } else if($_GET["pag"] == "entrar"){
+					 echo '<li><a href="?pag=inicio">Início</a></li>';
+					 echo '<li class="li_right"><a href="?pag=cadastrar">Criar conta</a></li>';
+					 echo '<li class="li_right"><a class="active" href="?pag=entrar">Entrar</a></li>';
+				 } else if($_GET["pag"] == "cadastrar"){
+					 echo '<li><a href="?pag=inicio">Início</a></li>';
+					 echo '<li class="li_right"><a class="active" href="?pag=cadastrar">Criar conta</a></li>';
+					 echo '<li class="li_right"><a href="?pag=entrar">Entrar</a></li>';
+				 }
+			 }
+			?>
+		</ul>
+	</div>
 
-		<div id="div_tabOptions">
-			<ul id="ul_options">
-				<li class="li_search" id="li_addFilo">
-					<label for="input_addFilo"><p id="p_addFilo">Inserir novo filo</p></label>
-					<input type="text" id="input_addFilo">
-				</li>
+  <?php
+	 	if(!empty($_GET["pag"])){
+			if($_GET["pag"] == "entrar"){
+				include("php/login.php");
+			} else if($_GET["pag"] == "cadastrar"){
+				include("php/register.php");
+			}
 
-				<li class="li_search" id="li_removeFilo">
-					<span>Remover filo</span>
-				</li>
-
-				<li class="li_search" id="li_editFilo">
-					<span>Editar filo</span>
-				</li>
-
-				<li class="li_search" id="li_infoFilo">
-					<span>Informações sobre o filo</span>
-				</li>
-			</ul>
-		</div>
-
-		<div id="div_search">
-			<input type="text" class="btn" id="input_text" placeholder="Pesquise por um filo..." autocomplete="off">
-			<ul id="ul_autoComplete"></ul>
-			<input type="button" class="btn btn-primary" id="input_button" value="">
-		</div>
-
-		<input type="button" class="btn btn-primary anime" onclick="saveDiagram()" value="Salvar">
+		} else{
+			header("location: ?pag=inicio");
+		}
+	?>
 </body>
 </html>
