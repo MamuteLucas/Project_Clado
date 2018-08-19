@@ -48,6 +48,7 @@ $(function(){
   $("input[name = 'reg_email']").on("blur", function(){
     if($(this).val() != ""){
       $.post("php/checkEmail.php", {"email": $(this).val()}, function(existingEmail){
+        console.log(existingEmail);
         if(existingEmail != "" && correctEmail){
           $("input[name = 'reg_email']").css({"border-color": "red", margin: "0.8rem 0 0.2rem 0"});
           $("input[name = 'reg_password']").css("margin", "0.28rem 0 0.8rem 0");

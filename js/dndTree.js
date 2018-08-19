@@ -482,7 +482,7 @@ function startDiagram(cladograma) {
                 .on("mouseout", function(node) {
                     outCircle(node);
                 });
-            console.log(nodeEnter);
+            //console.log(nodeEnter);
 
             // Update the text to reflect whether node has children or not.
             node.select('text')

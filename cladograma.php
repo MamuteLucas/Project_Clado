@@ -1,18 +1,15 @@
 <?php
-	include("php/connect.php");
+	require("php/validateLogin.php");
+	require("php/connect.php");
 
-	$sql = "SELECT * FROM `cladograma` WHERE Clado_userAdmin = 1";
 
-	$info_clado = mysqli_query($con, $sql) or die('Falha procurar cladograma');
-	$info_clado = mysqli_fetch_array($info_clado);
-	$dir_cladograma = $info_clado['Clado_userAdmin']."_".$info_clado['Clado_nome'].".json";
 ?>
 
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
 	<meta charset="utf-8">
-	<title>Página Principal</title>
+	<title>Cladograma</title>
 
 	<script src="js/jquery-3.3.1.min.js"></script>
 	<script src="js/d3.v3.min.js"></script>
@@ -20,8 +17,8 @@
 	<script src="js/dndTree.js"></script>
 	<link rel="stylesheet" type="text/css" href="css/dndTree.css">
 
-	<script src="js/script-app.js"></script>
-	<link rel="stylesheet" type="text/css" href="css/style-app.css">
+	<script src="js/cladograma.js"></script>
+	<link rel="stylesheet" type="text/css" href="css/cladograma.css">
 
 	<script src="js/events-search.js"></script>
 	<link rel="stylesheet" type="text/css" href="css/div_search.css">

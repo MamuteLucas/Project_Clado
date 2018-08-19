@@ -1,16 +1,25 @@
 <?php
-  if(empty($_POST["email"])){
-    header("location: ../index.php?pag=inicio");
-  } else{
+  if(!empty($_POST["email"])){
+    $email = $_POST["email"];
+    $email = addslashes($email);
+    $password = $_POST["password"];
+    $password = hash("sha512", $password);
+
     require("connect.php");
 
-    $email = $_POST["email"];
-    $password = $_POST["password"];
+    $con = new connect();
+    $result = $con->doLogin($email, $password);
+    $nLinhas = $result[0];
 
-    $sql = "SELECT * FROM user WHERE User_email = '$email' and User_senha = '$password'";
-    $result = mysqli_query($con, $sql);
-    $result = mysqli_num_rows($result);
+    if($nLinhas == 1){
+      $user = $result[1];
 
-    echo $result;
+      session_start();
+      $_SESSION["user_id"] = $user["user_id"];
+      $_SESSION["user_name"] = $user["user_name"];
+
+    }
+
+    echo $nLinhas;
   }
 ?>
