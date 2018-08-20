@@ -1,7 +1,6 @@
 body{
   margin: 0;
   font-family: arial;
-  background-image: url("../images/wallpaper.jpg");
 }
 
 h1{
@@ -42,8 +41,29 @@ h1{
 }
 
 small{
+  position: absolute;
   font-size: 12px;
   color: red;
+}
+
+#small_error{
+  left:  9.85rem;
+  top: 26.8rem;
+}
+
+#small_newPassword{
+  left:  10.7rem;
+  top: 26.8rem;
+}
+
+#small_email{
+  left:  11.5rem;
+  top: 14.4rem;
+}
+
+#small_oldPassword{
+  left:  12.5rem;
+  top: 18.5rem;
 }
 
 ul {

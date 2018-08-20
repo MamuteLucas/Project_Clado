@@ -17,6 +17,7 @@
       session_start();
       $_SESSION["user_id"] = $user["user_id"];
       $_SESSION["user_name"] = $user["user_name"];
+      $_SESSION["user_email"] = $user["user_email"];
 
     }
 

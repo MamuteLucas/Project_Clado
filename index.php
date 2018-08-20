@@ -16,7 +16,7 @@
 	<title>Página Inicial</title>
 
 	<script src="js/jquery-3.3.1.min.js"></script>
-	<link rel="stylesheet" type="text/css" href="css/index.css">
+	<link rel="stylesheet" type="text/css" href="css/style-app.css">
 
 	<?php
 		if($_GET["pag"] == "entrar"){

@@ -19,7 +19,13 @@
 	<title>Página Principal</title>
 
 	<script src="js/jquery-3.3.1.min.js"></script>
-	<link rel="stylesheet" type="text/css" href="css/home.css">
+	<link rel="stylesheet" type="text/css" href="css/style-app.css">
+
+	<?php
+		if($_GET["pag"] == "conta"){
+			echo "<script src='js/events-configAccount.js'></script>";
+		}
+	?>
 </head>
 
 <body>

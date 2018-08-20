@@ -11,44 +11,39 @@ function submitCad(){
   }
 }
 
+function checkPassword(fPassword, sPassword){
+  if(sPassword != "" && fPassword != sPassword && correctPassword){
+    $("input[name = 'reg_confirmPassword']").css({border: "1px solid red", margin: "0.8rem 0 0.2rem 0"});
+    $("#form_inputButton").css("margin", "0.28rem 0 0.8rem 0");
+    $("#div_confirmPassword").append("<small id='small_senha'>As senhas são diferentes!</small>");
+    correctPassword = false;
+
+  } else if(sPassword == fPassword){
+    correctPassword = true;
+    $("#small_senha").remove();
+    $("input[name = 'reg_confirmPassword']").removeAttr("style");
+    $("#form_inputButton").removeAttr("style");
+  }
+}
+
 $(function(){
   $("input[name = 'reg_confirmPassword']").on("keyup", function(){
     var firstPassword = $("input[name = 'reg_password']").val();
         secondPassword = $(this).val();
-    if(firstPassword != secondPassword && correctPassword){
-      $("input[name = 'reg_confirmPassword']").css({border: "1px solid red", margin: "0.8rem 0 0.2rem 0"});
-      $("#form_inputButton").css("margin", "0.28rem 0 0.8rem 0");
-      $("#div_confirmPassword").append("<small id='small_senha'>As senhas são diferentes!</small>");
-      correctPassword = false;
-    } else if(firstPassword == secondPassword){
-      correctPassword = true;
-      $("#small_senha").remove();
-      $("input[name = 'reg_confirmPassword']").removeAttr("style");
-      $("#form_inputButton").removeAttr("style");
-    }
+
+    checkPassword(firstPassword, secondPassword);
   });
 
   $("input[name = 'reg_password']").on("keyup", function(){
     var firstPassword = $(this).val();
         secondPassword = $("input[name = 'reg_confirmPassword']").val();
 
-    if(secondPassword != "" && firstPassword != secondPassword && correctPassword){
-      $("input[name = 'reg_confirmPassword']").css({border: "1px solid red", margin: "0.8rem 0 0.2rem 0"});
-      $("#form_inputButton").css("margin", "0.28rem 0 0.8rem 0");
-      $("#div_confirmPassword").append("<small id='small_senha'>As senhas são diferentes!</small>");
-      correctPassword = false;
-    } else if(secondPassword == firstPassword){
-      correctPassword = true;
-      $("#small_senha").remove();
-      $("input[name = 'reg_confirmPassword']").removeAttr("style");
-      $("#form_inputButton").removeAttr("style");
-    }
+    checkPassword(firstPassword, secondPassword);
   });
 
   $("input[name = 'reg_email']").on("blur", function(){
     if($(this).val() != ""){
       $.post("php/checkEmail.php", {"email": $(this).val()}, function(existingEmail){
-        console.log(existingEmail);
         if(existingEmail != "" && correctEmail){
           $("input[name = 'reg_email']").css({"border-color": "red", margin: "0.8rem 0 0.2rem 0"});
           $("input[name = 'reg_password']").css("margin", "0.28rem 0 0.8rem 0");

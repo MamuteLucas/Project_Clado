@@ -14,6 +14,15 @@
 			return $sql->rowCount();
 		}
 
+		public function checkPassword($id, $password){
+			$sql = $this->pdo->prepare("SELECT user_password FROM user WHERE user_id = :id and user_password = :password");
+			$sql->bindValue(":id", $id);
+			$sql->bindValue(":password", $password);
+			$sql->execute();
+
+			return $sql->rowCount();
+		}
+
 		public function createAccount($name, $email, $password){
 			$sql = $this->pdo->prepare("INSERT INTO user(user_name, user_email, user_password) VALUES(:name, :email, :password)");
 			$sql->bindValue(":name", $name);
@@ -23,7 +32,8 @@
 		}
 
 		public function doLogin($email, $password){
-			$sql = $this->pdo->prepare("SELECT user_id, user_name FROM user WHERE user_email = :email and user_password = :password");
+			$sql = $this->pdo->prepare("SELECT user_id, user_name, user_email FROM user
+																		WHERE user_email = :email and user_password = :password");
 			$sql->bindValue(":email", $email);
 			$sql->bindValue(":password", $password);
 			$sql->execute();
@@ -40,6 +50,23 @@
 			$sql->execute();
 
 			return $sql->fetchAll(PDO::FETCH_ASSOC);
+		}
+
+		public function saveAccount_nameEmail($id, $name, $email){
+			$sql = $this->pdo->prepare("UPDATE user SET user_name = :name, user_email = :email WHERE user_id = :id");
+			$sql->bindValue(":id", $id);
+			$sql->bindValue(":name", $name);
+			$sql->bindValue(":email", $email);
+			$sql->execute();
+
+		}
+
+		public function saveAccount_password($id, $password){
+			$sql = $this->pdo->prepare("UPDATE user SET user_password = :password WHERE user_id = :id");
+			$sql->bindValue(":id", $id);
+			$sql->bindValue(":password", $password);
+			$sql->execute();
+			
 		}
 	}
 ?>
