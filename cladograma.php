@@ -2,6 +2,22 @@
 	require("php/validateLogin.php");
 	require("php/connect.php");
 
+	if(empty($_GET["clado_id"])){
+		header("location: home.php?pag=inicio");
+
+	} else{
+		$con = new connect();
+		$rowCount = $con->checkCladogram($_SESSION["user_id"], $_GET["clado_id"]);
+
+		if($rowCount == 1){
+			$dir_cladogram = $con->selectCladogram($_GET["clado_id"]);
+			$dir_cladogram = $dir_cladogram["clado_directory"].".json";
+
+		} else{
+			header("location: home.php?pag=inicio");
+		}
+	}
+
 
 ?>
 
@@ -27,7 +43,7 @@
 	<link rel="stylesheet" type="text/css" href="css/div_tabOptions.css">
 
 	<script type="text/javascript">
-		startDiagram("<?= "cladogramas/".$dir_cladograma ?>");
+		startDiagram("<?= "cladogramas/".$dir_cladogram ?>");
 	</script>
 
 </head>

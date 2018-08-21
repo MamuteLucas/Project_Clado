@@ -66,7 +66,8 @@ small{
   top: 18.5rem;
 }
 
-ul {
+#ul_navbar {
+    z-index: 2;
     list-style-type: none;
     margin: 0;
     padding: 0;
@@ -77,19 +78,18 @@ ul {
     overflow: auto;
 }
 
-li a {
+.li_navbar .a_navbar {
     display: block;
-    color: #000;
     padding: 8px 16px;
     text-decoration: none;
 }
 
-li a:hover {
+.li_navbar .a_navbar:hover {
     background-color: #555;
     color: white;
 }
 
-li {
+.li_navbar {
     float: left;
 }
 
@@ -97,11 +97,16 @@ li {
   float: right;
 }
 
-a {
+.a_navbar {
     display: block;
     padding: 8px;
 }
 
+a:not(.active){
+  color: #000;
+}
+
 .active {
-    background-color: #4CAF50;
+    color: white;
+    background-color: #555;
 }

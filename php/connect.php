@@ -52,6 +52,26 @@
 			return $sql->fetchAll(PDO::FETCH_ASSOC);
 		}
 
+		public function checkCladogram($user_id, $clado_id){
+			$sql = $this->pdo->prepare("SELECT u.user_id, c.clado_id
+																		FROM user as u INNER JOIN user_has_cladogram as uc ON u.user_id = uc.user_id
+																									 INNER JOIN cladogram as c ON uc.clado_id = c.clado_id
+																		WHERE u.user_id = :user_id and c.clado_id = :clado_id");
+			$sql->bindValue(":user_id", $user_id);
+			$sql->bindValue(":clado_id", $clado_id);
+			$sql->execute();
+
+			return $sql->rowCount();
+		}
+
+		public function selectCladogram($id){
+			$sql = $this->pdo->prepare("SELECT clado_directory FROM cladogram WHERE clado_id = :id");
+			$sql->bindValue(":id", $id);
+			$sql->execute();
+
+			return $sql->fetch(PDO::FETCH_ASSOC);
+		}
+
 		public function saveAccount_nameEmail($id, $name, $email){
 			$sql = $this->pdo->prepare("UPDATE user SET user_name = :name, user_email = :email WHERE user_id = :id");
 			$sql->bindValue(":id", $id);
@@ -66,7 +86,7 @@
 			$sql->bindValue(":id", $id);
 			$sql->bindValue(":password", $password);
 			$sql->execute();
-			
+
 		}
 	}
 ?>

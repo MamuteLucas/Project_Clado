@@ -1,0 +1,44 @@
+#div_cladograms{
+  z-index: 1;
+  position: relative;
+  text-align: center;
+  top: 3rem;
+  margin: 0;
+}
+
+.button_cladograms{
+  margin: 1.5rem 2rem;
+  height: 30rem;
+  width: 15rem;
+  border: 1px solid #000;
+  border-radius: 0.2rem;
+  background-color: #fff;
+  transition: background-color 0.5s;
+}
+
+#button_addCladogram{
+  background-image: url("../images/Add-button.png");
+  background-size: 75px;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+#button_addCladogram:hover #p_addCladogram{
+  color: #ddd;
+}
+
+.button_cladograms:hover{
+  background-color: #ddd;
+}
+
+.p_cladograms{
+  position: relative;
+  text-align: center;
+  margin: 0;
+  top: -14rem;
+}
+
+#p_addCladogram{
+  transition: color 0.5s;
+  color: #fff;
+}

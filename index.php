@@ -29,18 +29,18 @@
 
 <body>
 	<div id="navbar">
-		<ul>
+		<ul id="ul_navbar">
 			<?php
 				$active['inicio'] = '';
 			  $active['cadastrar'] = '';
 			  $active['entrar'] = '';
 
-			  $active[$_GET['pag']] = 'class="active"';
+			  $active[$_GET['pag']] = "active";
 			?>
 
-			<li><a <?= $active['inicio'] ?> href="?pag=inicio">Início</a></li>
-			<li class="li_right"><a <?= $active['cadastrar'] ?> href="?pag=cadastrar">Criar conta</a></li>
-			<li class="li_right"><a <?= $active['entrar'] ?> href="?pag=entrar">Entrar</a></li>
+			<li class="li_navbar"><a class="a_navbar <?= $active["inicio"] ?>" href="?pag=inicio">Início</a></li>
+			<li class="li_navbar li_right"><a class="a_navbar <?= $active["cadastrar"] ?>" href="?pag=cadastrar">Criar conta</a></li>
+			<li class="li_navbar li_right"><a class="a_navbar <?= $active["entrar"] ?>" href="?pag=entrar">Entrar</a></li>
 		</ul>
 	</div>
 
