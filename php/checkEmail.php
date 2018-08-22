@@ -3,17 +3,19 @@
     $email = $_POST["email"];
     $email = addslashes($email);
 
-    session_start();
-    if(!empty($_SESSION["user_email"])){
-      if($email != $_SESSION["user_email"]){
-        require("connect.php");
+    require("connect.php");
 
-        $con = new connect();
-        $nLinhas = $con->checkEmail($email);
+    $con = new connect();
+    $nLinhas = $con->checkEmail($email);
 
-        if($nLinhas != 0){
-          echo "Email já cadastrado";
-        }
+    if($nLinhas != 0){
+      session_start();
+      if(!empty($_SESSION["user_email"])){
+        echo $_SESSION["user_email"];
+
+      } else{
+        echo "JA CADASTRADO";
+
       }
     }
   }

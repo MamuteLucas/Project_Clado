@@ -88,9 +88,11 @@ $(function(){
   });
 
   $("input[name = 'config_email']").on("blur", function(){
-    if($(this).val() != ""){
-      $.post("php/checkEmail.php", {"email": $(this).val()}, function(existingEmail){
-        if(existingEmail != "" && correctEmail){
+    var email = $(this).val();
+
+    if(email != ""){
+      $.post("php/checkEmail.php", {"email": email}, function(existingEmail){
+        if(existingEmail != "" && existingEmail != email && correctEmail){
           $("input[name = 'config_email']").css({"border-color": "red"});
           $("#input_email").append("<small id='small_email'>E-mail já cadastrado!</small>");
           correctEmail = false;

@@ -51,6 +51,16 @@ small{
   top: 26.8rem;
 }
 
+#small_errorRegister{
+  left:  9.85rem;
+  top: 22.6rem;
+}
+
+#small_password{
+  left:  10.7rem;
+  top: 22.6rem;
+}
+
 #small_newPassword{
   left:  10.7rem;
   top: 26.8rem;
