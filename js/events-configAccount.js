@@ -1,6 +1,7 @@
 var correctOldPassword = true,
     correctNewPassword = true,
     correctEmail = true,
+    correctName = true,
     requiredPassword = false,
     errorInputNull = false;
 
@@ -11,7 +12,7 @@ function submitConfig(){
        $("input[name = 'config_oldPassword']").val() != "" &&
        $("input[name = 'config_name']").val() != "" &&
        $("input[name = 'config_email']").val() != ""){
-         if(correctOldPassword && correctNewPassword && correctEmail){
+         if(correctOldPassword && correctNewPassword && correctEmail && correctName){
            $("form").attr({"onsubmit": "return true", "action": "php/saveAccount.php"});
 
          }
@@ -61,6 +62,19 @@ function changeRequired(){
 
 
 $(function(){
+  $("input[name = 'config_name']").on("keyup", function(){
+    var name = $(this).val();
+
+    if(name.search(/[^a-z ]/i) != -1 && correctName){
+      $("#input_name").append("<small id='small_name'>Nome inválido!</small>");
+      correctName = false;
+    } else if(name.search(/[^a-z ]/i) == -1 && !correctName){
+      correctName = true;
+      $("#small_name").remove();
+
+    }
+  });
+
   $("#div_password").on("keyup", function(){
     var fPassword = $("input[name = 'config_newPassword']").val(),
         sPassword = $("input[name = 'config_confirmNewPassword']").val();

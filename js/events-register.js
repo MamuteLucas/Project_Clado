@@ -1,6 +1,7 @@
 var correctPassword = true,
     correctEmail = true,
-    errorInputNull = false;
+    errorInputNull = false,
+    correctName = true;
 
 function submitCad(){
   var name = $("input[name = 'reg_name']").val(),
@@ -9,7 +10,7 @@ function submitCad(){
       confirmPassword = $("input[name = 'reg_confirmPassword']").val();
 
   if(name != "" && email != "" && password != "" && confirmPassword != ""){
-    if(correctPassword && correctEmail){
+    if(correctPassword && correctEmail && correctName){
       $("form").attr({"onsubmit": "return true", "action": "php/createAccount.php"});
 
     }
@@ -39,6 +40,20 @@ function checkPassword(fPassword, sPassword){
 }
 
 $(function(){
+  $("input[name = 'reg_name']").on("keyup", function(){
+    var name = $(this).val();
+
+    if(name.search(/[^a-z ]/i) != -1 && correctName){
+      $("#div_name").append("<small id='small_name'>Nome inválido!</small>");
+      correctName = false;
+    } else if(name.search(/[^a-z ]/i) == -1 && !correctName){
+      correctName = true;
+      $("#small_name").remove();
+
+    }
+
+  });
+
   $("input[name = 'reg_confirmPassword']").on("keyup", function(){
     var firstPassword = $("input[name = 'reg_password']").val();
         secondPassword = $(this).val();

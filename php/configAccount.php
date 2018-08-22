@@ -1,7 +1,7 @@
 <div id="div_form">
   <h1>Configurações da Conta</h1>
   <form method="post" name="configAccount" id="form_configAccount" onsubmit="return false">
-    <div id="input_nome">
+    <div id="input_name">
       <input type="text" name="config_name" class="form_input" placeholder="Nome" value="<?= $_SESSION['user_name'] ?>" required>
     </div>
 
