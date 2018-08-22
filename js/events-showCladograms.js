@@ -4,6 +4,6 @@ $(function(){
   });
 
   $("#button_addCladogram").on("click", function(){
-    console.log("ADD");
+    window.location = "home.php?pag=criar";
   });
 });

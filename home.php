@@ -26,6 +26,8 @@
 			echo "<script src='js/events-showCladograms.js'></script>";
 		} else if($_GET["pag"] == "conta"){
 			echo "<script src='js/events-configAccount.js'></script>";
+		} else if($_GET["pag"] == "criar"){
+			echo "<script src='js/events-createCladogram.js'></script>";
 		}
 	?>
 </head>
@@ -54,6 +56,8 @@
 			include("php/configAccount.php");
 		} else if($_GET["pag"] == "sair"){
 			include("php/doLogout.php");
+		} else if($_GET["pag"] == "criar"){
+			include("php/formNewCladogram.php");
 		}
 	?>
 
