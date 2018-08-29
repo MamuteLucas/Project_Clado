@@ -40,7 +40,7 @@ h1{
   outline: none;
 }
 
-#form_inputButton{
+.form_inputButton{
   width: 30.2rem;
   color: white;
   padding: 0;
@@ -48,12 +48,12 @@ h1{
   background-color: #007bff;
 }
 
-#form_inputButton:hover{
+.form_inputButton:hover{
   border: 1px solid #0062cc;
   background-color: #0069d9;
 }
 
-.form_inputText:focus, #form_inputButton:active{
+.form_inputText:focus, .form_inputButton:active{
   border: 1px solid #007bff;
 }
 

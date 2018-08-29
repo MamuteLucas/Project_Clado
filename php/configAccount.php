@@ -24,7 +24,7 @@
     </div>
 
     <div id="input_button">
-      <input type="submit" id="form_inputButton" class="form_input" value="Salvar" onclick="submitConfig()">
+      <input type="submit" class="form_input form_inputButton" value="Salvar" onclick="submitConfig()">
     </div>
   </form>
 </div>
