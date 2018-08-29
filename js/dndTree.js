@@ -30,9 +30,9 @@ var initialNodes = null;
 var indexInitialNodes = null;
 var firstLoad = true;
 
-function startDiagram(cladograma) {
+function startDiagram(cladogram) {
     // Get JSON data
-    treeJSON = d3.json(cladograma, function(error, treeData) {
+    treeJSON = d3.json(cladogram, function(error, treeData) {
 
         //var usada para permitir que o Node seja arrastado somente quando o botao esquerdo do mouse for usado nele
         var permitionDrag = true;
@@ -578,7 +578,7 @@ function startDiagram(cladograma) {
             if (mouseIn[0] != null && mouseIn[1] != null) {
                 changeValueOfLMIMI();
                 if (mouseIn[lastModifiedIndexMouseIn]) {
-                    saveNewRoot(root, initialDiagram);
+                    saveNewRoot(root, initialDiagram, cladogram);
                 }
             }
         }
@@ -600,7 +600,7 @@ function startDiagram(cladograma) {
             firstLoad = false;
 
             //setado o valor da var initialDiagram como o diagrama inicial
-            //isso poderia ser feito lendo o arquivo 1_cladograma.json
+            //isso poderia ser feito lendo o arquivo 1_cladogram.json
             initialDiagram = JSON.parse(turnDiagramInText(root));
             initialDiagram = prepareDiagram(initialDiagram);
 

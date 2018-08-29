@@ -1,27 +1,36 @@
 function inputText_onkeyup(keyPressed, digitated){
-  if(65 <= keyPressed && keyPressed <= 90 || keyPressed == 8){
-    if(digitated != ''){ //a condicao (A1) entra caso o campo de pesquisa tenha algo digitado nele
-      //nesse caso eh mostrado as li (itens da lista)
-      $("#input_text").css("border-radius", "0.3rem 0.3rem 0rem 0rem");
-      $("#ul_autoComplete").css("display", "inline");
+  try{
+    if(65 <= keyPressed && keyPressed <= 90 || keyPressed == 8){
+      if(digitated != ''){ //a condicao (A1) entra caso o campo de pesquisa tenha algo digitado nele
+        //nesse caso eh mostrado as li (itens da lista)
+        $("#input_text").css("border-radius", "0.3rem 0.3rem 0rem 0rem");
+        $("#ul_autoComplete").css("display", "inline");
 
-    } else{ //a condicao (A1) entra caso o campo de pesquisa nao tenha nada escrito nele
-      //nesse caso eh escondida as li (itens da lista)
-      $("#input_text").css("border-radius", "0.3rem");
-      $("#ul_autoComplete").css("display", "none");
+      } else{ //a condicao (A1) entra caso o campo de pesquisa nao tenha nada escrito nele
+        //nesse caso eh escondida as li (itens da lista)
+        $("#input_text").css("border-radius", "0.3rem");
+        $("#ul_autoComplete").css("display", "none");
 
+      }
+
+      //as li (itens da lista) sao removidas
+      $(".results_search").remove();
+
+      liFinder(indexInitialNodes.length, digitated);
     }
-
-    //as li (itens da lista) sao removidas
-    $(".results_search").remove();
-
-    liFinder(indexInitialNodes.length, digitated);
+  } catch(e){
+    $('#ul_autoComplete').append("<li class='results_search'>Sem resultados</li>");
+    
   }
 }
 
 function liFinder(lengthInitialNodes, digitated){
   //var para contar quando results foram encontrados
   var countResults = 0;
+
+  if(lengthInitialNodes > 25){
+    lengthInitialNodes = 25;
+  }
 
   for(var i = 0; i < lengthInitialNodes; i++){ //para cada Node
     if(indexInitialNodes[i].match(digitated)){  //a condicao (A2) entra caso algum valor de indexInitialNodes (indice de

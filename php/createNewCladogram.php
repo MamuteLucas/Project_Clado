@@ -1,8 +1,8 @@
 <?php
   require("connect.php");
 
-  $user_id = $_POST["user_id"];
-  $user_id = addslashes($user_id);
+  session_start();
+  $user_id = $_SESSION["user_id"];
   $clado_name = $_POST["clado_name"];
   $clado_name = addslashes($clado_name);
 
@@ -18,7 +18,7 @@
     fclose($newJson);
 
     echo "Novo cladograma criado";
-    
+
   } else{
     echo $clado_directory;
 

@@ -1,6 +1,8 @@
-var savedRoot = null;
+var savedRoot = null
+    clado_name = null;
 
-function saveNewRoot(notSavedRoot, initialDiagram){
+function saveNewRoot(notSavedRoot, initialDiagram, cladogram){
+  clado_name = cladogram;
   //a var savedRoot se torna uma copia do objeto notSavedRoot, na qual agora pode ser manipulado sem causar travamentos
   //pois nao se trata mais de uma referencia ao mesmo local da memoria
   savedRoot = JSON.parse(turnDiagramInText(notSavedRoot));
@@ -36,8 +38,7 @@ function prepareDiagram(diagram){
 //funcao que 'salva' o novo diagrama
 function saveDiagram(){
   //a linha abaixo envia (assincronamente) os dados que devem ser escritos no arquivo .json para o script PHP
-  $.post("php/writeNewDiagram.php", {modifiedDiagram: savedRoot});
-
+  $.post("php/writeNewDiagram.php", {"modifiedDiagram": savedRoot, "cladogram": clado_name});
   //var initialDiagram recebe o valor do novo diagrama
   initialDiagram = savedRoot;
 
@@ -91,35 +92,45 @@ function turnDiagramInText(diagram){
 
 function searchNode(quest, diagram){
   diagram = JSON.parse(turnDiagramInText(diagram));
-  
+
 }
 
 function getNodes(diagram, nodes){
-  for(var i = 0; i < diagram.children.length; i++){
-    var child = diagram.children[i];
+  try{
+    for(var i = 0; i < diagram.children.length; i++){
+      var child = diagram.children[i];
 
-    nodes[child.name] = child;
+      nodes[child.name] = child;
 
-    if(child.children){
-      getNodes(child, nodes);
+      if(child.children){
+        getNodes(child, nodes);
+      }
     }
-  }
 
-  return nodes;
+    return nodes;
+  } catch(e){
+    //error
+
+  }
 }
 
 function getIndexNodes(diagram, indexNodes){
-  for(var i = 0; i < diagram.children.length; i++){
-    var child = diagram.children[i];
+  try{
+    for(var i = 0; i < diagram.children.length; i++){
+      var child = diagram.children[i];
 
-    indexNodes.push(child.name);
+      indexNodes.push(child.name);
 
-    if(child.children){
-      getIndexNodes(child, indexNodes);
+      if(child.children){
+        getIndexNodes(child, indexNodes);
+      }
     }
-  }
 
-  return indexNodes;
+    return indexNodes;
+  } catch(e){
+    //error
+
+  }
 }
 
 //funcao que adiciona a classe anime-start

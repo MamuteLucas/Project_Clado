@@ -45,7 +45,7 @@
 			$sql = $this->pdo->prepare("SELECT c.clado_id, c.clado_name, c.clado_userAdmin, c.clado_directory
 																		FROM user as u INNER JOIN user_has_cladogram as uc ON u.user_id = uc.user_id
 																									 INNER JOIN cladogram as c ON uc.clado_id = c.clado_id
-																		WHERE u.user_id = :id");
+																		WHERE u.user_id = :id AND uc.solicitation != '10'");
 			$sql->bindValue(":id", $id);
 			$sql->execute();
 
@@ -118,7 +118,7 @@
 					die("Falha ao inserir cladogram");
 				}
 
-				$sql = $this->pdo->prepare("INSERT INTO user_has_cladogram(user_id, clado_id) VALUES(:user_id, :clado_id)");
+				$sql = $this->pdo->prepare("INSERT INTO user_has_cladogram(user_id, clado_id, solicitation) VALUES(:user_id, :clado_id, 0)");
 				$sql->bindValue(":user_id", $user_id);
 				$sql->bindValue(":clado_id", $clado_id);
 
@@ -136,6 +136,106 @@
 
 			}
 
+		}
+
+		public function addCladogram($user_id, $email_userAdmin, $clado_name){
+			$sql = $this->pdo->prepare("SELECT user_id FROM user WHERE user_email = :email_userAdmin");
+			$sql->bindValue(":email_userAdmin", $email_userAdmin);
+
+			$sql->execute();
+
+			$id_userAdmin = $sql->fetch(PDO::FETCH_ASSOC);
+
+			if($id_userAdmin["user_id"] != ""){
+				$clado_directory = $id_userAdmin["user_id"]."_".$clado_name;
+
+				$sql = $this->pdo->prepare("SELECT u.user_id, c.clado_id FROM user as u
+																				INNER JOIN user_has_cladogram as uc ON uc.user_id = u.user_id
+																				INNER JOIN cladogram as c ON uc.clado_id = c.clado_id
+																						WHERE u.user_id = :id_userAdmin and c.clado_directory = :clado_directory");
+				$sql->bindValue(":id_userAdmin", $id_userAdmin["user_id"]);
+				$sql->bindValue(":clado_directory", $clado_directory);
+
+				$sql->execute();
+
+				$select_USER_USERHASCLADOGRAM_CLADOGRAM = $sql->fetch(PDO::FETCH_ASSOC);
+
+				if($select_USER_USERHASCLADOGRAM_CLADOGRAM["user_id"] != ""){
+					$sql = $this->pdo->prepare("SELECT * FROM user_has_cladogram
+																							 WHERE user_id = :user_id AND clado_id = :clado_id");
+					$sql->bindValue(":user_id", $user_id);
+					$sql->bindValue(":clado_id", $select_USER_USERHASCLADOGRAM_CLADOGRAM["clado_id"]);
+
+					$sql->execute();
+
+					$select_USERHASCLADOGRAM = $sql->fetch(PDO::FETCH_ASSOC);
+
+					if($select_USERHASCLADOGRAM["solicitation"] == ""){
+						$sql = $this->pdo->prepare("INSERT INTO user_has_cladogram(user_id, clado_id, solicitation)
+																							 VALUES(:user_id, :clado_id, 10)");
+						$sql->bindValue(":user_id", $user_id);
+						$sql->bindValue(":clado_id", $select_USER_USERHASCLADOGRAM_CLADOGRAM["clado_id"]);
+
+						$sql->execute();
+
+						return "SOLICITACAO ENVIADA";
+
+					} else if($select_USERHASCLADOGRAM["solicitation"] == "5"){
+						$sql = $this->pdo->prepare("UPDATE user_has_cladogram SET solicitation = 10
+																						WHERE user_id = :user_id AND clado_id = :clado_id");
+						$sql->bindValue(":user_id", $user_id);
+						$sql->bindValue(":clado_id", $select_USER_USERHASCLADOGRAM_CLADOGRAM["clado_id"]);
+
+						$sql->execute();
+
+						return "SOLICITACAO ENVIADA";
+
+					} else if($select_USERHASCLADOGRAM["solicitation"] == "10"){
+						return "SOLICITACAO JA ENVIADA";
+
+					} else if($select_USERHASCLADOGRAM["solicitation"] == "1" ||
+										$select_USERHASCLADOGRAM["solicitation"] == "0"){
+						return "CLADOGRAMA JA ADICIONADO";
+
+					}
+
+				} else{
+					return "CLADOGRAMA INEXISTENTE";
+
+				}
+			} else{
+				echo "USUARIO NAO EXISTE";
+
+			}
+		}
+
+		public function searchSolicitation($user_id){
+			$sql = $this->pdo->prepare("SELECT u.user_id, u.user_name, c.clado_id, c.clado_name
+																			FROM user as u INNER JOIN user_has_cladogram as uc ON u.user_id = uc.user_id
+																										 INNER JOIN cladogram as c ON uc.clado_id = c.clado_id
+																			WHERE c.clado_userAdmin = :user_id AND uc.solicitation = '10'");
+			$sql->bindValue(":user_id", $user_id);
+
+			$sql->execute();
+
+			return $sql->fetchAll(PDO::FETCH_ASSOC);
+		}
+
+		public function actionSolicitation($user_id, $clado_id, $button_type){
+			if($button_type == "btn btn-success"){
+				$sql = $this->pdo->prepare("UPDATE user_has_cladogram SET solicitation = 1
+																				WHERE user_id = :user_id AND clado_id = :clado_id");
+
+			} else if($button_type == "btn btn-danger"){
+				$sql = $this->pdo->prepare("UPDATE user_has_cladogram SET solicitation = 5
+																				WHERE user_id = :user_id AND clado_id = :clado_id");
+
+			}
+
+			$sql->bindValue(":user_id", $user_id);
+			$sql->bindValue(":clado_id", $clado_id);
+
+			$sql->execute();
 		}
 	}
 ?>

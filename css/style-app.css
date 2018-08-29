@@ -7,6 +7,23 @@ h1{
   margin-top: 3rem;
 }
 
+.class_soli{
+  position: absolute;
+  width: 35%;
+  text-align: center;
+  margin: 0;
+}
+
+#soli_received{
+  margin-right: 60%;
+  padding-left: 5%;
+}
+
+#soli_sended{
+  margin-left: 60%;
+  padding-right: 5%;
+}
+
 #div_form{
   position: absolute;
   text-align: center;
@@ -44,6 +61,16 @@ small{
   position: absolute;
   font-size: 12px;
   color: red;
+}
+
+#small_newCladogram{
+  left:  11rem;
+  top: 10.3rem;
+}
+
+#small_addCladogram{
+  left:  9rem;
+  top: 28.7rem;
 }
 
 #small_error{

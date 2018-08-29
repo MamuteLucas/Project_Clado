@@ -3,12 +3,18 @@
 
 	if(empty($_GET["pag"])){
 		 header("location: ?pag=inicio");
+
+	} else{
+		if($_GET["pag"] != "inicio" && $_GET["pag"] != "conta" && $_GET["pag"] != "solicitacao" && $_GET["pag"] != "sair" && $_GET["pag"] != "criar"){
+			header("location: ?pag=inicio");
+		}
 	}
 
 	require("php/connect.php");
 
 	$con = new connect();
 	$_SESSION["cladograms"] = $con->searchCladograms($_SESSION["user_id"]);
+
 ?>
 
 <!DOCTYPE html>
@@ -24,10 +30,17 @@
 		if($_GET["pag"] == "inicio"){
 			echo "<link rel='stylesheet' type='text/css' href='css/home.css'>";
 			echo "<script src='js/events-showCladograms.js'></script>";
+
 		} else if($_GET["pag"] == "conta"){
 			echo "<script src='js/events-configAccount.js'></script>";
+
 		} else if($_GET["pag"] == "criar"){
 			echo "<script src='js/events-createCladogram.js'></script>";
+
+		} else if($_GET["pag"] == "solicitacao"){
+			echo "<link rel='stylesheet' type='text/css' href='css/solicitation.css'>";
+			echo "<script src='js/events-solicitation.js'></script>";
+
 		}
 	?>
 </head>
@@ -39,6 +52,7 @@
 				$active["inicio"] = "";
 			  $active["conta"] = "";
 				$active["sair"] = "";
+				$active["solicitacao"] = "";
 
 			  $active[$_GET["pag"]] = "active";
 			?>
@@ -46,18 +60,26 @@
 			<li class="li_navbar"><a class="a_navbar <?= $active["inicio"] ?>" href="?pag=inicio">Início</a></li>
 			<li class="li_navbar li_right"><a class="a_navbar <?= $active["sair"] ?>" href="?pag=sair">Sair</a></li>
 			<li class="li_navbar li_right"><a class="a_navbar <?= $active["conta"] ?>" href="?pag=conta">Conta</a></li>
+			<li class="li_navbar li_right"><a class="a_navbar <?= $active["solicitacao"] ?>" href="?pag=solicitacao">Solicitações</a></li>
 		</ul>
 	</div>
 
 	<?php
 		if($_GET["pag"] == "inicio"){
 			include("php/showCladograms.php");
+
 		} else if($_GET["pag"] == "conta"){
 			include("php/configAccount.php");
+
 		} else if($_GET["pag"] == "sair"){
 			include("php/doLogout.php");
+
 		} else if($_GET["pag"] == "criar"){
 			include("php/formNewCladogram.php");
+
+		} else if($_GET["pag"] == "solicitacao"){
+			include("php/showSolicitation.php");
+
 		}
 	?>
 
