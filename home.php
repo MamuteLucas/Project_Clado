@@ -75,7 +75,7 @@
 			include("php/doLogout.php");
 
 		} else if($_GET["pag"] == "criar"){
-			include("php/formNewCladogram.php");
+			include("html/formNewCladogram.html");
 
 		} else if($_GET["pag"] == "solicitacao"){
 			include("php/showSolicitation.php");
