@@ -20,6 +20,7 @@ function saveNewRoot(notSavedRoot, initialDiagram, cladogram){
 //funcao prepara o diagrama para ser salvo
 function prepareDiagram(diagram){
   //aqui sao deletas as chaves da primeira camada do diagrama
+  //delete diagram.parent;
   delete diagram.x;
   delete diagram.x0;
   delete diagram.y;
@@ -50,6 +51,7 @@ function delUnwatedKeysDiagram(diagram){
   if(diagram["children"] != null){
     diagram = diagram["children"];
     for(var i = 0; i < diagram.length; i++){
+        //delete diagram[i].parent;
         delete diagram[i].x;
         delete diagram[i].x0;
         delete diagram[i].y;

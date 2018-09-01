@@ -65,7 +65,7 @@
 		}
 
 		public function selectCladogram($id){
-			$sql = $this->pdo->prepare("SELECT clado_directory FROM cladogram WHERE clado_id = :id");
+			$sql = $this->pdo->prepare("SELECT clado_name, clado_directory FROM cladogram WHERE clado_id = :id");
 			$sql->bindValue(":id", $id);
 			$sql->execute();
 
@@ -209,7 +209,7 @@
 			}
 		}
 
-		public function searchSolicitation($user_id){
+		public function searchSolicitationReceived($user_id){
 			$sql = $this->pdo->prepare("SELECT u.user_id, u.user_name, c.clado_id, c.clado_name
 																			FROM user as u INNER JOIN user_has_cladogram as uc ON u.user_id = uc.user_id
 																										 INNER JOIN cladogram as c ON uc.clado_id = c.clado_id
@@ -221,7 +221,7 @@
 			return $sql->fetchAll(PDO::FETCH_ASSOC);
 		}
 
-		public function actionSolicitation($user_id, $clado_id, $button_type){
+		public function actionSolicitationReceived($user_id, $clado_id, $button_type){
 			if($button_type == "btn btn-success"){
 				$sql = $this->pdo->prepare("UPDATE user_has_cladogram SET solicitation = 1
 																				WHERE user_id = :user_id AND clado_id = :clado_id");
@@ -236,6 +236,18 @@
 			$sql->bindValue(":clado_id", $clado_id);
 
 			$sql->execute();
+		}
+
+		public function searchSolicitationSended($user_id){
+			$sql = $this->pdo->prepare("SELECT c.clado_id, c.clado_name, u.user_id, u.user_name
+																			FROM cladogram as c INNER JOIN user_has_cladogram as uc ON c.clado_id = uc.clado_id
+																					INNER JOIN user as u ON u.user_id = c.clado_userAdmin
+																			WHERE uc.user_id = :user_id and uc.solicitation = 10");
+			$sql->bindValue(":user_id", $user_id);
+
+			$sql->execute();
+
+			return $sql->fetchAll(PDO::FETCH_ASSOC);
 		}
 	}
 ?>

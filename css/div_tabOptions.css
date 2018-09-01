@@ -20,17 +20,10 @@
   background-color: steelblue;
 }
 
-#li_addFilo{
-  text-align: center;
-}
-
-#p_addFilo {
+#title_tabOptions{
   margin: 0;
   padding: 0;
   border: 0;
-  text-align: left;
-}
-
-#input_addFilo{
-    max-width: 11rem;
+  border-bottom: 1px solid #000;
+  text-align: center;
 }

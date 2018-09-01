@@ -24,11 +24,11 @@ DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
 OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
 EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.*/
-
-var initialDiagram = null;
-var initialNodes = null;
-var indexInitialNodes = null;
-var firstLoad = true;
+var modifiedFilo = null,
+    initialDiagram = null,
+    initialNodes = null,
+    indexInitialNodes = null,
+    firstLoad = true;
 
 function startDiagram(cladogram) {
     // Get JSON data
@@ -618,7 +618,35 @@ function startDiagram(cladogram) {
               permitionDrag = dotNode_onmousedown(buttonPressed);
 
           }).on("mouseup", function(buttonPressed){ //ocorre quando um botao do mouse eh solto em um Node
-              dotNode_onmouseup(buttonPressed);
+              dotNode_onmouseup(buttonPressed, $(this));
+              modifiedFilo = $(this)[0].__data__;
+
+          });
+
+          $("#li_addFilo").on("click", function(){
+            addFilo("stronger", modifiedFilo);
+            saveNewRoot(root, initialDiagram, cladogram);
+            update(root);
+            //window.location = "cladograma.php?clado_id=1";
+
+          });
+
+          $("#li_removeFilo").on("click", function(){
+            window.location = "php/clado_removeFilo.php";
+
+          });
+
+          $("#li_editFilo").on("click", function(){
+            window.location = "php/clado_editFilo.php";
+
+          });
+
+          $("#li_infoFilo").on("click", function(){
+            window.location = "php/clado_infoFilo.php";
+
+          });
+
+          $("#btn_addFilo").on("click", function(){
 
           });
 

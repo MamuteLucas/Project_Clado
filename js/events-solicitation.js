@@ -10,13 +10,20 @@ $(function(){
       padding: "0.75rem 1.25rem 0 1.25rem",
       opacity: 0
 
-    }, 500, function(){
+    }, 400, function(){
       $("#"+div.id).remove();
-      $("#soli_received").append("<div class='alert alert-primary' role='alert'>Nenhuma solicitação.</div>");
-      
+
+      if($("#soli_sended")[0].children.length == 1){
+        $("#soli_sended").append("<div class='alert alert-primary' role='alert'>Nenhuma solicitação.</div>");
+      }
+
+      if($("#soli_received")[0].children.length == 1){
+        $("#soli_received").append("<div class='alert alert-primary' role='alert'>Nenhuma solicitação.</div>");
+      }
+
     });
 
-    $.post("php/actionSolicitation.php", {"user_id": user_id, "clado_id": clado_id, "button_type": button_type});
+    $.post("php/actionSolicitationReceived.php", {"user_id": user_id, "clado_id": clado_id, "button_type": button_type});
   });
 
 });

@@ -6,5 +6,5 @@
   include("connect.php");
 
   $con = new connect();
-  $con->actionSolicitation($user_id, $clado_id, $button_type);
+  $con->actionSolicitationReceived($user_id, $clado_id, $button_type);
 ?>

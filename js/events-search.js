@@ -20,7 +20,7 @@ function inputText_onkeyup(keyPressed, digitated){
     }
   } catch(e){
     $('#ul_autoComplete').append("<li class='results_search'>Sem resultados</li>");
-    
+
   }
 }
 
@@ -28,16 +28,13 @@ function liFinder(lengthInitialNodes, digitated){
   //var para contar quando results foram encontrados
   var countResults = 0;
 
-  if(lengthInitialNodes > 25){
-    lengthInitialNodes = 25;
-  }
-
   for(var i = 0; i < lengthInitialNodes; i++){ //para cada Node
-    if(indexInitialNodes[i].match(digitated)){  //a condicao (A2) entra caso algum valor de indexInitialNodes (indice de
+    if(indexInitialNodes[i].match(digitated) && countResults < 15){  //a condicao (A2) entra caso algum valor de indexInitialNodes (indice de
       //ul#ul_autoComplete recebe um 'filho'    //initialNodes) tenha uma parte do texto igual ao que foi digitado
       //(<li>um dos possiveis itens procurado</li>)
       $('#ul_autoComplete').append("<li class='results_search'>"+indexInitialNodes[i]+"</li>");
       countResults++;
+
     }
   }
 

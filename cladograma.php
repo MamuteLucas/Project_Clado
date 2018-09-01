@@ -11,6 +11,7 @@
 
 		if($rowCount == 1){
 			$dir_cladogram = $con->selectCladogram($_GET["clado_id"]);
+			$title = $dir_cladogram["clado_name"];
 			$dir_cladogram = $dir_cladogram["clado_directory"].".json";
 
 		} else{
@@ -25,7 +26,7 @@
 <html lang="pt-br">
 <head>
 	<meta charset="utf-8">
-	<title>Cladograma</title>
+	<title><?= $title;?></title>
 
 	<script src="js/jquery-3.3.1.min.js"></script>
 	<script src="js/d3.v3.min.js"></script>
@@ -42,6 +43,8 @@
 	<script src="js/events-tabOptions.js"></script>
 	<link rel="stylesheet" type="text/css" href="css/div_tabOptions.css">
 
+	<script src="js/events-options.js"></script>
+
 	<script type="text/javascript">
 		startDiagram("<?= "cladogramas/".$dir_cladogram ?>");
 	</script>
@@ -53,9 +56,12 @@
 
 		<div id="div_tabOptions">
 			<ul id="ul_options">
+				<li class="li_search">
+					<p id="title_tabOptions"></p>
+				</li>
+
 				<li class="li_search" id="li_addFilo">
-					<label for="input_addFilo"><p id="p_addFilo">Inserir novo filo</p></label>
-					<input type="text" id="input_addFilo">
+					<span>Inserir novo filo</span>
 				</li>
 
 				<li class="li_search" id="li_removeFilo">

@@ -1,7 +1,9 @@
-function dotNode_onmouseup(buttonPressed){
+function dotNode_onmouseup(buttonPressed, varThis){
   if(buttonPressed.which == 3){ //a condicao (A1) entra se o botao do mouse pressionado foi o direito
     //a div#div_tabOptions fica visivel e posicionado onde foi clicado
     $("#div_tabOptions").css({display: "inline", left: buttonPressed.clientX, top: buttonPressed.clientY});
+
+    $("#title_tabOptions").text(varThis[0].textContent);
   }
 }
 
@@ -11,9 +13,4 @@ function dotNode_onmousedown(buttonPressed){
   } else {
       return false; //nao permitira um node
   }
-}
-
-function hashtagTreeContainer(){
-  $('input[name="filo"]').css("border-radius", "0.3rem");
-  $('#search-autoComplete').css({opacity: 0, top: "-20rem", right: "-20rem"});
 }
