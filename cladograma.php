@@ -46,7 +46,7 @@
 	<script src="js/events-options.js"></script>
 
 	<script type="text/javascript">
-		startDiagram("<?= "cladogramas/".$dir_cladogram ?>");
+		startDiagram("<?= "cladogramas/".$dir_cladogram; ?>", "<?= $_SESSION["user_name"]; ?>");
 	</script>
 
 </head>
@@ -84,6 +84,12 @@
 			<input type="button" class="btn btn-primary" id="input_button" value="">
 		</div>
 
-		<input type="button" class="btn btn-primary anime" onclick="saveDiagram()" value="Salvar">
+		<div class="popup">
+
+		</div>
+
+		<div class="popup" id="popup_shadow"></div>
+
+		<input type="button" class="btn btn-primary anime" id="saveDiagram" value="Salvar">
 </body>
 </html>

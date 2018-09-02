@@ -5,6 +5,9 @@ function dotNode_onmouseup(buttonPressed, varThis){
 
     $("#title_tabOptions").text(varThis[0].textContent);
   }
+
+  inputText_onfocusout($("#input_text").val());
+
 }
 
 function dotNode_onmousedown(buttonPressed){

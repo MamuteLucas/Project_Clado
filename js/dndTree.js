@@ -25,12 +25,13 @@ OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
 EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.*/
 var modifiedFilo = null,
+    colorModifiedFilo = null,
     initialDiagram = null,
     initialNodes = null,
     indexInitialNodes = null,
     firstLoad = true;
 
-function startDiagram(cladogram) {
+function startDiagram(cladogram, user_logged) {
     // Get JSON data
     treeJSON = d3.json(cladogram, function(error, treeData) {
 
@@ -612,51 +613,67 @@ function startDiagram(cladogram) {
         }
 
         $(function(){
-          $(".node")
-          .on("mousedown", function(buttonPressed){ //ocorre quando um botao do mouse eh pressionado em um Node
-              //a var permitionDrag eh boolean, se true ela permitira arrastar um node, caso false nao permitira
+          $("body").on("mousedown", function(buttonPressed){
+            if(buttonPressed.target.className.animVal == "overlay"){
+              $("#div_tabOptions").css("display", "none");
+              inputText_onfocusout($("#input_text").val());
+
+            } else if(buttonPressed.target.className == "btn"){
+              $("#div_tabOptions").css("display", "none");
+
+            }
+          });
+
+          $(".node").on("mousedown", function(buttonPressed){
+              $("#div_tabOptions").css("display", "none");
               permitionDrag = dotNode_onmousedown(buttonPressed);
 
-          }).on("mouseup", function(buttonPressed){ //ocorre quando um botao do mouse eh solto em um Node
+          }).on("mouseup", function(buttonPressed){
               dotNode_onmouseup(buttonPressed, $(this));
+
+              colorModifiedFilo = $(this)[0].children[0].attributes[2].nodeValue;
               modifiedFilo = $(this)[0].__data__;
 
           });
 
+          $("#saveDiagram").on("click", function(){
+            saveDiagram(root);
+
+          });
+
+          $("#popup_shadow").on("click", function(){
+            $(".popup").css({"display": "none"});
+
+          });
+
           $("#li_addFilo").on("click", function(){
-            addFilo("stronger", modifiedFilo);
+            //$("#div_tabOptions").css("display", "none");
+            //$(".popup").css({"display": "block"});
+
+            if(colorModifiedFilo == "fill: lightsteelblue;"){
+              toggleChildren(modifiedFilo);
+            }
+            addFilo("mamute", "reino", user_logged, modifiedFilo);
             saveNewRoot(root, initialDiagram, cladogram);
+
             update(root);
-            //window.location = "cladograma.php?clado_id=1";
 
           });
 
           $("#li_removeFilo").on("click", function(){
-            window.location = "php/clado_removeFilo.php";
+            $("#div_tabOptions").css("display", "none");
 
           });
 
           $("#li_editFilo").on("click", function(){
-            window.location = "php/clado_editFilo.php";
+            $("#div_tabOptions").css("display", "none");
 
           });
 
           $("#li_infoFilo").on("click", function(){
-            window.location = "php/clado_infoFilo.php";
+            $("#div_tabOptions").css("display", "none");
 
           });
-
-          $("#btn_addFilo").on("click", function(){
-
-          });
-
-          $("#tree-container")
-            .not(".node, #div_tabOptions, #ul_autoComplete")
-            .on("mousedown", function(){                    //ocorre quando um botao do mouse eh pressionado em qualquer lugar da
-              $("#div_tabOptions").css("display", "none");  //div#tree-container (toda a area da tela) com excecao dos Nodes, da
-              inputText_onfocusout($("#input_text").val()); //div#div_tabOptions (aba de opcoes) e do ul#ul_autoComplete
-                                                            //(autocomplete do campo de pesquisa)
-            });
 
           $("#input_text").on("keyup", function(keyPressed){            //ocorre caso alguma letra (+backspace) seja pressionada
             //$(this).val() eh o que esta escrito no campo de pesquisa  //no campo de pesquisa

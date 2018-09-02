@@ -37,11 +37,14 @@ function prepareDiagram(diagram){
 }
 
 //funcao que 'salva' o novo diagrama
-function saveDiagram(){
+function saveDiagram(diagram){
   //a linha abaixo envia (assincronamente) os dados que devem ser escritos no arquivo .json para o script PHP
   $.post("php/writeNewDiagram.php", {"modifiedDiagram": savedRoot, "cladogram": clado_name});
   //var initialDiagram recebe o valor do novo diagrama
   initialDiagram = savedRoot;
+
+  initialNodes = getNodes(diagram, new Array());
+  indexInitialNodes = getIndexNodes(diagram, new Array());
 
   depress();
 }
