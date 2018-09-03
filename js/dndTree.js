@@ -299,6 +299,8 @@ function startDiagram(cladogram, user_logged) {
             if (draggingNode !== null) {
                 update(root);
                 centerNode(draggingNode);
+
+                svgOnMouseDown_dotNode();
                 draggingNode = null;
             }
         }
@@ -400,6 +402,8 @@ function startDiagram(cladogram, user_logged) {
             d = toggleChildren(d);
             update(d);
             centerNode(d);
+
+            svgOnMouseDown_dotNode();
         }
 
         function update(source) {
@@ -584,6 +588,18 @@ function startDiagram(cladogram, user_logged) {
             }
         }
 
+        function svgOnMouseDown_dotNode(){
+          var allDotNodes = document.querySelectorAll(".node");
+
+          for (var i = 0; i < allDotNodes.length; i++) {
+            allDotNodes[i].addEventListener("mousedown", function(buttonPressed){
+              $("#div_tabOptions").css("display", "none");
+              permitionDrag = dotNode_onmousedown(buttonPressed);
+
+            })
+          }
+        }
+
         // Append a group which holds all nodes and which the zoom Listener can act upon.
         var svgGroup = baseSvg.append("g");
 
@@ -595,6 +611,8 @@ function startDiagram(cladogram, user_logged) {
         // Layout the tree initially and center on the root node.
         update(root);
         centerNode(root);
+
+        svgOnMouseDown_dotNode();
 
         //na primeira vez que carrega
         if (firstLoad) {
@@ -622,13 +640,10 @@ function startDiagram(cladogram, user_logged) {
               $("#div_tabOptions").css("display", "none");
 
             }
+
           });
 
-          $(".node").on("mousedown", function(buttonPressed){
-              $("#div_tabOptions").css("display", "none");
-              permitionDrag = dotNode_onmousedown(buttonPressed);
-
-          }).on("mouseup", function(buttonPressed){
+          $("svg").on("mouseup", ".node", function(buttonPressed){
               dotNode_onmouseup(buttonPressed, $(this));
 
               colorModifiedFilo = $(this)[0].children[0].attributes[2].nodeValue;
@@ -653,10 +668,14 @@ function startDiagram(cladogram, user_logged) {
             if(colorModifiedFilo == "fill: lightsteelblue;"){
               toggleChildren(modifiedFilo);
             }
+
             addFilo("mamute", "reino", user_logged, modifiedFilo);
             saveNewRoot(root, initialDiagram, cladogram);
 
             update(root);
+            centerNode(modifiedFilo);
+
+            svgOnMouseDown_dotNode();
 
           });
 
