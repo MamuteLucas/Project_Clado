@@ -25,6 +25,7 @@ OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
 EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.*/
 var modifiedFilo = null,
+    tabOptions_click = null;
     colorModifiedFilo = null,
     initialDiagram = null,
     initialNodes = null,
@@ -630,6 +631,28 @@ function startDiagram(cladogram, user_logged) {
             indexInitialNodes = getIndexNodes(root, new Array());
         }
 
+        function attDiagram(){
+          saveNewRoot(root, initialDiagram, cladogram);
+
+          update(root);
+          centerNode(modifiedFilo);
+
+          svgOnMouseDown_dotNode();
+        }
+
+        function fAddFilo(filo_name, filo_category){
+          addFilo(filo_name, filo_category, user_logged, modifiedFilo);
+
+          attDiagram();
+        }
+
+        function fEditFilo(filo_name, filo_category){
+          modifiedFilo.name = filo_name;
+          modifiedFilo.filo = filo_category;
+
+          attDiagram();
+        }
+
         $(function(){
           $("body").on("mousedown", function(buttonPressed){
             if(buttonPressed.target.className.animVal == "overlay"){
@@ -662,36 +685,64 @@ function startDiagram(cladogram, user_logged) {
           });
 
           $("#li_addFilo").on("click", function(){
-            //$("#div_tabOptions").css("display", "none");
-            //$(".popup").css({"display": "block"});
+            tabOptions_click = "#li_addFilo";
 
-            if(colorModifiedFilo == "fill: lightsteelblue;"){
-              toggleChildren(modifiedFilo);
-            }
+            $("#div_tabOptions").css("display", "none");
+            $(".popup").css({"display": "block"});
 
-            addFilo("mamute", "reino", user_logged, modifiedFilo);
-            saveNewRoot(root, initialDiagram, cladogram);
-
-            update(root);
-            centerNode(modifiedFilo);
-
-            svgOnMouseDown_dotNode();
+            $("input[name = filo_name]").val("");
 
           });
 
           $("#li_removeFilo").on("click", function(){
+            tabOptions_click = "#li_removeFilo";
+
             $("#div_tabOptions").css("display", "none");
 
           });
 
           $("#li_editFilo").on("click", function(){
+            tabOptions_click = "#li_editFilo";
+
             $("#div_tabOptions").css("display", "none");
+            $(".popup").css({"display": "block"});
+
+            $("input[name = filo_name]").val(modifiedFilo.name);
 
           });
 
           $("#li_infoFilo").on("click", function(){
+            tabOptions_click = "#li_infoFilo";
+
             $("#div_tabOptions").css("display", "none");
 
+          });
+
+          $("#createOrEdit_btn").on("click", function(){
+            var filo_name = $("input[name = filo_name]").val();
+                filo_category = modifiedFilo.category + 1;
+
+            if(filo_name != ""){
+              $(".popup").css({"display": "none"});
+
+              if(colorModifiedFilo == "fill: lightsteelblue;"){
+                toggleChildren(modifiedFilo);
+              }
+
+              if(tabOptions_click == "#li_addFilo"){
+                fAddFilo(filo_name, filo_category);
+
+              } else if(tabOptions_click == "#li_removeFilo"){
+
+
+              } else if(tabOptions_click == "#li_editFilo"){
+                fEditFilo(filo_name, filo_category);
+
+              } else if(tabOptions_click == "#li_infoFilo"){
+
+
+              }
+            }
           });
 
           $("#input_text").on("keyup", function(keyPressed){            //ocorre caso alguma letra (+backspace) seja pressionada

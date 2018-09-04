@@ -157,3 +157,7 @@ a:not(.active){
     color: white;
     background-color: #555;
 }
+
+#createOrEdit_filo{
+  text-align: center;
+}

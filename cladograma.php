@@ -45,6 +45,8 @@
 
 	<script src="js/events-options.js"></script>
 
+	<link rel="stylesheet" type="text/css" href="css/style-app.css">
+
 	<script type="text/javascript">
 		startDiagram("<?= "cladogramas/".$dir_cladogram; ?>", "<?= $_SESSION["user_name"]; ?>");
 	</script>
@@ -85,6 +87,20 @@
 		</div>
 
 		<div class="popup">
+			<div id="createOrEdit_filo">
+				<h2 id="createOrEdit_title">Teste</h2>
+
+				<form onsubmit="return false;">
+					<div id="input_filoName">
+							<input type="text" name="filo_name" class="form_input"
+									placeholder="Nome do filo (Ex: Animalia, Mammalia, Homo Sapiens.)">
+				  	</div>
+
+					<div id="input_filoButton">
+							<input type="submit" id="createOrEdit_btn" class="form_input form_inputButton" value="Salvar">
+					</div>
+				</form>
+			</div>
 
 		</div>
 
