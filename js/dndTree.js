@@ -641,8 +641,8 @@ function startDiagram(cladogram, user_logged) {
         }
 
         function fAddFilo(filo_name, filo_category){
-          addFilo(filo_name, filo_category, user_logged, modifiedFilo);
-
+          modifiedFilo = addFilo(filo_name, filo_category, user_logged, modifiedFilo);
+          
           attDiagram();
         }
 
@@ -651,6 +651,55 @@ function startDiagram(cladogram, user_logged) {
           modifiedFilo.filo = filo_category;
 
           attDiagram();
+        }
+
+        function placeholderAndTitleOfPOPUP(typeOfAction){
+            var category = modifiedFilo.category,
+                examples = null;
+
+            if(typeOfAction == 0){
+                title_category = "Adicionar";
+            } else if(typeOfAction == 1){
+                title_category = "Editar";
+            }
+            
+            if(category == 0){
+                category = title_category + " Domínio";
+                examples = "Eukaryota, Prokaryota, etc..";
+
+            } else if(category == 1){
+                category = title_category + " Reino";
+                examples = "Monera, Fungi, Plantae, etc..";
+
+            } else if(category == 2){
+                category = title_category + " Filo";
+                examples = "Chordata, Basidiomycota, etc..";
+
+            } else if(category == 3){
+                category = title_category + " Classe";
+                examples = "Spirochaetes, Cephalopoda, etc..";
+
+            } else if(category == 4){
+                category = title_category + " Ordem";
+                examples = "Primates, Cucurbitales, etc..";
+
+            } else if(category == 5){
+                category = title_category + " Família";
+                examples = "Trichocomaceae, Clostridiaceae, etc..";
+
+            } else if(category == 6){
+                category = title_category + " Genêro";
+                examples = "Homo, Cycas, Ananas, etc..";
+
+            } else if(category == 7){
+                category = title_category + " Espécie";
+                examples = "Canis Lupus, Busarellus Nigricollis, etc..";
+
+            }
+
+            $("#createOrEdit_title")[0].innerText = category;
+
+            $("input[name = 'filo_name']").attr("placeholder", "Ex: " + examples);
         }
 
         $(function(){
@@ -668,7 +717,7 @@ function startDiagram(cladogram, user_logged) {
 
           $("svg").on("mouseup", ".node", function(buttonPressed){
               dotNode_onmouseup(buttonPressed, $(this));
-
+              
               colorModifiedFilo = $(this)[0].children[0].attributes[2].nodeValue;
               modifiedFilo = $(this)[0].__data__;
 
@@ -690,14 +739,29 @@ function startDiagram(cladogram, user_logged) {
             $("#div_tabOptions").css("display", "none");
             $(".popup").css({"display": "block"});
 
+            placeholderAndTitleOfPOPUP(0);
+
             $("input[name = filo_name]").val("");
 
           });
 
           $("#li_removeFilo").on("click", function(){
-            tabOptions_click = "#li_removeFilo";
-
             $("#div_tabOptions").css("display", "none");
+
+            var father = modifiedFilo.parent.children;
+
+            for(var i = 0; i < father.length; i++){
+                if(father[i].name == modifiedFilo.name){
+                    father.splice(i, 1);
+
+                    break;
+                }
+                
+            }
+
+            modifiedFilo = modifiedFilo.parent;
+
+            attDiagram();
 
           });
 
@@ -707,42 +771,60 @@ function startDiagram(cladogram, user_logged) {
             $("#div_tabOptions").css("display", "none");
             $(".popup").css({"display": "block"});
 
+            placeholderAndTitleOfPOPUP(1);
+
             $("input[name = filo_name]").val(modifiedFilo.name);
 
           });
 
           $("#li_infoFilo").on("click", function(){
-            tabOptions_click = "#li_infoFilo";
-
             $("#div_tabOptions").css("display", "none");
 
           });
 
           $("#createOrEdit_btn").on("click", function(){
             var filo_name = $("input[name = filo_name]").val();
-                filo_category = modifiedFilo.category + 1;
+                filo_category = modifiedFilo.category + 1,
+                filoName_isOnlyChar = filo_name.search(/[^a-z ]/i);
 
-            if(filo_name != ""){
-              $(".popup").css({"display": "none"});
+            if(filo_name != "" && filoName_isOnlyChar == -1){
+              filo_name = filo_name.toLowerCase().split(" ");
 
-              if(colorModifiedFilo == "fill: lightsteelblue;"){
-                toggleChildren(modifiedFilo);
+              if(filo_name.length < 3){
+                for(var i = 0; i < filo_name.length; i++){
+                    filo_name[i] = filo_name[i][0].toUpperCase() + filo_name[i].slice(1);
+                }
+
+                if(filo_name.length == 1){
+                    filo_name = filo_name[0];
+                } else if(filo_name.length == 2){
+                    filo_name = filo_name[0] + " " + filo_name[1];
+                }
+                
+                $(".popup").css({"display": "none"});
+
+                if(colorModifiedFilo == "fill: lightsteelblue;"){
+                  toggleChildren(modifiedFilo);
+                }
+  
+                if(tabOptions_click == "#li_addFilo"){
+                  fAddFilo(filo_name, filo_category);
+  
+                } else if(tabOptions_click == "#li_editFilo"){
+                  fEditFilo(filo_name, filo_category);
+  
+                }
+
               }
+              
+            } else if(filo_name == ""){
+                $("#small_popup")[0].innerText = "Preencha o campo!";
 
-              if(tabOptions_click == "#li_addFilo"){
-                fAddFilo(filo_name, filo_category);
+            } else if(filoName_isOnlyChar != -1){
+                $("#small_popup")[0].innerText = "Nome inválido!";
 
-              } else if(tabOptions_click == "#li_removeFilo"){
-
-
-              } else if(tabOptions_click == "#li_editFilo"){
-                fEditFilo(filo_name, filo_category);
-
-              } else if(tabOptions_click == "#li_infoFilo"){
-
-
-              }
             }
+
           });
 
           $("#input_text").on("keyup", function(keyPressed){            //ocorre caso alguma letra (+backspace) seja pressionada

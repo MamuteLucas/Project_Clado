@@ -27,7 +27,11 @@ h1{
 #div_form{
   position: absolute;
   text-align: center;
-  margin: 0 32.43045%;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
 }
 
 .form_input{
@@ -57,60 +61,64 @@ h1{
   border: 1px solid #007bff;
 }
 
-small{
+.small_zindex{
+  z-index: 100;
+}
+
+.smallp{
   position: absolute;
   font-size: 12px;
   color: red;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: -1;
+  margin: auto;
 }
 
 #small_newCladogram{
-  left:  11rem;
   top: 10.3rem;
 }
 
 #small_addCladogram{
-  left:  9rem;
   top: 28.7rem;
 }
 
 #small_error{
-  left:  9.85rem;
   top: 26.8rem;
 }
 
 #small_errorRegister{
-  left:  9.85rem;
   top: 22.6rem;
 }
 
 #small_password{
-  left:  10.7rem;
   top: 22.6rem;
 }
 
 #small_newPassword{
-  left:  10.7rem;
   top: 26.8rem;
 }
 
 #small_email{
-  left:  11.5rem;
   top: 14.4rem;
 }
 
 #small_name{
-  left:  12.4rem;
   top: 10.4rem;
 }
 
 #small_login{
-  left:  10.5rem;
   top: 14.4rem;
 }
 
 #small_oldPassword{
-  left:  12.5rem;
   top: 18.5rem;
+}
+
+#small_popup{
+  top: 8.8rem;
 }
 
 #ul_navbar {

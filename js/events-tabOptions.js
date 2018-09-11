@@ -1,7 +1,14 @@
 function dotNode_onmouseup(buttonPressed, varThis){
-  if(buttonPressed.which == 3){ //a condicao (A1) entra se o botao do mouse pressionado foi o direito
-    //a div#div_tabOptions fica visivel e posicionado onde foi clicado
+  if(buttonPressed.which == 3){
     $("#div_tabOptions").css({display: "inline", left: buttonPressed.clientX, top: buttonPressed.clientY});
+
+    if(buttonPressed.target.__data__.name == "Vida"){
+      $("#li_removeFilo").css("display", "none");
+      $("#li_editFilo").css("display", "none");
+    } else{
+      $("#li_removeFilo").removeAttr("style");
+      $("#li_editFilo").removeAttr("style");
+    }
 
     $("#title_tabOptions").text(varThis[0].textContent);
   }

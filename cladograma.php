@@ -88,16 +88,16 @@
 
 		<div class="popup">
 			<div id="createOrEdit_filo">
-				<h2 id="createOrEdit_title">Teste</h2>
+				<h2 id="createOrEdit_title"></h2>
 
 				<form onsubmit="return false;">
 					<div id="input_filoName">
-							<input type="text" name="filo_name" class="form_input"
-									placeholder="Nome do filo (Ex: Animalia, Mammalia, Homo Sapiens.)">
+						<input type="text" name="filo_name" class="form_input">
 				  	</div>
 
 					<div id="input_filoButton">
-							<input type="submit" id="createOrEdit_btn" class="form_input form_inputButton" value="Salvar">
+						<input type="submit" id="createOrEdit_btn" class="form_input form_inputButton" value="Salvar">
+						<p class='smallp' id="small_popup"></p>
 					</div>
 				</form>
 			</div>

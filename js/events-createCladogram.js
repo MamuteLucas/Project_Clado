@@ -10,7 +10,7 @@ $(function(){
         if(returned != "CHAVE DUPLICADA"){
           window.location = "?pag=inicio";
         } else if(cladoExist){
-          $("#form_newCladogram").append("<small id='small_newCladogram'>Cladograma já existente!</small>");
+          $("#form_newCladogram").append("<p class='smallp' id='small_newCladogram'>Cladograma já existente!</p>");
           cladoExist = false;
         }
       });
@@ -27,7 +27,7 @@ $(function(){
         if(returned == "SOLICITACAO ENVIADA"){
           window.location = "?pag=inicio";
         } else if(smallAdd){
-            $("#form_addCladogram").append("<small id='small_addCladogram'></small>");
+            $("#form_addCladogram").append("<p class='smallp' id='small_addCladogram'></p>");
             smallAdd = false;
         }
 

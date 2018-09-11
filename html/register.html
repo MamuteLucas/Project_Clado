@@ -3,23 +3,27 @@
   <form method="post" name="formCad" id="form_cadastro" onsubmit="return false">
 
     <div id="div_name">
-      <input type="text"      name="reg_name"
-        class="form_input form_inputText" placeholder="Nome" required autofocus>
+      <input type="text" name="reg_name"
+        class="form_input form_inputText small_zindex" placeholder="Nome" required autofocus>
     </div>
 
     <div id="div_confirmEmail">
-      <input type="email"     name="reg_email"
-        class="form_input form_inputText" placeholder="E-mail" required>
+      <input type="email" name="reg_email" 
+        class="form_input form_inputText small_zindex" placeholder="E-mail" required>
     </div>
 
-    <input type="password"  name="reg_password"
-      class="form_input form_inputText" placeholder="Senha" required>
+    <div>
+      <input type="password" name="reg_password"
+        class="form_input form_inputText small_zindex" placeholder="Senha" required>
+    </div>
 
 		<div id="div_confirmPassword">
-	     <input type="password"  name="reg_confirmPassword"
-	       class="form_input form_inputText" placeholder="Confirmação de senha" required>
+	     <input type="password" name="reg_confirmPassword"
+	       class="form_input form_inputText small_zindex" placeholder="Confirmação de senha" required>
 		</div>
 
-    <input type="submit" class="form_input form_inputButton" value="Criar conta" onclick="submitCad()">
+    <div>
+      <input type="submit" class="form_input form_inputButton small_zindex" value="Criar conta" onclick="submitCad()">
+    </div>
   </form>
 </div>

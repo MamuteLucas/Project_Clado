@@ -9,7 +9,7 @@ function submitLogin(){
       window.location = "home.php";
     } else if(numRows == 0 && correctInfo){
       correctInfo = false;
-      $("#div_confirmPassword").append("<small id='small_login'>E-mail ou senha incorretos!</small>");
+      $("#div_confirmPassword").append("<p class='smallp' id='small_login'>E-mail ou senha incorretos!</p>");
     }
   });
 }

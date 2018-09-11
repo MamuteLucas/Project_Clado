@@ -7,6 +7,8 @@
     <button type="button" class="button_cladograms"
       value='<?= $_SESSION["cladograms"][$i]["clado_id"]?>'>
         <p class="p_cladograms"><?= $_SESSION["cladograms"][$i]["clado_name"]; ?></p>
+
+        
     </button>
   <?php endfor; ?>
 </div>

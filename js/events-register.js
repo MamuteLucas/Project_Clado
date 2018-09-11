@@ -16,7 +16,7 @@ function submitCad(){
     }
   } else if(!errorInputNull){
     $("#small_password").remove();
-    $("#div_confirmPassword").append("<small id='small_errorRegister'>Preencha os campos restantes!</small>");
+    $("#div_confirmPassword").append("<p class='smallp' id='small_errorRegister'>Preencha os campos restantes!</p>");
     errorInputNull = true;
   }
 }
@@ -24,7 +24,7 @@ function submitCad(){
 function checkPassword(fPassword, sPassword){
   if(sPassword != "" && fPassword != sPassword && correctPassword){
     $("input[name = 'reg_confirmPassword']").css({border: "1px solid red"});
-    $("#div_confirmPassword").append("<small id='small_password'>As senhas são diferentes!</small>");
+    $("#div_confirmPassword").append("<p class='smallp' id='small_password'>As senhas são diferentes!</p>");
     correctPassword = false;
 
     if(errorInputNull){
@@ -44,7 +44,7 @@ $(function(){
     var name = $(this).val();
 
     if(name.search(/[^a-z ]/i) != -1 && correctName){
-      $("#div_name").append("<small id='small_name'>Nome inválido!</small>");
+      $("#div_name").append("<p class='smallp' id='small_name'>Nome inválido!</p>");
       correctName = false;
     } else if(name.search(/[^a-z ]/i) == -1 && !correctName){
       correctName = true;
@@ -73,7 +73,7 @@ $(function(){
       $.post("php/checkEmail.php", {"email": $(this).val()}, function(existingEmail){
         if(existingEmail != "" && correctEmail){
           $("input[name = 'reg_email']").css({"border-color": "red"});
-          $("#div_confirmEmail").append("<small id='small_email'>E-mail já cadastrado!</small>");
+          $("#div_confirmEmail").append("<p class='smallp' id='small_email'>E-mail já cadastrado!</p>");
 
           correctEmail = false;
         }

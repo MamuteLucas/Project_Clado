@@ -18,7 +18,7 @@ function submitConfig(){
          }
        } else if(!errorInputNull){
          $("#small_newPassword").remove();
-         $("#input_confirmNewPassword").append("<small id='small_error'>Preencha os campos restantes!</small>");
+         $("#input_confirmNewPassword").append("<p class='smallp' id='small_error'>Preencha os campos restantes!</p>");
          errorInputNull = true;
        }
 
@@ -31,7 +31,7 @@ function submitConfig(){
 
     } else if(!errorInputNull){
       $("#small_newPassword").remove();
-      $("#input_confirmNewPassword").append("<small id='small_error'>Preencha os campos restantes!</small>");
+      $("#input_confirmNewPassword").append("<p class='smallp' id='small_error'>Preencha os campos restantes!</p>");
       errorInputNull = true;
 
     }
@@ -66,7 +66,8 @@ $(function(){
     var name = $(this).val();
 
     if(name.search(/[^a-z ]/i) != -1 && correctName){
-      $("#input_name").append("<small id='small_name'>Nome inválido!</small>");
+      $("input[name = 'config_name']").css({border: "1px solid red"});
+      $("#input_name").append("<p class='smallp' id='small_name'>Nome inválido!</p>");
       correctName = false;
     } else if(name.search(/[^a-z ]/i) == -1 && !correctName){
       correctName = true;
@@ -82,7 +83,7 @@ $(function(){
     if(sPassword != "" && fPassword != sPassword && correctNewPassword){
       $("#small_error").remove();
       $("input[name = 'config_confirmNewPassword']").css({border: "1px solid red"});
-      $("#input_confirmNewPassword").append("<small id='small_newPassword'>As senhas são diferentes!</small>");
+      $("#input_confirmNewPassword").append("<p class='smallp' id='small_newPassword'>As senhas são diferentes!</p>");
       correctNewPassword = false;
       errorInputNull = false;
 
@@ -108,7 +109,7 @@ $(function(){
       $.post("php/checkEmail.php", {"email": email}, function(existingEmail){
         if(existingEmail != "" && existingEmail != email && correctEmail){
           $("input[name = 'config_email']").css({"border-color": "red"});
-          $("#input_email").append("<small id='small_email'>E-mail já cadastrado!</small>");
+          $("#input_email").append("<p class='smallp' id='small_email'>E-mail já cadastrado!</p>");
           correctEmail = false;
 
         }
@@ -130,7 +131,7 @@ $(function(){
       $.post("php/checkPassword.php", {"password": $(this).val()}, function(correctPassword){
         if(correctPassword != "" && correctOldPassword){
           $("input[name = 'config_oldPassword']").css({"border-color": "red"});
-          $("#input_oldPassword").append("<small id='small_oldPassword'>Senha invalida!</small>");
+          $("#input_oldPassword").append("<p class='smallp' id='small_oldPassword'>Senha invalida!</p>");
 
           correctOldPassword = false;
         }
