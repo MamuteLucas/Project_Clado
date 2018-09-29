@@ -131,6 +131,8 @@ function getIndexNodes(diagram, indexNodes){
       }
     }
 
+    indexNodes.sort();
+
     return indexNodes;
   } catch(e){
     //error

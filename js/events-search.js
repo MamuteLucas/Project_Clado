@@ -15,8 +15,13 @@ function inputText_onkeyup(keyPressed, digitated){
 
       //as li (itens da lista) sao removidas
       $(".results_search").remove();
+      
+      firstLiSearch = liFinder(indexInitialNodes.length, digitated);
 
-      liFinder(indexInitialNodes.length, digitated);
+      if(digitated == ''){
+        firstLiSearch = 0;
+      }
+      
     }
   } catch(e){
     $('#ul_autoComplete').append("<li class='results_search'>Sem resultados</li>");
@@ -26,20 +31,28 @@ function inputText_onkeyup(keyPressed, digitated){
 
 function liFinder(lengthInitialNodes, digitated){
   //var para contar quando results foram encontrados
-  var countResults = 0;
+  var countResults = 0,
+      results_bySearch = [];
 
   for(var i = 0; i < lengthInitialNodes; i++){ //para cada Node
-    if(indexInitialNodes[i].match(digitated) && countResults < 15){  //a condicao (A2) entra caso algum valor de indexInitialNodes (indice de
-      //ul#ul_autoComplete recebe um 'filho'    //initialNodes) tenha uma parte do texto igual ao que foi digitado
-      //(<li>um dos possiveis itens procurado</li>)
-      $('#ul_autoComplete').append("<li class='results_search'>"+indexInitialNodes[i]+"</li>");
+    if(indexInitialNodes[i].match(digitated) && countResults < 15){
+      results_bySearch[countResults] = indexInitialNodes[i];
+
       countResults++;
 
     }
   }
 
-  if(countResults == 0){ //a condicao (A3) entra caso nao seja encontrado nenhum resultado
+  for(var i = 0; i < countResults; i++){
+    $('#ul_autoComplete').append("<li class='results_search'>"+results_bySearch[i]+"</li>");
+  }
+
+  if(countResults == 0){
     $('#ul_autoComplete').append("<li class='results_search'>Sem resultados</li>");
+
+    return 0;
+  } else{
+    return results_bySearch[0];
   }
 }
 

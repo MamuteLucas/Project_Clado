@@ -18,6 +18,8 @@
     fclose($newJson);
 
     echo "Novo cladograma criado";
+    
+    $_SESSION["result"] = "Novo cladograma criado";
 
   } else{
     echo $clado_directory;

@@ -31,6 +31,14 @@
 			echo "<link rel='stylesheet' type='text/css' href='css/home.css'>";
 			echo "<script src='js/events-showCladograms.js'></script>";
 
+			if(!empty($_SESSION["result"])){
+				echo "<link rel='stylesheet' type='text/css' href='css/alertCladogram.css'>";
+				echo "<script src='js/events-alertCladogram.js'></script>";
+
+				echo "<script src='js/bootstrap.min.js'></script>";
+
+			}
+
 		} else if($_GET["pag"] == "conta"){
 			echo "<script src='js/events-configAccount.js'></script>";
 
@@ -68,6 +76,26 @@
 		if($_GET["pag"] == "inicio"){
 			include("php/showCladograms.php");
 
+			if(!empty($_SESSION["result"])){
+				if($_SESSION["result"] == "Cladograma não existe"){
+					$alert_class = "alert-danger";
+			
+				} else if($_SESSION["result"] == "Cladograma já adicionado" || 
+							$_SESSION["result"] == "Solicitação já foi enviada"){
+					$alert_class = "alert-warning";
+			
+				} else if($_SESSION["result"] == "Solicitação enviada com sucesso" || 
+							$_SESSION["result"] == "Solicitação re-enviada com sucesso" ||
+							$_SESSION["result"] == "Novo cladograma criado"){
+					$alert_class = "alert-success";
+			
+				}
+
+				echo "<div id='alert_cladogram' class='alert $alert_class fade show' role='alert'>".$_SESSION["result"]."</div>";
+				
+				unset($_SESSION["result"]);
+			}
+
 		} else if($_GET["pag"] == "conta"){
 			include("php/configAccount.php");
 
@@ -75,7 +103,11 @@
 			include("php/doLogout.php");
 
 		} else if($_GET["pag"] == "criar"){
-			include("html/formNewCladogram.html");
+			if(!empty($_GET["token"])){
+				include("php/addCladogramByToken.php");
+			} else{
+				include("html/formNewCladogram.html");
+			}
 
 		} else if($_GET["pag"] == "solicitacao"){
 			include("php/showSolicitation.php");

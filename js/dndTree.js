@@ -30,7 +30,10 @@ var modifiedFilo = null,
     initialDiagram = null,
     initialNodes = null,
     indexInitialNodes = null,
-    firstLoad = true;
+    firstLoad = true,
+    results_bySearch = 0,
+    first_filosNotSaved = false;
+    filos_notSaved = [];
 
 function startDiagram(cladogram, user_logged) {
     // Get JSON data
@@ -800,21 +803,53 @@ function startDiagram(cladogram, user_logged) {
                 } else if(filo_name.length == 2){
                     filo_name = filo_name[0] + " " + filo_name[1];
                 }
+
+                if(initialNodes != undefined){
+                    if(initialNodes[filo_name] != undefined){
+                        $("#small_popup")[0].innerText = "Filo já existente!";
+                        
+                    } else{
+                        if(filos_notSaved.indexOf(filo_name) != -1 && first_filosNotSaved){
+                            $("#small_popup")[0].innerText = "Filo já existente!";
+
+                        } else{
+                            $(".popup").css({"display": "none"});
+
+                            if(colorModifiedFilo == "fill: lightsteelblue;"){
+                                toggleChildren(modifiedFilo);
+                            }
+            
+                            if(tabOptions_click == "#li_addFilo"){
+                                fAddFilo(filo_name, filo_category);
+            
+                            } else if(tabOptions_click == "#li_editFilo"){
+                                fEditFilo(filo_name, filo_category);
+            
+                            }
+    
+                            filos_notSaved.push(filo_name);
+                        }
+
+                        if(!first_filosNotSaved){
+                            first_filosNotSaved = true;
+                        }
+                    }
+                } else{
+                    $(".popup").css({"display": "none"});
+
+                    if(colorModifiedFilo == "fill: lightsteelblue;"){
+                    toggleChildren(modifiedFilo);
+                    }
+    
+                    if(tabOptions_click == "#li_addFilo"){
+                    fAddFilo(filo_name, filo_category);
+    
+                    } else if(tabOptions_click == "#li_editFilo"){
+                    fEditFilo(filo_name, filo_category);
+    
+                    }
+                }
                 
-                $(".popup").css({"display": "none"});
-
-                if(colorModifiedFilo == "fill: lightsteelblue;"){
-                  toggleChildren(modifiedFilo);
-                }
-  
-                if(tabOptions_click == "#li_addFilo"){
-                  fAddFilo(filo_name, filo_category);
-  
-                } else if(tabOptions_click == "#li_editFilo"){
-                  fEditFilo(filo_name, filo_category);
-  
-                }
-
               }
               
             } else if(filo_name == ""){
@@ -827,23 +862,26 @@ function startDiagram(cladogram, user_logged) {
 
           });
 
-          $("#input_text").on("keyup", function(keyPressed){            //ocorre caso alguma letra (+backspace) seja pressionada
-            //$(this).val() eh o que esta escrito no campo de pesquisa  //no campo de pesquisa
+          $("#input_text").on("keyup", function(keyPressed){
             inputText_onkeyup(keyPressed.keyCode, $(this).val());
 
-          }).on("focusin", function(){ //ocorre quando o campo de pesquisa entra em foco
-            //$(this).val() eh o que esta escrito no campo de pesquisa
+          }).on("focusin", function(){
             inputText_onfocusin($(this).val());
 
           });
 
-          $("#ul_autoComplete").on("click", function(liClicked){  //ocorre quando um botao do mouse eh pressionado dentro da
-            liClicked = liClicked.target.innerText;               //ul#ul_autoComplete (autocomplete do campo de pesquisa)
-            //chamada a funcao passando como parametro o texto do li em que o mouse foi clicado sobre
+          $("#ul_autoComplete").on("click", function(liClicked){
+            liClicked = liClicked.target.innerText;
             ulAutoComplete_onclick(liClicked);
-            //node selecionado eh colocado no centro da tela
+
             centerNode(initialNodes[liClicked]);
 
+          });
+
+          $("#input_button").on("click", function(){
+            if(firstLiSearch != 0){
+                centerNode(initialNodes[firstLiSearch]);
+            }
           });
 
         });
