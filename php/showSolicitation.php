@@ -26,8 +26,10 @@
   <h1>Solicitações Enviadas</h1>
   <?php for($i = 0; $i < sizeof($soli_sended); $i++):?>
     <div class="alert alert-primary" role="alert" id="divSended_<?= $i;?>">
-      <?= $soli_sended[$i]["clado_name"];?><span id="clado_id" style="display: none"><?= $soli_sended[$i]["clado_id"];?></span>
-      <?= $soli_sended[$i]["user_name"];?><span id="user_id" style="display: none"><?= $soli_sended[$i]["user_id"];?></span>
+      Você pediu para participar do projeto:
+      <?= $soli_sended[$i]["clado_name"];?><span id="user_id" style="display: none"><?= $soli_sended[$i]["user_id"];?></span>
+      de
+      <?= $soli_sended[$i]["user_name"];?><span id="clado_id" style="display: none"><?= $soli_sended[$i]["clado_id"];?></span>
 
       <button type="button" class="btn btn-danger">Calcelar</button>
     </div>

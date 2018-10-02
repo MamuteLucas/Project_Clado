@@ -23,12 +23,10 @@
   background-position: center;
 }
 
-#button_addCladogram:hover #p_addCladogram{
-  color: #ddd;
-}
 
 .button_cladograms:hover{
   background-color: #ddd;
+  
 }
 
 .p_cladograms{
@@ -39,6 +37,29 @@
 }
 
 #p_addCladogram{
-  transition: color 0.5s;
-  color: #fff;
+  font-size: 20px;
+}
+
+.button-action_ShareDelete{
+  position: absolute;
+  margin: 0;
+  padding: 0;
+  height: 35px;
+  width: 35px;
+  border: 0px;
+  background-color: transparent;
+  background-size: 35px;
+  background-repeat: no-repeat;
+  background-position: center;
+  text-align: center;
+}
+
+.button_share{
+  background-image: url("../images/icon-share.png");
+
+}
+
+.button_delete{
+  background-image: url("../images/icon-delete.png");
+
 }

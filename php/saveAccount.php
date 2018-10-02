@@ -22,6 +22,9 @@
       $con->saveAccount_password($_SESSION["user_id"], $newPassword);
     }
 
+    $_SESSION["result"] = "Dados salvos com sucesso";
+    $_SESSION["alert_class"] = "alert-success";
+
     header("location: ../home.php?pag=conta");
   }
 ?>

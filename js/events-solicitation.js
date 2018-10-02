@@ -23,7 +23,12 @@ $(function(){
 
     });
 
-    $.post("php/actionSolicitationReceived.php", {"user_id": user_id, "clado_id": clado_id, "button_type": button_type});
+    if(div.id[3] == "R"){
+      $.post("php/actionSolicitationReceived.php", {"user_id": user_id, "clado_id": clado_id, "button_type": button_type});
+    } else if(div.id[3] == "S"){
+      $.post("php/actionSolicitationSended.php", {"clado_id": clado_id});
+    }
+    
   });
 
 });

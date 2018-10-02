@@ -15,6 +15,8 @@
 			$dir_cladogram = $dir_cladogram["clado_directory"].".json";
 
 		} else{
+			$_SESSION["result"] = "Acesso negado";
+			$_SESSION["alert_class"] = "alert-danger";
 			header("location: home.php?pag=inicio");
 		}
 	}
