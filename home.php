@@ -32,9 +32,7 @@
 			echo "<script src='js/events-homeCladograms.js'></script>";
 
 			if(!empty($_SESSION["result"])){
-				echo "<link rel='stylesheet' type='text/css' href='css/alertCladogram.css'>";
-				echo "<script src='js/events-alertCladogram.js'></script>";
-
+				echo "<script src='js/events-alert.js'></script>";
 				echo "<script src='js/bootstrap.min.js'></script>";
 
 			}
@@ -43,8 +41,8 @@
 			echo "<script src='js/events-configAccount.js'></script>";
 
 			if(!empty($_SESSION["result"])){
-				echo "<link rel='stylesheet' type='text/css' href='css/alertCladogram.css'>";
-				echo "<script src='js/events-alertCladogram.js'></script>";
+				echo "<link rel='stylesheet' type='text/css' href='css/alert.css'>";
+				echo "<script src='js/events-alert.js'></script>";
 
 				echo "<script src='js/bootstrap.min.js'></script>";
 
@@ -83,7 +81,21 @@
 	<?php
 		if($_GET["pag"] == "inicio"){
 			include("php/showCladograms.php");
+	?>
 
+		<div class='div_confirmDelete'>
+			<p id='p_confirmDelete'>
+				
+				Confirme a exclusão
+
+				<button type="button" id="btn_confirmDelete" class="btn btn-success">Confirmar</button>
+			  	<button type="button" id="btn_cancelDelete" class="btn btn-danger">Cancelar</button>
+			</p>
+		</div>
+
+		<div class='div_confirmDelete' id='div_confirmDelete_shadow'></div>
+
+	<?php
 			if(!empty($_SESSION["result"])){
 				if($_SESSION["result"] == "Cladograma não existe"){
 					$_SESSION["alert_class"] = "alert-danger";

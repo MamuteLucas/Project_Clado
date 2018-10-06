@@ -296,6 +296,7 @@
 				$sql->bindValue(":clado_id", $clado_id);
 
 				$sql->execute();
+				
 			} else{
 				$sql = $this->pdo->prepare("UPDATE user_has_cladogram SET solicitation = 5
 												WHERE clado_id = :clado_id AND user_id = :user_id");
@@ -304,6 +305,21 @@
 
 				$sql->execute();
 			}
+		}
+
+		public function shareCladogram($clado_id, $user_id){
+			$sql = $this->pdo->prepare("SELECT c.clado_token FROM user as u 
+											INNER JOIN user_has_cladogram as uc ON u.user_id = uc.user_id
+											INNER JOIN cladogram as c ON uc.clado_id = c.clado_id
+										WHERE c.clado_id = :clado_id AND u.user_id = :user_id");
+			$sql->bindValue(":clado_id", $clado_id);
+			$sql->bindValue(":user_id", $user_id);
+
+			$sql->execute();
+			
+			$result = $sql->fetch(PDO::FETCH_ASSOC);
+
+			return $result["clado_token"];
 		}
 	}
 ?>

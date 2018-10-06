@@ -1,6 +1,6 @@
 $(document).ready(function(){
     setTimeout(function(){
-        $(".alert").alert('close');
+        $("#alert_cladogram").alert('close');
     }, 5000);
     
 });
