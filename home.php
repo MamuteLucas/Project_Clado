@@ -2,7 +2,7 @@
 	require("php/validateLogin.php");
 
 	if(empty($_GET["pag"])){
-		 header("location: ?pag=inicio");
+		header("location: ?pag=inicio");
 
 	} else{
 		if($_GET["pag"] != "inicio" && $_GET["pag"] != "conta" && $_GET["pag"] != "solicitacao" && $_GET["pag"] != "sair" && $_GET["pag"] != "criar"){
@@ -30,10 +30,10 @@
 		if($_GET["pag"] == "inicio"){
 			echo "<link rel='stylesheet' type='text/css' href='css/home.css'>";
 			echo "<script src='js/events-homeCladograms.js'></script>";
+			echo "<script src='js/bootstrap.min.js'></script>";
 
 			if(!empty($_SESSION["result"])){
 				echo "<script src='js/events-alert.js'></script>";
-				echo "<script src='js/bootstrap.min.js'></script>";
 
 			}
 
@@ -140,6 +140,11 @@
 
 		}
 	?>
+
+	<div id='alert_share' class='alert alert-dark fade show' role='alert' style='padding: 0.2rem; display: none;'>
+        <input type='text' id='input_copycat' class='form-control' value=''>
+        <input type='button' id='btn_copycat' class='btn btn-success' value='Copiar'>
+    </div>
 
 </body>
 </html>

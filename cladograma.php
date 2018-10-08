@@ -1,11 +1,11 @@
 <?php
 	require("php/validateLogin.php");
-	require("php/connect.php");
 
 	if(empty($_GET["clado_id"])){
 		header("location: home.php?pag=inicio");
 
 	} else{
+		require("php/connect.php");
 		$con = new connect();
 		$rowCount = $con->checkCladogram($_SESSION["user_id"], $_GET["clado_id"]);
 
@@ -92,9 +92,9 @@
 			<div id="createOrEdit_filo">
 				<h2 id="createOrEdit_title"></h2>
 
-				<form onsubmit="return false;">
+				<form onsubmit="return false;" id="form_addOrEditFilo">
 					<div id="input_filoName">
-						<input type="text" name="filo_name" class="form_input">
+						<input type="text" name="filo_name" class="form_input" placeholder="Nome do filo">
 				  	</div>
 
 					<div id="input_filoButton">
@@ -102,6 +102,16 @@
 						<p class='smallp' id="small_popup"></p>
 					</div>
 				</form>
+
+				<div id="div_informationFilo">
+					<p>Nome: </p>
+					<p>Criado por: </p>
+					<p>Editado por: </p>
+					<p>Número de edições: </p>
+					<p>Número de sub-filos diretos: </p>
+					<p>Número de sub-filos indiretos: </p>
+					<p>Filo antecedente: </p>
+				</div>
 			</div>
 
 		</div>

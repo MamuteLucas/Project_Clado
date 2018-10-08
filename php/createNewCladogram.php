@@ -11,7 +11,7 @@
 
   if($clado_directory != "CHAVE DUPLICADA"){
     $file = "../cladogramas/".$clado_directory.".json";
-    $pattern = '{"name": "Vida", "category": 0}';
+    $pattern = '{"name": "Vida"}';
 
     $newJson = fopen($file, "w");
     fwrite($newJson, $pattern);

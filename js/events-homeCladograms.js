@@ -38,15 +38,26 @@ $(function(){
   $(".button_share").on("click", function(){
     clado_id = $(this)[0].id;
     clado_id = clado_id[6];
+
+    $("#alert_share").removeAttr("style");
+    $("#alert_share").css("padding", "0.2rem");
     
     $.post("php/shareCladogram.php", {"clado_id": clado_id}, function(token){
-      $("body").append(
-      "<div id='alert_share' class='alert alert-dark fade show' role='alert' style='padding: 0.2rem;'>"+
-        "<input type='text' class='form-control' value='http://localhost/project_clado/home.php?pag=criar&token="+token+"'>"+
-        "<input type='button' id='btn_copycat' class='btn btn-success' value='Copiar'>"+
-      "</div>");
+      $("#input_copycat").val("http://localhost/project_clado/home.php?pag=criar&token="+token);
     });
+
+    $("#btn_copycat").on("click", function(){
+      $("#input_copycat").select();
+      document.execCommand('copy');
+
+    });
+
+    setTimeout(function(){
+      $("#alert_share").alert('close');
+    }, 15000);
   });
+
+  
 
   $(".button_delete").on("click", function(){
     clado_id = $(this)[0].id;

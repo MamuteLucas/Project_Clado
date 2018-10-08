@@ -1,16 +1,14 @@
-function addFilo(newFilo_name, newFilo_category, user_creator, modifiedFilo){
+function addFilo(newFilo_name, user_creator, modifiedFilo){
   try{
     modifiedFilo.children[modifiedFilo.children.length] = {
       "name": newFilo_name,
-      "category": newFilo_category,
       "creator": user_creator,
       "size": 100
     };
 
-  } catch(error){
+  } catch(inCaseOfError){
     modifiedFilo.children = [{
       "name": newFilo_name,
-      "category": newFilo_category,
       "creator": user_creator,
       "size": 100
     }];
@@ -27,5 +25,4 @@ function addFilo(newFilo_name, newFilo_category, user_creator, modifiedFilo){
 
   }
 
-  console.log(modifiedFilo);
 }

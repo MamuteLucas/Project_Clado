@@ -643,66 +643,26 @@ function startDiagram(cladogram, user_logged) {
           svgOnMouseDown_dotNode();
         }
 
-        function fAddFilo(filo_name, filo_category){
-          modifiedFilo = addFilo(filo_name, filo_category, user_logged, modifiedFilo);
+        function fAddFilo(filo_name){
+          modifiedFilo = addFilo(filo_name, user_logged, modifiedFilo);
           
           attDiagram();
         }
 
-        function fEditFilo(filo_name, filo_category){
+        function fEditFilo(filo_name){
           modifiedFilo.name = filo_name;
-          modifiedFilo.filo = filo_category;
 
           attDiagram();
         }
 
         function placeholderAndTitleOfPOPUP(typeOfAction){
-            var category = modifiedFilo.category,
-                examples = null;
-
             if(typeOfAction == 0){
-                title_category = "Adicionar";
+                title = "Adicionar novo filo";
             } else if(typeOfAction == 1){
-                title_category = "Editar";
+                title = "Editar filo";
             }
             
-            if(category == 0){
-                category = title_category + " Domínio";
-                examples = "Eukaryota, Prokaryota, etc..";
-
-            } else if(category == 1){
-                category = title_category + " Reino";
-                examples = "Monera, Fungi, Plantae, etc..";
-
-            } else if(category == 2){
-                category = title_category + " Filo";
-                examples = "Chordata, Basidiomycota, etc..";
-
-            } else if(category == 3){
-                category = title_category + " Classe";
-                examples = "Spirochaetes, Cephalopoda, etc..";
-
-            } else if(category == 4){
-                category = title_category + " Ordem";
-                examples = "Primates, Cucurbitales, etc..";
-
-            } else if(category == 5){
-                category = title_category + " Família";
-                examples = "Trichocomaceae, Clostridiaceae, etc..";
-
-            } else if(category == 6){
-                category = title_category + " Genêro";
-                examples = "Homo, Cycas, Ananas, etc..";
-
-            } else if(category == 7){
-                category = title_category + " Espécie";
-                examples = "Canis Lupus, Busarellus Nigricollis, etc..";
-
-            }
-
-            $("#createOrEdit_title")[0].innerText = category;
-
-            $("input[name = 'filo_name']").attr("placeholder", "Ex: " + examples);
+            $("#createOrEdit_title")[0].innerText = title;
         }
 
         $(function(){
@@ -737,6 +697,10 @@ function startDiagram(cladogram, user_logged) {
           });
 
           $("#li_addFilo").on("click", function(){
+            $("#small_popup")[0].innerText = "";
+            $("#form_addOrEditFilo").removeAttr("style");
+            $("#div_informationFilo").css("display", "none");
+
             tabOptions_click = "#li_addFilo";
 
             $("#div_tabOptions").css("display", "none");
@@ -769,6 +733,10 @@ function startDiagram(cladogram, user_logged) {
           });
 
           $("#li_editFilo").on("click", function(){
+            $("#small_popup")[0].innerText = "";
+            $("#form_addOrEditFilo").removeAttr("style");
+            $("#div_informationFilo").css("display", "none");
+
             tabOptions_click = "#li_editFilo";
 
             $("#div_tabOptions").css("display", "none");
@@ -782,12 +750,16 @@ function startDiagram(cladogram, user_logged) {
 
           $("#li_infoFilo").on("click", function(){
             $("#div_tabOptions").css("display", "none");
+            $(".popup").css({"display": "block"});
+            
+            $("#createOrEdit_title")[0].innerText = "Informações do filo";
 
+            $("#form_addOrEditFilo").css("display", "none");
+            $("#div_informationFilo").removeAttr("style");
           });
 
           $("#createOrEdit_btn").on("click", function(){
             var filo_name = $("input[name = filo_name]").val();
-                filo_category = modifiedFilo.category + 1,
                 filoName_isOnlyChar = filo_name.search(/[^a-z ]/i);
 
             if(filo_name != "" && filoName_isOnlyChar == -1){
@@ -820,10 +792,10 @@ function startDiagram(cladogram, user_logged) {
                             }
             
                             if(tabOptions_click == "#li_addFilo"){
-                                fAddFilo(filo_name, filo_category);
+                                fAddFilo(filo_name);
             
                             } else if(tabOptions_click == "#li_editFilo"){
-                                fEditFilo(filo_name, filo_category);
+                                fEditFilo(filo_name);
             
                             }
     
@@ -838,14 +810,14 @@ function startDiagram(cladogram, user_logged) {
                     $(".popup").css({"display": "none"});
 
                     if(colorModifiedFilo == "fill: lightsteelblue;"){
-                    toggleChildren(modifiedFilo);
+                        toggleChildren(modifiedFilo);
                     }
     
                     if(tabOptions_click == "#li_addFilo"){
-                    fAddFilo(filo_name, filo_category);
+                        fAddFilo(filo_name);
     
                     } else if(tabOptions_click == "#li_editFilo"){
-                    fEditFilo(filo_name, filo_category);
+                        fEditFilo(filo_name);
     
                     }
                 }
