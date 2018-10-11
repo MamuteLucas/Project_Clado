@@ -35,7 +35,7 @@ var modifiedFilo = null,
     first_filosNotSaved = false;
     filos_notSaved = [];
 
-function startDiagram(cladogram, user_logged) {
+function startDiagram(cladogram, user_logged, user_logged_id, user_clado_id) {
     // Get JSON data
     treeJSON = d3.json(cladogram, function(error, treeData) {
 
@@ -641,18 +641,31 @@ function startDiagram(cladogram, user_logged) {
           centerNode(modifiedFilo);
 
           svgOnMouseDown_dotNode();
+
+          
         }
 
         function fAddFilo(filo_name){
-          modifiedFilo = addFilo(filo_name, user_logged, modifiedFilo);
+            filo_id = null;
+
+            $.when($.post("php/setNewFiloOnBD.php")).then(function(){
+                modifiedFilo = addFilo(filo_name, user_logged, filo_id, modifiedFilo);
           
-          attDiagram();
+                attDiagram();
+            });
+
+            $.post("php/setNewFiloOnBD.php", 
+                    {"filo_name": filo_name, "user_id": user_clado_id, "clado_id": user_clado_id},
+                    function(e){
+                        filo_id = e;
+                            
+                    });   
         }
 
         function fEditFilo(filo_name){
-          modifiedFilo.name = filo_name;
+            modifiedFilo.name = filo_name;
 
-          attDiagram();
+            attDiagram();
         }
 
         function placeholderAndTitleOfPOPUP(typeOfAction){
@@ -749,6 +762,7 @@ function startDiagram(cladogram, user_logged) {
           });
 
           $("#li_infoFilo").on("click", function(){
+              console.log(modifiedFilo);
             $("#div_tabOptions").css("display", "none");
             $(".popup").css({"display": "block"});
             
@@ -756,6 +770,13 @@ function startDiagram(cladogram, user_logged) {
 
             $("#form_addOrEditFilo").css("display", "none");
             $("#div_informationFilo").removeAttr("style");
+
+            $.post("getInfoFilo.php", {"filo_id": "tes"});
+
+            $("#info_name")[0].innerHTML = "<span style='font-weight: 600;'>Nome: </span> "+modifiedFilo.name;
+            $("#info_create")[0].innerHTML = "<span style='font-weight: 600;'>Criado por: </span> ";
+            $("#info_ancestralFilo")[0].innerHTML = "<span style='font-weight: 600;'>Filo ancestral: </span> "+modifiedFilo.parent.name;
+
           });
 
           $("#createOrEdit_btn").on("click", function(){

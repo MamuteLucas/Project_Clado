@@ -39,8 +39,10 @@ $(function(){
     clado_id = $(this)[0].id;
     clado_id = clado_id[6];
 
-    $("#alert_share").removeAttr("style");
-    $("#alert_share").css("padding", "0.2rem");
+    $("body").append("<div id='alert_share' class='alert alert-dark fade show' role='alert' style='padding: 0.2rem;'>"+
+                        "<input type='text' id='input_copycat' class='form-control' value=''>"+
+                        "<input type='button' id='btn_copycat' class='btn btn-success' value='Copiar'>"+
+                     "</div>");
     
     $.post("php/shareCladogram.php", {"clado_id": clado_id}, function(token){
       $("#input_copycat").val("http://localhost/project_clado/home.php?pag=criar&token="+token);

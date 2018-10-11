@@ -169,3 +169,7 @@ a:not(.active){
 #createOrEdit_filo{
   text-align: center;
 }
+
+#div_informationFilo{
+  text-align: left;
+}

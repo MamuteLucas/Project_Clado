@@ -50,7 +50,10 @@
 	<link rel="stylesheet" type="text/css" href="css/style-app.css">
 
 	<script type="text/javascript">
-		startDiagram("<?= "cladogramas/".$dir_cladogram; ?>", "<?= $_SESSION["user_name"]; ?>");
+		startDiagram("<?= "cladogramas/".$dir_cladogram; ?>",
+					 "<?= $_SESSION["user_name"]; ?>",
+					 "<?= $_SESSION["user_id"];?>",
+					 "<?= $_GET["clado_id"];?>");
 	</script>
 
 </head>
@@ -104,13 +107,11 @@
 				</form>
 
 				<div id="div_informationFilo">
-					<p>Nome: </p>
-					<p>Criado por: </p>
-					<p>Editado por: </p>
-					<p>Número de edições: </p>
-					<p>Número de sub-filos diretos: </p>
-					<p>Número de sub-filos indiretos: </p>
-					<p>Filo antecedente: </p>
+					<p id="info_name"></p>
+					<p id="info_create"></p>
+					<p id="info_edit">Editado por: </p>
+					<p id="info_nSubFilo">Número de sub-filos: </p>
+					<p id="info_ancestralFilo"></p>
 				</div>
 			</div>
 

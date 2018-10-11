@@ -9,4 +9,6 @@
     $con = new connect();
 
     $con->deleteCladogram($user_id, $clado_id);
+
+    clearstatcache();
 ?>

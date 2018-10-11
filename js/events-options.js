@@ -1,6 +1,7 @@
-function addFilo(newFilo_name, user_creator, modifiedFilo){
+function addFilo(newFilo_name, user_creator, filo_id, modifiedFilo){
   try{
     modifiedFilo.children[modifiedFilo.children.length] = {
+      "id": filo_id,
       "name": newFilo_name,
       "creator": user_creator,
       "size": 100
@@ -8,6 +9,7 @@ function addFilo(newFilo_name, user_creator, modifiedFilo){
 
   } catch(inCaseOfError){
     modifiedFilo.children = [{
+      "id": filo_id,
       "name": newFilo_name,
       "creator": user_creator,
       "size": 100

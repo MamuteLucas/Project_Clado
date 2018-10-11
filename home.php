@@ -141,10 +141,5 @@
 		}
 	?>
 
-	<div id='alert_share' class='alert alert-dark fade show' role='alert' style='padding: 0.2rem; display: none;'>
-        <input type='text' id='input_copycat' class='form-control' value=''>
-        <input type='button' id='btn_copycat' class='btn btn-success' value='Copiar'>
-    </div>
-
 </body>
 </html>
