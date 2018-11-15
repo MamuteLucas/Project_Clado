@@ -26,6 +26,7 @@ function prepareDiagram(diagram){
   delete diagram.y;
   delete diagram.y0;
   delete diagram.depth;
+  delete diagram.id;
   //e aqui as posteriores
   delUnwatedKeysDiagram(diagram);
 
@@ -59,6 +60,7 @@ function delUnwatedKeysDiagram(diagram){
         delete diagram[i].y;
         delete diagram[i].y0;
         delete diagram[i].depth;
+        delete diagram[i].id;
     }
 
     for(var i = 0; i < diagram.length; i++){

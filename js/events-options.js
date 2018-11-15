@@ -1,17 +1,17 @@
-function addFilo(newFilo_name, user_creator, filo_id, modifiedFilo){
+function addFilo(newFilo_name, user_creator, modifiedFilo){
   try{
     modifiedFilo.children[modifiedFilo.children.length] = {
-      "id": filo_id,
       "name": newFilo_name,
       "creator": user_creator,
+      "editor": "-",
       "size": 100
     };
 
   } catch(inCaseOfError){
     modifiedFilo.children = [{
-      "id": filo_id,
       "name": newFilo_name,
       "creator": user_creator,
+      "editor": "-",
       "size": 100
     }];
 

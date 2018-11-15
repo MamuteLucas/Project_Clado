@@ -6,7 +6,9 @@
 	}
 
 	if(empty($_GET["pag"])){
-		 header("location: ?pag=inicio");
+		header("location: ?pag=entrar");
+	} else if($_GET["pag"] != "entrar" && $_GET["pag"] != "cadastrar"){
+		header("location: ?pag=entrar");
 	}
 ?>
 <!DOCTYPE html>
@@ -28,22 +30,6 @@
 </head>
 
 <body>
-	<div id="navbar">
-		<ul id="ul_navbar">
-			<?php
-				$active['inicio'] = '';
-			  $active['cadastrar'] = '';
-			  $active['entrar'] = '';
-
-			  $active[$_GET['pag']] = "active";
-			?>
-
-			<li class="li_navbar"><a class="a_navbar <?= $active["inicio"] ?>" href="?pag=inicio">Início</a></li>
-			<li class="li_navbar li_right"><a class="a_navbar <?= $active["cadastrar"] ?>" href="?pag=cadastrar">Criar conta</a></li>
-			<li class="li_navbar li_right"><a class="a_navbar <?= $active["entrar"] ?>" href="?pag=entrar">Entrar</a></li>
-		</ul>
-	</div>
-
   <?php
 		if($_GET["pag"] == "entrar"){
 			include("html/login.html");

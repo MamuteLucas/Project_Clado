@@ -321,26 +321,5 @@
 
 			return $result["clado_token"];
 		}
-
-		public function setNewFiloOnBD($filo_name, $user_id, $clado_id){
-			$sql = $this->pdo->prepare("INSERT INTO filo(filo_name, clado_id, user_id)
-											VALUES(:filo_name, :clado_id, :user_id)");
-			$sql->bindValue(":filo_name", $filo_name);
-			$sql->bindValue(":clado_id", $clado_id);
-			$sql->bindValue(":user_id", $user_id);
-
-			$sql->execute();
-
-			$sql = $this->pdo->prepare("SELECT AUTO_INCREMENT 
-												FROM information_schema.tables
-												WHERE table_name = 'filo' AND table_schema = 'project_clado'");
-
-			$sql->execute();
-
-			$filo_id = $sql->fetch(PDO::FETCH_ASSOC);
-			return $filo_id["AUTO_INCREMENT"] - 1;
-
-
-		}
 	}
 ?>

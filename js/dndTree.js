@@ -35,7 +35,7 @@ var modifiedFilo = null,
     first_filosNotSaved = false;
     filos_notSaved = [];
 
-function startDiagram(cladogram, user_logged, user_logged_id, user_clado_id) {
+function startDiagram(cladogram, user_logged) {
     // Get JSON data
     treeJSON = d3.json(cladogram, function(error, treeData) {
 
@@ -646,24 +646,14 @@ function startDiagram(cladogram, user_logged, user_logged_id, user_clado_id) {
         }
 
         function fAddFilo(filo_name){
-            filo_id = null;
+            modifiedFilo = addFilo(filo_name, user_logged, modifiedFilo);
 
-            $.when($.post("php/setNewFiloOnBD.php")).then(function(){
-                modifiedFilo = addFilo(filo_name, user_logged, filo_id, modifiedFilo);
-          
-                attDiagram();
-            });
-
-            $.post("php/setNewFiloOnBD.php", 
-                    {"filo_name": filo_name, "user_id": user_clado_id, "clado_id": user_clado_id},
-                    function(e){
-                        filo_id = e;
-                            
-                    });   
+            attDiagram();
         }
 
         function fEditFilo(filo_name){
             modifiedFilo.name = filo_name;
+            modifiedFilo.editor = user_logged;
 
             attDiagram();
         }
@@ -692,7 +682,7 @@ function startDiagram(cladogram, user_logged, user_logged_id, user_clado_id) {
           });
 
           $("svg").on("mouseup", ".node", function(buttonPressed){
-              dotNode_onmouseup(buttonPressed, $(this));
+              dotNode_onmouseup(buttonPressed, $(this), user_logged);
               
               colorModifiedFilo = $(this)[0].children[0].attributes[2].nodeValue;
               modifiedFilo = $(this)[0].__data__;
@@ -762,7 +752,7 @@ function startDiagram(cladogram, user_logged, user_logged_id, user_clado_id) {
           });
 
           $("#li_infoFilo").on("click", function(){
-              console.log(modifiedFilo);
+              console.log(modifiedFilo.editor);
             $("#div_tabOptions").css("display", "none");
             $(".popup").css({"display": "block"});
             
@@ -771,11 +761,21 @@ function startDiagram(cladogram, user_logged, user_logged_id, user_clado_id) {
             $("#form_addOrEditFilo").css("display", "none");
             $("#div_informationFilo").removeAttr("style");
 
-            $.post("getInfoFilo.php", {"filo_id": "tes"});
+            try{
+                $("#info_name")[0].innerHTML = "<span style='font-weight: 600;'>Nome: </span> "+modifiedFilo.name;
+                $("#info_create")[0].innerHTML = "<span style='font-weight: 600;'>Criado por: </span> "+modifiedFilo.creator;
+                $("#info_edit")[0].innerHTML = "<span style='font-weight: 600;'>Editado por: </span> "+modifiedFilo.editor;
+                $("#info_nSubFilo")[0].innerHTML = "<span style='font-weight: 600;'>Número de sub-filos: </span> "+modifiedFilo.children.length;
+                $("#info_ancestralFilo")[0].innerHTML = "<span style='font-weight: 600;'>Filo ancestral: </span> "+modifiedFilo.parent.name;
 
-            $("#info_name")[0].innerHTML = "<span style='font-weight: 600;'>Nome: </span> "+modifiedFilo.name;
-            $("#info_create")[0].innerHTML = "<span style='font-weight: 600;'>Criado por: </span> ";
-            $("#info_ancestralFilo")[0].innerHTML = "<span style='font-weight: 600;'>Filo ancestral: </span> "+modifiedFilo.parent.name;
+            } catch(e){
+                $("#info_name")[0].innerHTML = "<span style='font-weight: 600;'>Nome: </span> "+modifiedFilo.name;
+                $("#info_create")[0].innerHTML = "<span style='font-weight: 600;'>Criado por: </span> "+modifiedFilo.creator;
+                $("#info_edit")[0].innerHTML = "<span style='font-weight: 600;'>Editado por: </span> "+modifiedFilo.editor;
+                $("#info_nSubFilo")[0].innerHTML = "<span style='font-weight: 600;'>Número de sub-filos: </span> 0";
+                $("#info_ancestralFilo")[0].innerHTML = "<span style='font-weight: 600;'>Filo ancestral: </span> "+modifiedFilo.parent.name;
+
+            }
 
           });
 

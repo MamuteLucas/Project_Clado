@@ -12,6 +12,6 @@
     $con = new connect();
     $con->createAccount($name, $email, $password);
 
-    header("location: ../index.php?pag=inicio");
+    header("location: ../index.php?pag=entrar");
   }
 ?>
