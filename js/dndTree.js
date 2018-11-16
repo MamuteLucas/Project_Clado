@@ -25,19 +25,21 @@ OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
 EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.*/
 var modifiedFilo = null,
-    tabOptions_click = null;
+    tabOptions_click = null,
     colorModifiedFilo = null,
     initialDiagram = null,
     initialNodes = null,
     indexInitialNodes = null,
     firstLoad = true,
     results_bySearch = 0,
-    first_filosNotSaved = false;
-    filos_notSaved = [];
+    first_filosNotSaved = false,
+    filos_notSaved = [],
+    count_add = 0,
+    actions = [[], [] ,[]];
 
-function startDiagram(cladogram, user_logged) {
+function startDiagram(cladogram, user_logged, clado_id) {
     // Get JSON data
-    treeJSON = d3.json(cladogram, function(error, treeData) {
+    treeJSON = d3.json(cladogram, function(treeData) {
 
         //var usada para permitir que o Node seja arrastado somente quando o botao esquerdo do mouse for usado nele
         var permitionDrag = true;
@@ -645,14 +647,26 @@ function startDiagram(cladogram, user_logged) {
           
         }
 
-        function fAddFilo(filo_name){
-            modifiedFilo = addFilo(filo_name, user_logged, modifiedFilo);
+        function fAddFilo(filo_name, filo_category){
+            actions[0].push([filo_name, filo_category]);
+
+            modifiedFilo = addFilo(filo_name, filo_category, user_logged, modifiedFilo);
 
             attDiagram();
         }
 
-        function fEditFilo(filo_name){
+        function fEditFilo(filo_name, filo_category){
+            actions[1].push([
+                modifiedFilo.name, 
+                modifiedFilo.category, 
+                filo_name, 
+                filo_category, 
+                modifiedFilo.creator,
+                modifiedFilo.editor
+            ]);
+
             modifiedFilo.name = filo_name;
+            modifiedFilo.category = filo_category;
             modifiedFilo.editor = user_logged;
 
             attDiagram();
@@ -682,7 +696,7 @@ function startDiagram(cladogram, user_logged) {
           });
 
           $("svg").on("mouseup", ".node", function(buttonPressed){
-              dotNode_onmouseup(buttonPressed, $(this), user_logged);
+              dotNode_onmouseup(buttonPressed, $(this), user_logged, root.clado_creator);
               
               colorModifiedFilo = $(this)[0].children[0].attributes[2].nodeValue;
               modifiedFilo = $(this)[0].__data__;
@@ -690,7 +704,8 @@ function startDiagram(cladogram, user_logged) {
           });
 
           $("#saveDiagram").on("click", function(){
-            saveDiagram(root);
+            saveDiagram(root, actions, user_logged, clado_id);
+            actions = [[], [] ,[]];
 
           });
 
@@ -712,10 +727,18 @@ function startDiagram(cladogram, user_logged) {
             placeholderAndTitleOfPOPUP(0);
 
             $("input[name = filo_name]").val("");
+            $("input[name = filo_category]").val("");
 
           });
 
           $("#li_removeFilo").on("click", function(){
+            actions[2].push([
+                modifiedFilo.name, 
+                modifiedFilo.category,
+                modifiedFilo.creator,
+                modifiedFilo.editor
+            ]);
+
             $("#div_tabOptions").css("display", "none");
 
             var father = modifiedFilo.parent.children;
@@ -748,11 +771,11 @@ function startDiagram(cladogram, user_logged) {
             placeholderAndTitleOfPOPUP(1);
 
             $("input[name = filo_name]").val(modifiedFilo.name);
+            $("input[name = filo_category]").val(modifiedFilo.category);
 
           });
 
           $("#li_infoFilo").on("click", function(){
-              console.log(modifiedFilo.editor);
             $("#div_tabOptions").css("display", "none");
             $(".popup").css({"display": "block"});
             
@@ -762,14 +785,16 @@ function startDiagram(cladogram, user_logged) {
             $("#div_informationFilo").removeAttr("style");
 
             try{
-                $("#info_name")[0].innerHTML = "<span style='font-weight: 600;'>Nome: </span> "+modifiedFilo.name;
+                $("#info_name")[0].innerHTML = "<span style='font-weight: 600;'>Nome científico: </span> "+modifiedFilo.name;
+                $("#info_category")[0].innerHTML = "<span style='font-weight: 600;'>Categoria: </span> "+modifiedFilo.category;
                 $("#info_create")[0].innerHTML = "<span style='font-weight: 600;'>Criado por: </span> "+modifiedFilo.creator;
                 $("#info_edit")[0].innerHTML = "<span style='font-weight: 600;'>Editado por: </span> "+modifiedFilo.editor;
                 $("#info_nSubFilo")[0].innerHTML = "<span style='font-weight: 600;'>Número de sub-filos: </span> "+modifiedFilo.children.length;
                 $("#info_ancestralFilo")[0].innerHTML = "<span style='font-weight: 600;'>Filo ancestral: </span> "+modifiedFilo.parent.name;
 
             } catch(e){
-                $("#info_name")[0].innerHTML = "<span style='font-weight: 600;'>Nome: </span> "+modifiedFilo.name;
+                $("#info_name")[0].innerHTML = "<span style='font-weight: 600;'>Nome científico: </span> "+modifiedFilo.name;
+                $("#info_category")[0].innerHTML = "<span style='font-weight: 600;'>Categoria: </span> "+modifiedFilo.category;
                 $("#info_create")[0].innerHTML = "<span style='font-weight: 600;'>Criado por: </span> "+modifiedFilo.creator;
                 $("#info_edit")[0].innerHTML = "<span style='font-weight: 600;'>Editado por: </span> "+modifiedFilo.editor;
                 $("#info_nSubFilo")[0].innerHTML = "<span style='font-weight: 600;'>Número de sub-filos: </span> 0";
@@ -781,20 +806,34 @@ function startDiagram(cladogram, user_logged) {
 
           $("#createOrEdit_btn").on("click", function(){
             var filo_name = $("input[name = filo_name]").val();
+                filo_category = $("input[name = filo_category]").val();
                 filoName_isOnlyChar = filo_name.search(/[^a-z ]/i);
+                filoCategory_isOnlyChar = filo_category.search(/[^a-z ]/i);
 
-            if(filo_name != "" && filoName_isOnlyChar == -1){
+            if(filo_name != "" && filoName_isOnlyChar == -1 && 
+                    filo_category != "" && filoCategory_isOnlyChar == -1){
               filo_name = filo_name.toLowerCase().split(" ");
+              filo_category = filo_category.toLowerCase().split(" ");
 
-              if(filo_name.length < 3){
+              if(filo_name.length < 3 && filo_category.length < 3){
                 for(var i = 0; i < filo_name.length; i++){
                     filo_name[i] = filo_name[i][0].toUpperCase() + filo_name[i].slice(1);
+                }
+
+                for(var i = 0; i < filo_category.length; i++){
+                    filo_category[i] = filo_category[i][0].toUpperCase() + filo_category[i].slice(1);
                 }
 
                 if(filo_name.length == 1){
                     filo_name = filo_name[0];
                 } else if(filo_name.length == 2){
                     filo_name = filo_name[0] + " " + filo_name[1];
+                }
+
+                if(filo_category.length == 1){
+                    filo_category = filo_category[0];
+                } else if(filo_category.length == 2){
+                    filo_category = filo_category[0] + " " + filo_category[1];
                 }
 
                 if(initialNodes != undefined){
@@ -813,10 +852,10 @@ function startDiagram(cladogram, user_logged) {
                             }
             
                             if(tabOptions_click == "#li_addFilo"){
-                                fAddFilo(filo_name);
+                                fAddFilo(filo_name, filo_category);
             
                             } else if(tabOptions_click == "#li_editFilo"){
-                                fEditFilo(filo_name);
+                                fEditFilo(filo_name, filo_category);
             
                             }
     
@@ -835,21 +874,23 @@ function startDiagram(cladogram, user_logged) {
                     }
     
                     if(tabOptions_click == "#li_addFilo"){
-                        fAddFilo(filo_name);
+                        fAddFilo(filo_name, filo_category);
     
                     } else if(tabOptions_click == "#li_editFilo"){
-                        fEditFilo(filo_name);
+                        fEditFilo(filo_name, filo_category);
     
                     }
                 }
                 
+              } else{
+                $("#small_popup")[0].innerText = "Dados inválidos!";
               }
               
-            } else if(filo_name == ""){
-                $("#small_popup")[0].innerText = "Preencha o campo!";
+            } else if(filo_name == "" || filo_category == ""){
+                $("#small_popup")[0].innerText = "Preencha todos os campos!";
 
-            } else if(filoName_isOnlyChar != -1){
-                $("#small_popup")[0].innerText = "Nome inválido!";
+            } else if(filoName_isOnlyChar != -1 || filoCategory_isOnlyChar != -1){
+                $("#small_popup")[0].innerText = "Dados inválidos!";
 
             }
 

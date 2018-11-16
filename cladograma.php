@@ -29,6 +29,7 @@
 <head>
 	<meta charset="utf-8">
 	<title><?= $title;?></title>
+	<link rel="icon" type="imagem/png" href="images/icon-cladograma.png" />
 
 	<script src="js/jquery-3.3.1.min.js"></script>
 	<script src="js/d3.v3.min.js"></script>
@@ -50,7 +51,7 @@
 	<link rel="stylesheet" type="text/css" href="css/style-app.css">
 
 	<script type="text/javascript">
-		startDiagram("<?= "cladogramas/".$dir_cladogram; ?>", "<?= $_SESSION["user_name"]; ?>");
+		startDiagram("<?= "cladogramas/".$dir_cladogram; ?>", "<?= $_SESSION["user_id"]; ?>", "<?= $_GET['clado_id'];?>");
 	</script>
 
 </head>
@@ -94,7 +95,11 @@
 
 				<form onsubmit="return false;" id="form_addOrEditFilo">
 					<div id="input_filoName">
-						<input type="text" name="filo_name" class="form_input" placeholder="Nome do filo">
+						<input type="text" name="filo_name" class="form_input" placeholder="Nome científico do filo">
+					</div>
+					  
+					<div id="input_filoName">
+						<input type="text" name="filo_category" class="form_input" placeholder="Categoria taxonômica">
 				  	</div>
 
 					<div id="input_filoButton">
@@ -105,6 +110,7 @@
 
 				<div id="div_informationFilo">
 					<p id="info_name"></p>
+					<p id="info_category"></p>
 					<p id="info_create"></p>
 					<p id="info_edit"></p>
 					<p id="info_nSubFilo"></p>

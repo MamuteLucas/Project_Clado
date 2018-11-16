@@ -1,17 +1,19 @@
-function addFilo(newFilo_name, user_creator, modifiedFilo){
+function addFilo(newFilo_name, newFilo_category, user_creator, modifiedFilo){
   try{
     modifiedFilo.children[modifiedFilo.children.length] = {
       "name": newFilo_name,
+      "category": newFilo_category,
       "creator": user_creator,
-      "editor": "-",
+      "editor": "",
       "size": 100
     };
 
   } catch(inCaseOfError){
     modifiedFilo.children = [{
       "name": newFilo_name,
+      "category": newFilo_category,
       "creator": user_creator,
-      "editor": "-",
+      "editor": "",
       "size": 100
     }];
 

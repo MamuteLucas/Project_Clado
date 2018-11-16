@@ -36,6 +36,8 @@ $(function(){
   setPositionShareDelete();
 
   $(".button_share").on("click", function(){
+    $("#alert_share").remove();
+
     clado_id = $(this)[0].id;
     clado_id = clado_id[6];
 

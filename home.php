@@ -22,6 +22,7 @@
 <head>
 	<meta charset="utf-8">
 	<title>Página Principal</title>
+	<link rel="icon" type="imagem/png" href="images/icon-cladograma.png" />
 
 	<script src="js/jquery-3.3.1.min.js"></script>
 	<link rel="stylesheet" type="text/css" href="css/style-app.css">
