@@ -18,6 +18,9 @@
     <input type="button" id="delete_<?= $_SESSION["cladograms"][$i]["clado_id"]?>"
         class="button-action_ShareDelete button_delete">
 
+    <input type="button" id="report_<?= $_SESSION["cladograms"][$i]["clado_id"]?>" 
+        class="button_report" value="Relatório de Atividade">
+
     </span>
   <?php endfor; ?>
 </div>

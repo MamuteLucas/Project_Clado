@@ -35,7 +35,7 @@ var modifiedFilo = null,
     first_filosNotSaved = false,
     filos_notSaved = [],
     count_add = 0,
-    actions = [[], [] ,[]];
+    actions = [[], [] ,[], []];
 
 function startDiagram(cladogram, user_logged, clado_id) {
     // Get JSON data
@@ -648,7 +648,12 @@ function startDiagram(cladogram, user_logged, clado_id) {
         }
 
         function fAddFilo(filo_name, filo_category){
-            actions[0].push([filo_name, filo_category]);
+            actions[0].push([
+                modifiedFilo.name,
+                modifiedFilo.category,
+                filo_name,
+                filo_category
+            ]);
 
             modifiedFilo = addFilo(filo_name, filo_category, user_logged, modifiedFilo);
 
@@ -662,7 +667,6 @@ function startDiagram(cladogram, user_logged, clado_id) {
                 filo_name, 
                 filo_category, 
                 modifiedFilo.creator,
-                modifiedFilo.editor
             ]);
 
             modifiedFilo.name = filo_name;
@@ -705,7 +709,9 @@ function startDiagram(cladogram, user_logged, clado_id) {
 
           $("#saveDiagram").on("click", function(){
             saveDiagram(root, actions, user_logged, clado_id);
-            actions = [[], [] ,[]];
+            actions = [[], [] ,[], []];
+            filos_notSaved = [];
+            first_filosNotSaved = false;
 
           });
 
@@ -732,11 +738,18 @@ function startDiagram(cladogram, user_logged, clado_id) {
           });
 
           $("#li_removeFilo").on("click", function(){
+            var indexOfRemovedFilo = filos_notSaved.indexOf(modifiedFilo.name);
+            if(indexOfRemovedFilo != -1){
+                filos_notSaved.splice(indexOfRemovedFilo);
+
+            }
+
+            delete initialNodes[modifiedFilo.name];
+
             actions[2].push([
                 modifiedFilo.name, 
                 modifiedFilo.category,
                 modifiedFilo.creator,
-                modifiedFilo.editor
             ]);
 
             $("#div_tabOptions").css("display", "none");
@@ -837,9 +850,15 @@ function startDiagram(cladogram, user_logged, clado_id) {
                 }
 
                 if(initialNodes != undefined){
-                    if(initialNodes[filo_name] != undefined){
-                        $("#small_popup")[0].innerText = "Filo já existente!";
-                        
+                    if(initialNodes[filo_name] != undefined && filos_notSaved.indexOf(filo_name)){
+                        if(tabOptions_click != "#li_editFilo"){
+                            $("#small_popup")[0].innerText = "Filo já existente!";
+                            
+                        } else{
+                            $(".popup").css({"display": "none"});
+
+                            fEditFilo(filo_name, filo_category);
+                        }
                     } else{
                         if(filos_notSaved.indexOf(filo_name) != -1 && first_filosNotSaved){
                             $("#small_popup")[0].innerText = "Filo já existente!";
@@ -867,18 +886,25 @@ function startDiagram(cladogram, user_logged, clado_id) {
                         }
                     }
                 } else{
-                    $(".popup").css({"display": "none"});
+                    if(filos_notSaved.indexOf(filo_name) != -1){
+                        $("#small_popup")[0].innerText = "Filo já existente!";
 
-                    if(colorModifiedFilo == "fill: lightsteelblue;"){
-                        toggleChildren(modifiedFilo);
-                    }
-    
-                    if(tabOptions_click == "#li_addFilo"){
-                        fAddFilo(filo_name, filo_category);
-    
-                    } else if(tabOptions_click == "#li_editFilo"){
-                        fEditFilo(filo_name, filo_category);
-    
+                    } else{
+                        $(".popup").css({"display": "none"});
+
+                        if(colorModifiedFilo == "fill: lightsteelblue;"){
+                            toggleChildren(modifiedFilo);
+                        }
+        
+                        if(tabOptions_click == "#li_addFilo"){
+                            fAddFilo(filo_name, filo_category);
+        
+                        } else if(tabOptions_click == "#li_editFilo"){
+                            fEditFilo(filo_name, filo_category);
+        
+                        }
+
+                        filos_notSaved.push(filo_name);
                     }
                 }
                 

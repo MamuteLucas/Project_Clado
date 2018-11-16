@@ -322,14 +322,19 @@
 			return $result["clado_token"];
 		}
 
-		public function saveActions_add($filo_name, $filo_category, $user_logged, $clado_id){
-			$sql = $this->pdo->prepare("INSERT INTO actions(actions_newname, actions_newcategory, actions_type, 
-											actions_datetime, actions_creator, user_id, clado_id)
-										VALUES(:filo_name, :filo_category, 'Adicionou', CURRENT_TIMESTAMP(),
-											:user_creator, :user_id, :clado_id);");
-											
-			$sql->bindValue(":filo_name", $filo_name);
-			$sql->bindValue(":filo_category", $filo_category);
+		public function saveActions_add($filo_oldname, $filo_oldcategory, $filo_newname, $filo_newcategory,
+			$user_logged, $clado_id){
+
+			$sql = $this->pdo->prepare("INSERT INTO actions(actions_oldname, actions_oldcategory, actions_newname,
+											actions_newcategory, actions_type, actions_datetime, actions_creator,
+											user_id, clado_id)
+										VALUES(:filo_oldname, :filo_oldcategory, :filo_newname, :filo_newcategory, 
+											'adicionou', CURRENT_TIMESTAMP(), :user_creator, :user_id, :clado_id)");
+			
+			$sql->bindValue(":filo_oldname", $filo_oldname);
+			$sql->bindValue(":filo_oldcategory", $filo_oldcategory);
+			$sql->bindValue(":filo_newname", $filo_newname);
+			$sql->bindValue(":filo_newcategory", $filo_newcategory);
 			$sql->bindValue(":user_creator", $user_logged);
 			$sql->bindValue(":user_id", $user_logged);
 			$sql->bindValue(":clado_id", $clado_id);
@@ -337,26 +342,15 @@
 			$sql->execute();
 		}
 
-		public function saveActions_edit($old_name, $old_category, $new_name, $new_category, $creator, $editor, 
+		public function saveActions_edit($old_name, $old_category, $new_name, $new_category, $creator, 
 			$user_id, $clado_id){
 
-			if($editor == ''){
-				$sql = $this->pdo->prepare("INSERT INTO actions(actions_oldname, actions_oldcategory, 
+			$sql = $this->pdo->prepare("INSERT INTO actions(actions_oldname, actions_oldcategory, 
 											actions_newname, actions_newcategory, actions_creator, 
 											actions_type, actions_datetime, user_id, clado_id)
 										VALUES(:oldname, :oldcategory, :newname, :newcategory, :creator, 
-											'Editou', CURRENT_TIMESTAMP(), :user_id, :clado_id)");
+											'editou', CURRENT_TIMESTAMP(), :user_id, :clado_id)");
 
-			} else{
-				$sql = $this->pdo->prepare("INSERT INTO actions(actions_oldname, actions_oldcategory, 
-											actions_newname, actions_newcategory, actions_creator, actions_editor, 
-											actions_type, actions_datetime, user_id, clado_id)
-										VALUES(:oldname, :oldcategory, :newname, :newcategory, :creator, :editor, 
-											'Editou', CURRENT_TIMESTAMP(), :user_id, :clado_id)");
-				
-				$sql->bindValue(":editor", $editor);
-
-			}
 
 			$sql->bindValue(":oldname", $old_name);
 			$sql->bindValue(":oldcategory", $old_category);
@@ -371,21 +365,11 @@
 		}
 
 		public function saveAtions_del($old_name, $old_category, $creator, $editor, $user_id, $clado_id){
-			if($editor == ''){
-				$sql = $this->pdo->prepare("INSERT INTO actions(actions_oldname, actions_oldcategory, actions_creator,
+			$sql = $this->pdo->prepare("INSERT INTO actions(actions_oldname, actions_oldcategory, actions_creator,
 											actions_type, actions_datetime, user_id, clado_id)
-										VALUES(:old_name, :old_category, :creator, 'Excluiu', CURRENT_TIMESTAMP(),
+										VALUES(:old_name, :old_category, :creator, 'excluiu', CURRENT_TIMESTAMP(),
 											:user_id, :clado_id)");
 
-			} else{
-				$sql = $this->pdo->prepare("INSERT INTO actions(actions_oldname, actions_oldcategory, actions_creator,
-											actions_editor, actions_type, actions_datetime, user_id, clado_id)
-										VALUES(:old_name, :old_category, :creator, :editor, 'Excluiu', 
-											CURRENT_TIMESTAMP(), :user_id, :clado_id)");
-
-				$sql->bindValue(":editor", $editor);
-
-			}
 
 			$sql->bindValue(":old_name", $old_name);
 			$sql->bindValue(":old_category", $old_category);
@@ -395,6 +379,26 @@
 			
 
 			$sql->execute();
+		}
+
+		public function reportCladogram($clado_id){
+			$sql = $this->pdo->prepare("SELECT * FROM actions WHERE clado_id = :clado_id");
+
+			$sql->bindValue(":clado_id", $clado_id);
+
+			$sql->execute();
+
+			return $sql->fetchAll(PDO::FETCH_ASSOC);
+		}
+
+		public function searchUser($user_id){
+			$sql = $this->pdo->prepare("SELECT user_name FROM user WHERE user_id = :user_id");
+
+			$sql->bindValue(":user_id", $user_id);
+
+			$sql->execute();
+
+			return $sql->fetch(PDO::FETCH_ASSOC);
 		}
 	}
 ?>

@@ -179,3 +179,14 @@ a:not(.active){
 #div_informationFilo{
   text-align: left;
 }
+
+.report_div{
+  padding-top: 2rem;
+  width: 100%;
+}
+
+.report_p{
+  text-align: center;
+  border-bottom: 1px solid black;
+  width: 90%;
+}

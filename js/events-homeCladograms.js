@@ -17,9 +17,11 @@ $(function(){
           y_btnCladograms = $(this)[0].children[0].offsetTop,
           share_btn = $(this)[0].children[1].id,
           delete_btn = $(this)[0].children[2].id;
+          report_btn = $(this)[0].children[3].id;
           
-      $("#"+share_btn).css({"top": y_btnCladograms + 430, "left": x_btnCladograms + 122 - 35});
-      $("#"+delete_btn).css({"top": y_btnCladograms + 430, "left": x_btnCladograms + 122});
+      $("#"+share_btn).css({"top": y_btnCladograms + 390, "left": x_btnCladograms + 122 - 35});
+      $("#"+delete_btn).css({"top": y_btnCladograms + 390, "left": x_btnCladograms + 122});
+      $("#"+report_btn).css({"top": y_btnCladograms + 430, "left": x_btnCladograms + 8});
   
     });
   }
@@ -69,6 +71,13 @@ $(function(){
 
     $(".div_confirmDelete").css("display", "inline");
 
+  });
+
+  $(".button_report").on("click", function(){
+    clado_id = $(this)[0].id;
+    clado_id = clado_id[7];
+    
+    window.location = "?pag=relatorio&clado_id="+clado_id;
   });
 
   $("#div_confirmDelete_shadow, #btn_cancelDelete").on("click", function(){

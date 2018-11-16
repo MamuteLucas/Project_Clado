@@ -5,7 +5,9 @@
 		header("location: ?pag=inicio");
 
 	} else{
-		if($_GET["pag"] != "inicio" && $_GET["pag"] != "conta" && $_GET["pag"] != "solicitacao" && $_GET["pag"] != "sair" && $_GET["pag"] != "criar"){
+		if($_GET["pag"] != "inicio" && $_GET["pag"] != "relatorio" 
+			&& $_GET["pag"] != "conta" && $_GET["pag"] != "solicitacao" 
+			&& $_GET["pag"] != "sair" && $_GET["pag"] != "criar"){
 			header("location: ?pag=inicio");
 		}
 	}
@@ -117,6 +119,9 @@
 				unset($_SESSION["result"]);
 			}
 
+		} else if($_GET["pag"] == "relatorio"){
+			include("php/relatorio.php");
+			
 		} else if($_GET["pag"] == "conta"){
 			include("php/configAccount.php");
 

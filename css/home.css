@@ -80,6 +80,21 @@
   font-size: 20px;
 }
 
+.button_report{
+  position: absolute;
+  margin: 0;
+  padding: 0;
+  height: 35px;
+  width: 14rem;
+  border: 1px solid black;
+  border-radius: 0.3rem;
+  background-color: transparent;
+  background-size: 35px;
+  background-repeat: no-repeat;
+  background-position: center;
+  text-align: center;
+}
+
 .button-action_ShareDelete{
   position: absolute;
   margin: 0;
