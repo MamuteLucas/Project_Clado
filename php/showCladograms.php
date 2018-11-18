@@ -1,14 +1,21 @@
 <div id="div_cladograms">
-  <button type="button" class="button_cladograms" id="button_addCladogram">
+  <button type="button" class="button_cladograms ajuste_tec" id="button_addCladogram">
     <p class="p_cladograms">Criar novo cladograma</p>
   </button>
 
+  <button type="button" class="button_cladograms ajuste_tec_aux" id="button_addCladogram">
+    
+  </button>
+
   <?php for($i = 0; $i < sizeof($_SESSION["cladograms"]); $i++):?>
-    <span class="span_share_delete" id="span_sd_<?= $_SESSION["cladograms"][$i]["clado_id"]?>">
+    <?php $_userAdmin = $con->searchUser($_SESSION["cladograms"][$i]["clado_userAdmin"]); ?>
+    <span class="span_share_delete" id="span_sd_<?= $_SESSION["cladograms"][$i]["clado_id"] ?>">
 
     <button type="button" class="button_cladograms"
       value='<?= $_SESSION["cladograms"][$i]["clado_id"]?>'>
-        <p class="p_cladograms"><?= $_SESSION["cladograms"][$i]["clado_name"] ?></p>
+        <p class="p_cladograms">
+          <?= $_SESSION["cladograms"][$i]["clado_name"]."</br> Criado por: ".$_userAdmin["user_name"]?>
+        </p>
         
     </button>
 

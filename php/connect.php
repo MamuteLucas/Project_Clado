@@ -381,10 +381,12 @@
 			$sql->execute();
 		}
 
-		public function reportCladogram($clado_id){
-			$sql = $this->pdo->prepare("SELECT * FROM actions WHERE clado_id = :clado_id");
+		public function reportCladogram($clado_id, $user_id){
+			$sql = $this->pdo->prepare("SELECT * FROM actions as a INNER JOIN cladogram as c ON a.clado_id = c.clado_id
+										WHERE a.clado_id = :clado_id AND c.clado_userAdmin = :user_id");
 
 			$sql->bindValue(":clado_id", $clado_id);
+			$sql->bindValue(":user_id", $user_id);
 
 			$sql->execute();
 
@@ -400,5 +402,18 @@
 
 			return $sql->fetch(PDO::FETCH_ASSOC);
 		}
+
+		public function searchUserFromCladogram($clado_id){
+			$sql = $this->pdo->prepare("SELECT u.user_id, u.user_name FROM user as u
+											INNER JOIN user_has_cladogram as uc ON u.user_id = uc.user_id
+										WHERE uc.clado_id = :clado_id AND (uc.solicitation = 0 OR uc.solicitation = 1)");
+			
+			$sql->bindValue(":clado_id", $clado_id);
+
+			$sql->execute();
+
+			return $sql->fetchAll(PDO::FETCH_ASSOC);
+		}
+
 	}
 ?>

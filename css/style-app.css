@@ -44,6 +44,10 @@ h1{
   outline: none;
 }
 
+.form_input:focus{
+  border: 1px solid #007bff;
+}
+
 .form_inputButton{
   width: 30rem;
   color: white;
@@ -182,11 +186,5 @@ a:not(.active){
 
 .report_div{
   padding-top: 2rem;
-  width: 100%;
-}
-
-.report_p{
-  text-align: center;
-  border-bottom: 1px solid black;
-  width: 90%;
+  
 }

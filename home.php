@@ -57,8 +57,11 @@
 		} else if($_GET["pag"] == "solicitacao"){
 			echo "<link rel='stylesheet' type='text/css' href='css/solicitation.css'>";
 			echo "<script src='js/events-solicitation.js'></script>";
-
-		}
+			
+		} else if($_GET["pag"] == "relatorio"){
+			echo "<link rel='stylesheet' type='text/css' href='css/table.css'>";
+			
+		} 
 	?>
 </head>
 

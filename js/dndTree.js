@@ -732,6 +732,8 @@ function startDiagram(cladogram, user_logged, clado_id) {
 
             placeholderAndTitleOfPOPUP(0);
 
+            $("input[name = filo_name]").focus();
+
             $("input[name = filo_name]").val("");
             $("input[name = filo_category]").val("");
 
@@ -783,6 +785,8 @@ function startDiagram(cladogram, user_logged, clado_id) {
 
             placeholderAndTitleOfPOPUP(1);
 
+            $("input[name = filo_name]").focus();
+
             $("input[name = filo_name]").val(modifiedFilo.name);
             $("input[name = filo_category]").val(modifiedFilo.category);
 
@@ -797,23 +801,30 @@ function startDiagram(cladogram, user_logged, clado_id) {
             $("#form_addOrEditFilo").css("display", "none");
             $("#div_informationFilo").removeAttr("style");
 
-            try{
-                $("#info_name")[0].innerHTML = "<span style='font-weight: 600;'>Nome científico: </span> "+modifiedFilo.name;
-                $("#info_category")[0].innerHTML = "<span style='font-weight: 600;'>Categoria: </span> "+modifiedFilo.category;
-                $("#info_create")[0].innerHTML = "<span style='font-weight: 600;'>Criado por: </span> "+modifiedFilo.creator;
-                $("#info_edit")[0].innerHTML = "<span style='font-weight: 600;'>Editado por: </span> "+modifiedFilo.editor;
-                $("#info_nSubFilo")[0].innerHTML = "<span style='font-weight: 600;'>Número de sub-filos: </span> "+modifiedFilo.children.length;
-                $("#info_ancestralFilo")[0].innerHTML = "<span style='font-weight: 600;'>Filo ancestral: </span> "+modifiedFilo.parent.name;
+            $.post("php/searchUser.php", {"creator": modifiedFilo.creator, "editor": modifiedFilo.editor}, function(e){
+                e = e.split(";");
+                _creator = e[0];
+                _editor = e[1];
 
-            } catch(e){
-                $("#info_name")[0].innerHTML = "<span style='font-weight: 600;'>Nome científico: </span> "+modifiedFilo.name;
-                $("#info_category")[0].innerHTML = "<span style='font-weight: 600;'>Categoria: </span> "+modifiedFilo.category;
-                $("#info_create")[0].innerHTML = "<span style='font-weight: 600;'>Criado por: </span> "+modifiedFilo.creator;
-                $("#info_edit")[0].innerHTML = "<span style='font-weight: 600;'>Editado por: </span> "+modifiedFilo.editor;
-                $("#info_nSubFilo")[0].innerHTML = "<span style='font-weight: 600;'>Número de sub-filos: </span> 0";
-                $("#info_ancestralFilo")[0].innerHTML = "<span style='font-weight: 600;'>Filo ancestral: </span> "+modifiedFilo.parent.name;
+                try{
+                    $("#info_name")[0].innerHTML = "<span style='font-weight: 600;'>Nome científico: </span> "+modifiedFilo.name;
+                    $("#info_category")[0].innerHTML = "<span style='font-weight: 600;'>Categoria: </span> "+modifiedFilo.category;
+                    $("#info_create")[0].innerHTML = "<span style='font-weight: 600;'>Criado por: </span> "+_creator;
+                    $("#info_edit")[0].innerHTML = "<span style='font-weight: 600;'>Editado por: </span> "+_editor;
+                    $("#info_nSubFilo")[0].innerHTML = "<span style='font-weight: 600;'>Número de sub-filos: </span> "+modifiedFilo.children.length;
+                    $("#info_ancestralFilo")[0].innerHTML = "<span style='font-weight: 600;'>Filo ancestral: </span> "+modifiedFilo.parent.name;
+    
+                } catch(e){
+                    $("#info_name")[0].innerHTML = "<span style='font-weight: 600;'>Nome científico: </span> "+modifiedFilo.name;
+                    $("#info_category")[0].innerHTML = "<span style='font-weight: 600;'>Categoria: </span> "+modifiedFilo.category;
+                    $("#info_create")[0].innerHTML = "<span style='font-weight: 600;'>Criado por: </span> "+_creator;
+                    $("#info_edit")[0].innerHTML = "<span style='font-weight: 600;'>Editado por: </span> "+_editor;
+                    $("#info_nSubFilo")[0].innerHTML = "<span style='font-weight: 600;'>Número de sub-filos: </span> 0";
+                    $("#info_ancestralFilo")[0].innerHTML = "<span style='font-weight: 600;'>Filo ancestral: </span> "+modifiedFilo.parent.name;
+    
+                }
 
-            }
+            });
 
           });
 
@@ -855,9 +866,14 @@ function startDiagram(cladogram, user_logged, clado_id) {
                             $("#small_popup")[0].innerText = "Filo já existente!";
                             
                         } else{
-                            $(".popup").css({"display": "none"});
+                            if(filo_name != modifiedFilo.name){
+                                $("#small_popup")[0].innerText = "Filo já existente!";
 
-                            fEditFilo(filo_name, filo_category);
+                            } else{
+                                $(".popup").css({"display": "none"});
+                            
+                                fEditFilo(filo_name, filo_category);
+                            }
                         }
                     } else{
                         if(filos_notSaved.indexOf(filo_name) != -1 && first_filosNotSaved){

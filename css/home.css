@@ -38,7 +38,7 @@
   z-index: 1;
   position: relative;
   text-align: center;
-  top: 3rem;
+  top: 2.1rem;
   margin: 0;
 }
 
@@ -56,6 +56,15 @@
   transition: background-color 0.5s;
 }
 
+.ajuste_tec {
+  position: absolute;
+  top: 0px;
+}
+
+.ajuste_tec_aux {
+  height: 3rem;
+}
+
 #button_addCladogram{
   background-image: url("../images/Add-button.png");
   background-size: 75px;
@@ -70,10 +79,11 @@
 }
 
 .p_cladograms{
+  word-wrap: break-word;
   position: relative;
   text-align: center;
   margin: 0;
-  top: -14rem;
+  top: -13.5rem;
 }
 
 #p_addCladogram{
