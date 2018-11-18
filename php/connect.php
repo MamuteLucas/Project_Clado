@@ -124,8 +124,10 @@
 
 				$clado_token = hash("sha512", $clado_directory);
 
-				$sql = $this->pdo->prepare("INSERT INTO cladogram(clado_name, clado_userAdmin, clado_directory, clado_token, clado_status)
-												VALUES(:clado_name, :clado_userAdmin, :clado_directory, :clado_token, 1)");
+				$sql = $this->pdo->prepare("INSERT INTO cladogram(clado_name, clado_userAdmin, clado_directory, clado_token,
+												clado_status, clado_datetime)
+											VALUES(:clado_name, :clado_userAdmin, :clado_directory, :clado_token, 1, CURRENT_TIME())");
+				
 				$sql->bindValue(":clado_name", $clado_name);
 				$sql->bindValue(":clado_userAdmin", $user_id);
 				$sql->bindValue(":clado_directory", $clado_directory);
@@ -323,14 +325,14 @@
 		}
 
 		public function saveActions_add($filo_oldname, $filo_oldcategory, $filo_newname, $filo_newcategory,
-			$user_logged, $clado_id){
+			$user_logged, $clado_id, $datetime){
 
 			$sql = $this->pdo->prepare("INSERT INTO actions(actions_oldname, actions_oldcategory, actions_newname,
 											actions_newcategory, actions_type, actions_datetime, actions_creator,
 											user_id, clado_id)
 										VALUES(:filo_oldname, :filo_oldcategory, :filo_newname, :filo_newcategory, 
-											'adicionou', CURRENT_TIMESTAMP(), :user_creator, :user_id, :clado_id)");
-			
+											'adicionou', :date_time, :user_creator, :user_id, :clado_id)");
+
 			$sql->bindValue(":filo_oldname", $filo_oldname);
 			$sql->bindValue(":filo_oldcategory", $filo_oldcategory);
 			$sql->bindValue(":filo_newname", $filo_newname);
@@ -338,18 +340,19 @@
 			$sql->bindValue(":user_creator", $user_logged);
 			$sql->bindValue(":user_id", $user_logged);
 			$sql->bindValue(":clado_id", $clado_id);
+			$sql->bindValue(":date_time", $datetime);
 
 			$sql->execute();
 		}
 
 		public function saveActions_edit($old_name, $old_category, $new_name, $new_category, $creator, 
-			$user_id, $clado_id){
+			$user_id, $clado_id, $datetime){
 
 			$sql = $this->pdo->prepare("INSERT INTO actions(actions_oldname, actions_oldcategory, 
 											actions_newname, actions_newcategory, actions_creator, 
 											actions_type, actions_datetime, user_id, clado_id)
 										VALUES(:oldname, :oldcategory, :newname, :newcategory, :creator, 
-											'editou', CURRENT_TIMESTAMP(), :user_id, :clado_id)");
+											'editou', :date_time, :user_id, :clado_id)");
 
 
 			$sql->bindValue(":oldname", $old_name);
@@ -359,31 +362,56 @@
 			$sql->bindValue(":creator", $creator);
 			$sql->bindValue(":user_id", $user_id);
 			$sql->bindValue(":clado_id", $clado_id);
+			$sql->bindValue(":date_time", $datetime);
 
 			$sql->execute();
 
 		}
 
-		public function saveAtions_del($old_name, $old_category, $creator, $editor, $user_id, $clado_id){
+		public function saveAtions_del($old_name, $old_category, $creator, $user_id, $clado_id, $datetime){
 			$sql = $this->pdo->prepare("INSERT INTO actions(actions_oldname, actions_oldcategory, actions_creator,
 											actions_type, actions_datetime, user_id, clado_id)
-										VALUES(:old_name, :old_category, :creator, 'excluiu', CURRENT_TIMESTAMP(),
+										VALUES(:old_name, :old_category, :creator, 'excluiu', :date_time,
 											:user_id, :clado_id)");
-
 
 			$sql->bindValue(":old_name", $old_name);
 			$sql->bindValue(":old_category", $old_category);
 			$sql->bindValue(":creator", $creator);
 			$sql->bindValue(":user_id", $user_id);
 			$sql->bindValue(":clado_id", $clado_id);
+			$sql->bindValue(":date_time", $datetime);
 			
+
+			$sql->execute();
+		}
+
+		public function saveActions_drag($name, $category, $old_pname, $old_pcategory, $new_pname, $new_pcategory,
+			$creator, $user_logged, $clado_id, $datetime){
+
+			$sql = $this->pdo->prepare("INSERT INTO actions(actions_oldname, actions_oldcategory, actions_newname,
+											actions_newcategory, actions_auxname, actions_auxcategory, actions_type,
+											actions_creator, actions_datetime, user_id, clado_id)
+										VALUES(:old_name, :old_category, :new_name, :new_category, :aux_name,
+											:aux_category, 'arrastou', :creator, :date_time, :user_id, :clado_id)");
+
+			$sql->bindValue(":old_name", $old_pname);
+			$sql->bindValue(":old_category", $old_pcategory);
+			$sql->bindValue(":new_name", $new_pname);
+			$sql->bindValue(":new_category", $new_pcategory);
+			$sql->bindValue(":aux_name", $name);
+			$sql->bindValue(":aux_category", $category);
+			$sql->bindValue(":creator", $creator);
+			$sql->bindValue(":user_id", $user_logged);
+			$sql->bindValue(":clado_id", $clado_id);
+			$sql->bindValue(":date_time", $datetime);
 
 			$sql->execute();
 		}
 
 		public function reportCladogram($clado_id, $user_id){
 			$sql = $this->pdo->prepare("SELECT * FROM actions as a INNER JOIN cladogram as c ON a.clado_id = c.clado_id
-										WHERE a.clado_id = :clado_id AND c.clado_userAdmin = :user_id");
+										WHERE a.clado_id = :clado_id AND c.clado_userAdmin = :user_id 
+										ORDER BY a.actions_datetime DESC");
 
 			$sql->bindValue(":clado_id", $clado_id);
 			$sql->bindValue(":user_id", $user_id);
@@ -413,6 +441,18 @@
 			$sql->execute();
 
 			return $sql->fetchAll(PDO::FETCH_ASSOC);
+		}
+
+		public function permitionReport($clado_id, $user_id){
+			$sql = $this->pdo->prepare("SELECT * FROM cladogram 
+										WHERE clado_id = :clado_id AND clado_userAdmin = :user_id");
+
+			$sql->bindValue(":clado_id", $clado_id);
+			$sql->bindValue(":user_id", $user_id);
+
+			$sql->execute();
+
+			return $sql->fetch(PDO::FETCH_ASSOC);
 		}
 
 	}

@@ -2,7 +2,7 @@
 	require("php/validateLogin.php");
 
 	if(empty($_GET["clado_id"])){
-		header("location: home.php?pag=inicio");
+		echo "<script> location.replace('home.php?pag=inicio'); </script>";
 
 	} else{
 		require("php/connect.php");
@@ -17,7 +17,7 @@
 		} else{
 			$_SESSION["result"] = "Acesso negado";
 			$_SESSION["alert_class"] = "alert-danger";
-			header("location: home.php?pag=inicio");
+			echo "<script> location.replace('home.php?pag=inicio'); </script>";
 		}
 	}
 

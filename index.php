@@ -2,13 +2,13 @@
 	session_start();
 
 	if(!empty($_SESSION["user_id"])){
-		header("location: home.php");
+		echo "<script> location.replace('home.php'); </script>";
 	}
 
 	if(empty($_GET["pag"])){
-		header("location: ?pag=entrar");
+		echo "<script> location.replace('?pag=entrar'); </script>";
 	} else if($_GET["pag"] != "entrar" && $_GET["pag"] != "cadastrar"){
-		header("location: ?pag=entrar");
+		echo "<script> location.replace('?pag=entrar'); </script>";
 	}
 ?>
 <!DOCTYPE html>

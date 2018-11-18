@@ -188,3 +188,7 @@ a:not(.active){
   padding-top: 2rem;
   
 }
+
+.display_none{
+  display: none;
+}

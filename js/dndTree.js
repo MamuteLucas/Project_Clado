@@ -35,7 +35,8 @@ var modifiedFilo = null,
     first_filosNotSaved = false,
     filos_notSaved = [],
     count_add = 0,
-    actions = [[], [] ,[], []];
+    actions = [[], [] ,[], []],
+    draggedNode = [null, null, null, null, null];
 
 function startDiagram(cladogram, user_logged, clado_id) {
     // Get JSON data
@@ -234,6 +235,13 @@ function startDiagram(cladogram, user_logged, clado_id) {
                     if (dragStarted) {
                         domNode = this;
                         initiateDrag(d, domNode);
+
+                        draggedNode[0] = d.name;
+                        draggedNode[1] = d.category;
+                        draggedNode[2] = d.parent.name;
+                        draggedNode[3] = d.parent.category;
+                        draggedNode[4] = d.creator;
+                        
                     }
 
                     // get coords of mouseEvent relative to svg container to allow for panning
@@ -589,7 +597,8 @@ function startDiagram(cladogram, user_logged, clado_id) {
             if (mouseIn[0] != null && mouseIn[1] != null) {
                 changeValueOfLMIMI();
                 if (mouseIn[lastModifiedIndexMouseIn]) {
-                    saveNewRoot(root, initialDiagram, cladogram);
+                    saveNewRoot(root, initialDiagram, cladogram, true);
+
                 }
             }
         }
@@ -637,7 +646,7 @@ function startDiagram(cladogram, user_logged, clado_id) {
         }
 
         function attDiagram(){
-          saveNewRoot(root, initialDiagram, cladogram);
+          saveNewRoot(root, initialDiagram, cladogram, false);
 
           update(root);
           centerNode(modifiedFilo);
@@ -648,11 +657,14 @@ function startDiagram(cladogram, user_logged, clado_id) {
         }
 
         function fAddFilo(filo_name, filo_category){
+            var str_datetime = datetime();
+
             actions[0].push([
                 modifiedFilo.name,
                 modifiedFilo.category,
                 filo_name,
-                filo_category
+                filo_category,
+                str_datetime
             ]);
 
             modifiedFilo = addFilo(filo_name, filo_category, user_logged, modifiedFilo);
@@ -661,12 +673,15 @@ function startDiagram(cladogram, user_logged, clado_id) {
         }
 
         function fEditFilo(filo_name, filo_category){
+            var str_datetime = datetime();
+
             actions[1].push([
                 modifiedFilo.name, 
                 modifiedFilo.category, 
                 filo_name, 
                 filo_category, 
                 modifiedFilo.creator,
+                str_datetime
             ]);
 
             modifiedFilo.name = filo_name;
@@ -748,10 +763,13 @@ function startDiagram(cladogram, user_logged, clado_id) {
 
             delete initialNodes[modifiedFilo.name];
 
+            var str_datetime = datetime();
+
             actions[2].push([
                 modifiedFilo.name, 
                 modifiedFilo.category,
                 modifiedFilo.creator,
+                str_datetime
             ]);
 
             $("#div_tabOptions").css("display", "none");

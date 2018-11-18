@@ -18,10 +18,17 @@ $(function(){
           share_btn = $(this)[0].children[1].id,
           delete_btn = $(this)[0].children[2].id;
           report_btn = $(this)[0].children[3].id;
-          
-      $("#"+share_btn).css({"top": y_btnCladograms + 390, "left": x_btnCladograms + 122 - 35});
-      $("#"+delete_btn).css({"top": y_btnCladograms + 390, "left": x_btnCladograms + 122});
-      $("#"+report_btn).css({"top": y_btnCladograms + 430, "left": x_btnCladograms + 8});
+
+      if($("#"+report_btn).hasClass("display_none")){
+        $("#"+share_btn).css({"top": y_btnCladograms + 430, "left": x_btnCladograms + 122 - 35});
+        $("#"+delete_btn).css({"top": y_btnCladograms + 430, "left": x_btnCladograms + 122});
+        
+      } else{
+        $("#"+share_btn).css({"top": y_btnCladograms + 390, "left": x_btnCladograms + 122 - 35});
+        $("#"+delete_btn).css({"top": y_btnCladograms + 390, "left": x_btnCladograms + 122});
+        $("#"+report_btn).css({"top": y_btnCladograms + 430, "left": x_btnCladograms + 8});
+
+      }
   
     });
   }
@@ -41,7 +48,8 @@ $(function(){
     $("#alert_share").remove();
 
     clado_id = $(this)[0].id;
-    clado_id = clado_id[6];
+    clado_id = clado_id.split("_");
+    clado_id = clado_id[1];
 
     $("body").append("<div id='alert_share' class='alert alert-dark fade show' role='alert' style='padding: 0.2rem;'>"+
                         "<input type='text' id='input_copycat' class='form-control' value=''>"+
@@ -67,16 +75,18 @@ $(function(){
 
   $(".button_delete").on("click", function(){
     clado_id = $(this)[0].id;
-    clado_id = clado_id[7];
+    clado_id = clado_id.split("_");
+    clado_id = clado_id[1];
 
     $(".div_confirmDelete").css("display", "inline");
 
   });
 
   $(".button_report").on("click", function(){
-    clado_id = $(this)[0].id;
-    clado_id = clado_id[7];
-    
+    clado_id = $(this)[0].id;   
+    clado_id = clado_id.split("_");
+    clado_id = clado_id[1];
+
     window.location = "?pag=relatorio&clado_id="+clado_id;
   });
 

@@ -2,13 +2,13 @@
 	require("php/validateLogin.php");
 
 	if(empty($_GET["pag"])){
-		header("location: ?pag=inicio");
+		echo "<script> location.replace('?pag=inicio'); </script>";
 
 	} else{
 		if($_GET["pag"] != "inicio" && $_GET["pag"] != "relatorio" 
 			&& $_GET["pag"] != "conta" && $_GET["pag"] != "solicitacao" 
 			&& $_GET["pag"] != "sair" && $_GET["pag"] != "criar"){
-			header("location: ?pag=inicio");
+			echo "<script> location.replace('?pag=inicio'); </script>";
 		}
 	}
 
@@ -60,6 +60,7 @@
 			
 		} else if($_GET["pag"] == "relatorio"){
 			echo "<link rel='stylesheet' type='text/css' href='css/table.css'>";
+			echo "<script src='js/events-report.js'></script>";
 			
 		} 
 	?>

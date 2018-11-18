@@ -1,22 +1,39 @@
 <?php
     if(empty($_GET["clado_id"])){
-		header("location: home.php?pag=inicio");
+        echo "<script> location.replace('home.php?pag=inicio'); </script>";
 
     }
     
     $clado_id = $_GET['clado_id'];
     $clado_id = addslashes($clado_id);
+
+    $permition = $con->permitionReport($clado_id, $_SESSION['user_id']);
     
     $acoes = $con->reportCladogram($clado_id, $_SESSION['user_id']);
 
-    if(empty($acoes)){
+    if(!empty($permition)){
+        $acoes[0] = $permition;
+        $permition = false;
+
+    } else if(empty($acoes)){
         $_SESSION['result'] = "Acesso negado";
         $_SESSION['alert_class'] = "alert-danger";
         
-        header('location: home.php?pag=inicio');
+        echo "<script> location.replace('home.php?pag=inicio'); </script>";
+        
+    } else{
+        $permition = true;
     }
 
     $_users = $con->searchUserFromCladogram($clado_id);
+    
+    $dt_initial = date("Y-m-d H:i", strtotime($acoes[0]['clado_datetime']));
+    $dt_initial = explode(" ", $dt_initial);
+    $dt_initial = $dt_initial[0]."T".$dt_initial[1];
+
+    $dt_final = date("Y-m-d H:i");
+    $dt_final = explode(" ", $dt_final);
+    $dt_final = $dt_final[0]."T".$dt_final[1];
 ?>
 
 <div class="report_div">
@@ -39,17 +56,20 @@
                 <option value="1">Adicionou</option>
                 <option value="2">Editou</option>
                 <option value="3">Excluiu</option>
+                <option value="4">Arrastou</option>
             </select>
         </div>
 
         <div class="form-group">
             <label for="initial_date">Data inicial</label>
-            <input class="form-control" type="datetime-local" id="initial_date" name="initial_date">
+            <input class="form-control" type="datetime-local" id="initial_date" name="initial_date"
+                value="<?= $dt_initial ?>" min="<?= $dt_initial ?>" max="<?= $dt_final ?>">
         </div>
 
         <div class="form-group" style="float: right;">
             <label for="final_date">Data final</label>
-            <input class="form-control" type="datetime-local" id="final_date" name="final_date">
+            <input class="form-control" type="datetime-local" id="final_date" name="final_date"
+                value="<?= $dt_final ?>" min="<?= $dt_initial ?>" max="<?= $dt_final ?>">
         </div>
 
         <div class="form-group">
@@ -72,6 +92,7 @@
         <tbody>
 
 <?php
+    if($permition):
         foreach($acoes as $value):
             $user_name = $con->searchUser($value['user_id']);
             $user_name = $user_name['user_name'];
@@ -88,19 +109,14 @@
                 $filo_ancestral = $value['actions_oldname'];
                 $categoria_filoAncestral = $value['actions_oldcategory'];
 
-                if($categoria_filoAncestral != ""){
-                    $categoria_filoAncestral = "($categoria_filoAncestral)";
-                    $aux = "filo";
-
-                } else {
-                    $aux = "ramo inicial";
-
+                if($categoria_filoAncestral == ""){
+                    $categoria_filoAncestral= "ramo inicial";
                 }
 
                 $filo_adicionado = $value['actions_newname'];
-                $categoria_filoAdd = "(".$value['actions_newcategory'].")";
+                $categoria_filoAdd = $value['actions_newcategory'];
 
-                $descricao = "ao $aux $filo_ancestral$categoria_filoAncestral o filo $filo_adicionado$categoria_filoAdd";
+                $descricao = "ao(à) $categoria_filoAncestral $filo_ancestral o(a) $categoria_filoAdd $filo_adicionado";
 
             } else if($tipo_acao == 'editou'){
                 $oldname = $value['actions_oldname'];
@@ -109,13 +125,33 @@
                 $newname = $value['actions_newname'];
                 $newcategory = $value['actions_newcategory'];
 
-                $descricao = "o filo $oldname($oldcategory) para  $newname($newcategory)";
+                $descricao = "o(a) $oldcategory $oldname para $newcategory $newname";
 
             } else if($tipo_acao == 'excluiu'){
                 $name = $value['actions_oldname'];
                 $category = $value['actions_oldcategory'];
 
-                $descricao = "o filo $name($category)";
+                $descricao = "o(a) $category $name";
+
+            } else if($tipo_acao == 'arrastou'){
+                $name = $value['actions_auxname'];
+                $category = $value['actions_auxcategory'];
+
+                $old_pname = $value['actions_oldname'];
+                $old_pcategory = $value['actions_oldcategory'];
+
+                $new_pname = $value['actions_newname'];
+                $new_pcategory = $value['actions_newcategory'];
+
+                if($old_pcategory == ""){
+                    $old_pname = "ramo inicial ".$old_pname;
+                }
+
+                if($new_pcategory == ""){
+                    $new_pcategory = "ramo inicial";
+                }
+
+                $descricao = "o(a) $category $name do(a) $old_pcategory $old_pname para o(a) $new_pcategory $new_pname";
 
             }
 ?>
@@ -127,7 +163,7 @@
                 <td><?= $date; ?></td>
             </tr>
 
-            <?php endforeach; ?>
+            <?php endforeach; endif;?>
 
         </tbody>
     </table>

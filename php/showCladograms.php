@@ -25,8 +25,16 @@
     <input type="button" id="delete_<?= $_SESSION["cladograms"][$i]["clado_id"]?>"
         class="button-action_ShareDelete button_delete">
 
+    <?php
+      if($_userAdmin["user_name"] != $_SESSION['user_name']){
+        $_class = "display_none";
+      } else{
+        $_class = "";
+      }
+    ?>
+
     <input type="button" id="report_<?= $_SESSION["cladograms"][$i]["clado_id"]?>" 
-        class="button_report" value="Relatório de Atividade">
+        class="button_report <?= $_class?>" value="Relatório de Atividade">
 
     </span>
   <?php endfor; ?>

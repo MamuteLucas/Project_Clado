@@ -25,6 +25,6 @@
     $_SESSION["result"] = "Dados salvos com sucesso";
     $_SESSION["alert_class"] = "alert-success";
 
-    header("location: ../home.php?pag=conta");
+    echo "<script> location.replace('../home.php?pag=conta'); </script>";
   }
 ?>

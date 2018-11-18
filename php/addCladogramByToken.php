@@ -5,5 +5,5 @@
 
     $_SESSION["result"] = $con->addCladogram($user_id, $token);
 
-    header("Location: home.php?pag=inicio");
+    echo "<script> location.replace('home.php?pag=inicio'); </script>";
 ?>

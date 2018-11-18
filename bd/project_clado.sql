@@ -76,6 +76,8 @@ CREATE TABLE IF NOT EXISTS `project_clado`.`actions` (
   `actions_oldcategory` VARCHAR(45) NULL,
   `actions_newname` VARCHAR(45) NULL,
   `actions_newcategory` VARCHAR(45) NULL,
+  `actions_auxname` VARCHAR(45) NULL,
+  `actions_auxcategory` VARCHAR(45) NULL,
   `actions_type` VARCHAR(15) NOT NULL,
   `actions_creator` INT NOT NULL,
   `actions_datetime` DATETIME NOT NULL,
