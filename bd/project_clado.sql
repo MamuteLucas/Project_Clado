@@ -38,6 +38,7 @@ CREATE TABLE IF NOT EXISTS `project_clado`.`cladogram` (
   `clado_directory` VARCHAR(45) NOT NULL,
   `clado_token` VARCHAR(128) NOT NULL,
   `clado_status` TINYINT(1) NOT NULL,
+  `clado_datetime` DATETIME NOT NULL,
   PRIMARY KEY (`clado_id`),
   UNIQUE INDEX `clado_directory_UNIQUE` (`clado_directory` ASC),
   UNIQUE INDEX `clado_toke_UNIQUE` (`clado_token` ASC))
