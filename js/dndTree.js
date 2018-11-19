@@ -980,5 +980,14 @@ function startDiagram(cladogram, user_logged, clado_id) {
 
         });
 
+        $(window).resize(function() {
+            viewerWidth = window.innerWidth;
+            viewerHeight = window.innerHeight;
+            $(".overlay").attr("height", viewerHeight);
+            $(".overlay").attr("width", viewerWidth);
+            
+            centerNode(root);
+        });
+
     });
 }

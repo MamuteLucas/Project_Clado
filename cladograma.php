@@ -1,4 +1,6 @@
 <?php
+	clearstatcache();
+
 	require("php/validateLogin.php");
 
 	if(empty($_GET["clado_id"])){
@@ -20,7 +22,6 @@
 			echo "<script> location.replace('home.php?pag=inicio'); </script>";
 		}
 	}
-
 
 ?>
 

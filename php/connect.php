@@ -298,6 +298,13 @@
 				$sql->bindValue(":clado_id", $clado_id);
 
 				$sql->execute();
+
+				$sql = $this->pdo->prepare("UPDATE user_has_cladogram SET solicitation = 5 
+												WHERE clado_id = :clado_id AND user_id != :user_id");
+				$sql->bindValue(":clado_id", $clado_id);
+				$sql->bindValue(":user_id", $user_id);
+
+				$sql->execute();
 				
 			} else{
 				$sql = $this->pdo->prepare("UPDATE user_has_cladogram SET solicitation = 5

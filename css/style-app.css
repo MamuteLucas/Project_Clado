@@ -25,6 +25,8 @@ h1{
 }
 
 #div_form{
+  width: 35rem;
+  background: transparent;
   position: absolute;
   text-align: center;
   top: 0;
@@ -35,7 +37,7 @@ h1{
 }
 
 .form_input{
-  width: 29.6rem;
+  width: 86%;
   height: 2rem;
   padding: 0.2rem 0rem 0.2rem 0.4rem;
   margin: 0.8rem 0;
@@ -49,7 +51,7 @@ h1{
 }
 
 .form_inputButton{
-  width: 30rem;
+  width: 88.6%;
   color: white;
   padding: 0;
   border: 1px solid #007bff;
