@@ -11,29 +11,39 @@
     
     $acoes = $con->reportCladogram($clado_id, $_SESSION['user_id']);
 
-    if(!empty($permition)){
+    if(empty($permition)){
         $acoes[0] = $permition;
         $permition = false;
 
-    } else if(empty($acoes)){
+    } else{
+        $permition = true;
+
+    }
+    
+    if(!$permition){
         $_SESSION['result'] = "Acesso negado";
         $_SESSION['alert_class'] = "alert-danger";
         
         echo "<script> location.replace('home.php?pag=inicio'); </script>";
         
+    }
+
+    if(empty($acoes)){
+        $relatorio = false;
     } else{
-        $permition = true;
+        $relatorio = true;
     }
 
     $_users = $con->searchUserFromCladogram($clado_id);
-    
-    $dt_initial = date("Y-m-d H:i", strtotime($acoes[0]['clado_datetime']));
+
+    $dt_initial = date("Y-m-d H:i", strtotime($_users[0]['clado_datetime']));
     $dt_initial = explode(" ", $dt_initial);
     $dt_initial = $dt_initial[0]."T".$dt_initial[1];
 
     $dt_final = date("Y-m-d H:i");
     $dt_final = explode(" ", $dt_final);
     $dt_final = $dt_final[0]."T".$dt_final[1];
+    
 ?>
 
 <div class="report_div">
@@ -78,7 +88,7 @@
 
     </form>
 
-    <table class='table table-hover'>
+    <table class='table table-hover' id="table_report">
         <thead>
             <tr>
                 <th scope='col'>Usuário</th>
@@ -93,6 +103,7 @@
 
 <?php
     if($permition):
+    if($relatorio):
         foreach($acoes as $value):
             $user_name = $con->searchUser($value['user_id']);
             $user_name = $user_name['user_name'];
@@ -163,7 +174,7 @@
                 <td><?= $date; ?></td>
             </tr>
 
-            <?php endforeach; endif;?>
+            <?php endforeach; endif; endif;?>
 
         </tbody>
     </table>

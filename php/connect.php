@@ -439,8 +439,9 @@
 		}
 
 		public function searchUserFromCladogram($clado_id){
-			$sql = $this->pdo->prepare("SELECT u.user_id, u.user_name FROM user as u
+			$sql = $this->pdo->prepare("SELECT * FROM user as u
 											INNER JOIN user_has_cladogram as uc ON u.user_id = uc.user_id
+											INNER JOIN cladogram as c ON uc.clado_id = c.clado_id
 										WHERE uc.clado_id = :clado_id AND (uc.solicitation = 0 OR uc.solicitation = 1)");
 			
 			$sql->bindValue(":clado_id", $clado_id);
@@ -460,6 +461,54 @@
 			$sql->execute();
 
 			return $sql->fetch(PDO::FETCH_ASSOC);
+		}
+
+		public function searchActions($user_id, $type_actions, $dt_initial, $dt_final){
+			$query = "SELECT * FROM actions as a INNER JOIN user as u ON a.user_id = u.user_id WHERE";
+
+			if($user_id != 0){
+				$query = $query." a.user_id = :user_id AND";
+			}
+
+			if($type_actions != 0){
+				$query = $query." a.actions_type = :actions_type AND";
+
+				if($type_actions == 1){
+					$_type_actions = 'adicionou';
+		
+				} else if($type_actions == 2){
+					$_type_actions = 'editou';
+		
+				} else if($type_actions == 3){
+					$_type_actions = 'excluiu';
+		
+				} else if($type_actions == 4){
+					$_type_actions = 'arrastou';
+		
+				}
+
+			}
+
+			$query = $query." a.actions_datetime >= :dt_initial 
+							AND a.actions_datetime <= :dt_final 
+							ORDER BY a.actions_datetime DESC";
+
+			$sql = $this->pdo->prepare($query);
+
+			if($user_id != 0){
+				$sql->bindValue(":user_id", $user_id);
+			}
+
+			if($type_actions != 0){
+				$sql->bindValue(":actions_type", $_type_actions);
+			}
+
+			$sql->bindValue(":dt_initial", $dt_initial);
+			$sql->bindValue(":dt_final", $dt_final);
+
+			$sql->execute();
+
+			return $sql->fetchAll(PDO::FETCH_ASSOC);
 		}
 
 	}
