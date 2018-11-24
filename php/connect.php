@@ -238,6 +238,19 @@
 			return $sql->fetchAll(PDO::FETCH_ASSOC);
 		}
 
+		public function searchSolicitationSended($user_id){
+			$sql = $this->pdo->prepare("SELECT c.clado_id, c.clado_name, u.user_id, u.user_name
+											FROM cladogram as c INNER JOIN user_has_cladogram as uc ON c.clado_id = uc.clado_id
+												INNER JOIN user as u ON u.user_id = c.clado_userAdmin
+											WHERE uc.user_id = :user_id AND uc.solicitation = 10
+												AND c.clado_status = 1 AND u.user_status = 1");
+			$sql->bindValue(":user_id", $user_id);
+
+			$sql->execute();
+
+			return $sql->fetchAll(PDO::FETCH_ASSOC);
+		}
+
 		public function actionSolicitationReceived($user_id, $clado_id, $button_type){
 			if($button_type == "btn btn-success"){
 				$sql = $this->pdo->prepare("UPDATE user_has_cladogram SET solicitation = 1
@@ -264,19 +277,6 @@
 
 			$sql->execute();
 
-		}
-
-		public function searchSolicitationSended($user_id){
-			$sql = $this->pdo->prepare("SELECT c.clado_id, c.clado_name, u.user_id, u.user_name
-											FROM cladogram as c INNER JOIN user_has_cladogram as uc ON c.clado_id = uc.clado_id
-												INNER JOIN user as u ON u.user_id = c.clado_userAdmin
-											WHERE uc.user_id = :user_id AND uc.solicitation = 10
-												AND c.clado_status = 1 AND u.user_status = 1");
-			$sql->bindValue(":user_id", $user_id);
-
-			$sql->execute();
-
-			return $sql->fetchAll(PDO::FETCH_ASSOC);
 		}
 
 		public function deleteCladogram($user_id, $clado_id){

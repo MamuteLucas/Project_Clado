@@ -1,6 +1,6 @@
 <div id="div_cladograms">
   <button type="button" class="button_cladograms ajuste_tec" id="button_addCladogram">
-    <p class="p_cladograms">Criar novo cladograma</p>
+    <p class="p_cladograms">Criar cladograma</p>
   </button>
 
   <button type="button" class="button_cladograms ajuste_tec_aux" id="button_addCladogram">
