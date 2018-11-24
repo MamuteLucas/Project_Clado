@@ -693,9 +693,9 @@ function startDiagram(cladogram, user_logged, clado_id) {
 
         function placeholderAndTitleOfPOPUP(typeOfAction){
             if(typeOfAction == 0){
-                title = "Adicionar novo filo";
+                title = "Adicionar táxon";
             } else if(typeOfAction == 1){
-                title = "Editar filo";
+                title = "Editar táxon";
             }
             
             $("#createOrEdit_title")[0].innerText = title;
@@ -829,16 +829,16 @@ function startDiagram(cladogram, user_logged, clado_id) {
                     $("#info_category")[0].innerHTML = "<span style='font-weight: 600;'>Categoria: </span> "+modifiedFilo.category;
                     $("#info_create")[0].innerHTML = "<span style='font-weight: 600;'>Criado por: </span> "+_creator;
                     $("#info_edit")[0].innerHTML = "<span style='font-weight: 600;'>Editado por: </span> "+_editor;
-                    $("#info_nSubFilo")[0].innerHTML = "<span style='font-weight: 600;'>Número de sub-filos: </span> "+modifiedFilo.children.length;
-                    $("#info_ancestralFilo")[0].innerHTML = "<span style='font-weight: 600;'>Filo ancestral: </span> "+modifiedFilo.parent.name;
+                    $("#info_nSubFilo")[0].innerHTML = "<span style='font-weight: 600;'>Número de táxons descentendes: </span> "+modifiedFilo.children.length;
+                    $("#info_ancestralFilo")[0].innerHTML = "<span style='font-weight: 600;'>Táxon ascendente: </span> "+modifiedFilo.parent.name;
     
                 } catch(e){
                     $("#info_name")[0].innerHTML = "<span style='font-weight: 600;'>Nome científico: </span> "+modifiedFilo.name;
                     $("#info_category")[0].innerHTML = "<span style='font-weight: 600;'>Categoria: </span> "+modifiedFilo.category;
                     $("#info_create")[0].innerHTML = "<span style='font-weight: 600;'>Criado por: </span> "+_creator;
                     $("#info_edit")[0].innerHTML = "<span style='font-weight: 600;'>Editado por: </span> "+_editor;
-                    $("#info_nSubFilo")[0].innerHTML = "<span style='font-weight: 600;'>Número de sub-filos: </span> 0";
-                    $("#info_ancestralFilo")[0].innerHTML = "<span style='font-weight: 600;'>Filo ancestral: </span> "+modifiedFilo.parent.name;
+                    $("#info_nSubFilo")[0].innerHTML = "<span style='font-weight: 600;'>Número de táxons descentendes: </span> 0";
+                    $("#info_ancestralFilo")[0].innerHTML = "<span style='font-weight: 600;'>Táxon ascendente: </span> "+modifiedFilo.parent.name;
     
                 }
 
@@ -881,11 +881,11 @@ function startDiagram(cladogram, user_logged, clado_id) {
                 if(initialNodes != undefined){
                     if(initialNodes[filo_name] != undefined && filos_notSaved.indexOf(filo_name)){
                         if(tabOptions_click != "#li_editFilo"){
-                            $("#small_popup")[0].innerText = "Filo já existente!";
+                            $("#small_popup")[0].innerText = "Táxon já existente!";
                             
                         } else{
                             if(filo_name != modifiedFilo.name){
-                                $("#small_popup")[0].innerText = "Filo já existente!";
+                                $("#small_popup")[0].innerText = "Táxon já existente!";
 
                             } else{
                                 $(".popup").css({"display": "none"});
@@ -895,7 +895,7 @@ function startDiagram(cladogram, user_logged, clado_id) {
                         }
                     } else{
                         if(filos_notSaved.indexOf(filo_name) != -1 && first_filosNotSaved){
-                            $("#small_popup")[0].innerText = "Filo já existente!";
+                            $("#small_popup")[0].innerText = "Táxon já existente!";
 
                         } else{
                             $(".popup").css({"display": "none"});
@@ -921,7 +921,7 @@ function startDiagram(cladogram, user_logged, clado_id) {
                     }
                 } else{
                     if(filos_notSaved.indexOf(filo_name) != -1){
-                        $("#small_popup")[0].innerText = "Filo já existente!";
+                        $("#small_popup")[0].innerText = "Táxon já existente!";
 
                     } else{
                         $(".popup").css({"display": "none"});

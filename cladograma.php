@@ -67,25 +67,25 @@
 				</li>
 
 				<li class="li_search" id="li_addFilo">
-					<span>Inserir novo filo</span>
+					<span>Inserir novo táxon</span>
 				</li>
 
 				<li class="li_search" id="li_removeFilo">
-					<span>Remover filo</span>
+					<span>Remover táxon</span>
 				</li>
 
 				<li class="li_search" id="li_editFilo">
-					<span>Editar filo</span>
+					<span>Editar táxon</span>
 				</li>
 
 				<li class="li_search" id="li_infoFilo">
-					<span>Informações sobre o filo</span>
+					<span>Informações sobre o táxon</span>
 				</li>
 			</ul>
 		</div>
 
 		<div id="div_search">
-			<input type="text" class="btn" id="input_text" placeholder="Pesquise por um filo..." autocomplete="off">
+			<input type="text" class="btn" id="input_text" placeholder="Pesquise por um táxon..." autocomplete="off">
 			<ul id="ul_autoComplete"></ul>
 			<input type="button" class="btn btn-primary" id="input_button" value="">
 		</div>
@@ -96,7 +96,7 @@
 
 				<form onsubmit="return false;" id="form_addOrEditFilo">
 					<div id="input_filoName">
-						<input type="text" name="filo_name" class="form_input" placeholder="Nome científico do filo">
+						<input type="text" name="filo_name" class="form_input" placeholder="Nome científico do táxon">
 					</div>
 					  
 					<div id="input_filoName">
